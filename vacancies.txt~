@@ -1,0 +1,1169 @@
+lk{
+    "items": [
+        {
+            "id": "22494957",
+            "premium": false,
+            "name": "Полицейский - водитель",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2061",
+                "name": "Подольск (Московская область)",
+                "url": "https://api.hh.ru/areas/2061"
+            },
+            "salary": {
+                "from": 30000,
+                "to": 35000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Подольск",
+                "street": "Железнодорожная улица",
+                "building": "18",
+                "description": null,
+                "lat": 55.424945,
+                "lng": 37.563638,
+                "raw": "Подольск, Железнодорожная улица, 18",
+                "metro": null,
+                "metro_stations": [],
+                "id": "1605093"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-17T15:04:38+0300",
+            "created_at": "2021-03-17T15:04:38+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=22494957",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/22494957?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/22494957",
+            "relations": [],
+            "employer": {
+                "id": "2980229",
+                "name": "Подольский ОВО-филиал ФГКУ УВО ВНГ России по Московской области",
+                "url": "https://api.hh.ru/employers/2980229",
+                "alternate_url": "https://hh.ru/employer/2980229",
+                "logo_urls": {
+                    "240": "https://hhcdn.ru/employer-logo/2233960.png",
+                    "90": "https://hhcdn.ru/employer-logo/2233959.png",
+                    "original": "https://hhcdn.ru/employer-logo-original/447998.jpg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=2980229",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "На должность полицейского водителя наличие водительского удостоверения. Не имеющие ограничений по здоровью. Служба в армии обязательна для военнообязанных. ",
+                "responsibility": "Обеспечение охраны общественного порядка на объектах и маршрутах патрулирования в городском округе Подольск. Пресечение административных правонарушений и преступлений. "
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "23863827",
+            "premium": false,
+            "name": "Разработчик C#",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2033",
+                "name": "Коломна",
+                "url": "https://api.hh.ru/areas/2033"
+            },
+            "salary": {
+                "from": 80000,
+                "to": 120000,
+                "currency": "RUR",
+                "gross": true
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Коломна",
+                "street": "улица Льва Толстого",
+                "building": null,
+                "description": null,
+                "lat": 55.098903,
+                "lng": 38.775644,
+                "raw": "Коломна, улица Льва Толстого",
+                "metro": null,
+                "metro_stations": [],
+                "id": "580896"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-16T12:53:48+0300",
+            "created_at": "2021-03-16T12:53:48+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=23863827",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/23863827?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/23863827",
+            "relations": [],
+            "employer": {
+                "id": "41144",
+                "name": "АСКОН",
+                "url": "https://api.hh.ru/employers/41144",
+                "alternate_url": "https://hh.ru/employer/41144",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/223410.png",
+                    "240": "https://hhcdn.ru/employer-logo/391093.png",
+                    "90": "https://hhcdn.ru/employer-logo/318236.png"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=41144",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Опыт использования С# не менее года. Знание принципов объектно-ориентированного программирования и умение применять их на практике. Знание технологии WPF. ",
+                "responsibility": "Анализ требований к новому программному продукту, разработка концепции реализации требований, написание кода. Поддержка уже существующего кода."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24291277",
+            "premium": false,
+            "name": "Полицейский полка охраны и конвоирования",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2057",
+                "name": "Ликино-Дулево",
+                "url": "https://api.hh.ru/areas/2057"
+            },
+            "salary": {
+                "from": 35000,
+                "to": 55000,
+                "currency": "RUR",
+                "gross": true
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-16T14:08:03+0300",
+            "created_at": "2021-03-16T14:08:03+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24291277",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24291277?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24291277",
+            "relations": [],
+            "employer": {
+                "id": "1907321",
+                "name": "Спецподразделение по г. Москва ПОиКПиО ГУ МВД России",
+                "url": "https://api.hh.ru/employers/1907321",
+                "alternate_url": "https://hh.ru/employer/1907321",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/527205.png",
+                    "240": "https://hhcdn.ru/employer-logo/2550298.jpeg",
+                    "90": "https://hhcdn.ru/employer-logo/2550297.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1907321",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Для военнообязанных служба в ВС, среднее (полное) общее образование.",
+                "responsibility": "Конвоирование и охрана подсудимых в залы судебных заседаний и на слушаниях уголовных дел. Досмотр подсудимых и их личных вещей."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24343781",
+            "premium": false,
+            "name": "Менеджер по работе с клиентами",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2088",
+                "name": "Зеленоград",
+                "url": "https://api.hh.ru/areas/2088"
+            },
+            "salary": {
+                "from": 60000,
+                "to": null,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-15T11:57:13+0300",
+            "created_at": "2021-03-15T11:57:13+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24343781",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24343781?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24343781",
+            "relations": [],
+            "employer": {
+                "id": "1464",
+                "name": "ИНКОМ-НЕДВИЖИМОСТЬ",
+                "url": "https://api.hh.ru/employers/1464",
+                "alternate_url": "https://hh.ru/employer/1464",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/816780.jpg",
+                    "240": "https://hhcdn.ru/employer-logo/3708008.jpeg",
+                    "90": "https://hhcdn.ru/employer-logo/3708007.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1464",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Коммуникабельный - навыки межличностного общения и обслуживания клиентов приветствуются. Если есть опыт в продажах, то это тоже плюс. Возможность работы в...",
+                "responsibility": "Анализировать рынок и объекты недвижимости. Подбирать объекты в интересах клиента. Обрабатывать заявки и оценивать объекты недвижимости. Вести переговоры и консультировать..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "flexible",
+                "name": "Гибкий график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472624",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "5968",
+                "name": "Ашукино",
+                "url": "https://api.hh.ru/areas/5968"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:12+0300",
+            "created_at": "2021-03-13T16:45:12+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472624",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472624?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472624",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472625",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "5045",
+                "name": "Быково (Московская область)",
+                "url": "https://api.hh.ru/areas/5045"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:12+0300",
+            "created_at": "2021-03-13T16:45:12+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472625",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472625?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472625",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472626",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "5040",
+                "name": "Ильинское (Раменский район)",
+                "url": "https://api.hh.ru/areas/5040"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:12+0300",
+            "created_at": "2021-03-13T16:45:12+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472626",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472626?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472626",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472627",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "5085",
+                "name": "Крекшино",
+                "url": "https://api.hh.ru/areas/5085"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:12+0300",
+            "created_at": "2021-03-13T16:45:12+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472627",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472627?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472627",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472628",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2020",
+                "name": "Балашиха",
+                "url": "https://api.hh.ru/areas/2020"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:12+0300",
+            "created_at": "2021-03-13T16:45:12+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472628",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472628?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472628",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472630",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2064",
+                "name": "Жуковский",
+                "url": "https://api.hh.ru/areas/2064"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:12+0300",
+            "created_at": "2021-03-13T16:45:12+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472630",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472630?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472630",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472631",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2091",
+                "name": "Красноармейск (Московская область)",
+                "url": "https://api.hh.ru/areas/2091"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:12+0300",
+            "created_at": "2021-03-13T16:45:12+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472631",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472631?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472631",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472632",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2056",
+                "name": "Куровское",
+                "url": "https://api.hh.ru/areas/2056"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:12+0300",
+            "created_at": "2021-03-13T16:45:12+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472632",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472632?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472632",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472634",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2441",
+                "name": "Монино",
+                "url": "https://api.hh.ru/areas/2441"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:13+0300",
+            "created_at": "2021-03-13T16:45:13+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472634",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472634?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472634",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472635",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "5983",
+                "name": "Островцы (Московская область)",
+                "url": "https://api.hh.ru/areas/5983"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:13+0300",
+            "created_at": "2021-03-13T16:45:13+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472635",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472635?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472635",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472640",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "4609",
+                "name": "Барвиха",
+                "url": "https://api.hh.ru/areas/4609"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:13+0300",
+            "created_at": "2021-03-13T16:45:13+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472640",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472640?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472640",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472645",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2050",
+                "name": "Звенигород",
+                "url": "https://api.hh.ru/areas/2050"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:13+0300",
+            "created_at": "2021-03-13T16:45:13+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472645",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472645?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472645",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472647",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "4599",
+                "name": "Киевский",
+                "url": "https://api.hh.ru/areas/4599"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:13+0300",
+            "created_at": "2021-03-13T16:45:13+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472647",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472647?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472647",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472648",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2034",
+                "name": "Красногорск",
+                "url": "https://api.hh.ru/areas/2034"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:13+0300",
+            "created_at": "2021-03-13T16:45:13+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472648",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472648?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472648",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472650",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "4624",
+                "name": "Лесной Городок",
+                "url": "https://api.hh.ru/areas/4624"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:13+0300",
+            "created_at": "2021-03-13T16:45:13+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472650",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472650?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472650",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "24472654",
+            "premium": false,
+            "name": "Полицейский (Москва)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2053",
+                "name": "Одинцово",
+                "url": "https://api.hh.ru/areas/2053"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 65000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-13T16:45:13+0300",
+            "created_at": "2021-03-13T16:45:13+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=24472654",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/24472654?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/24472654",
+            "relations": [],
+            "employer": {
+                "id": "1094296",
+                "name": "6 рота ППСП УВД на Московском метрополитене",
+                "url": "https://api.hh.ru/employers/1094296",
+                "alternate_url": "https://hh.ru/employer/1094296",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1094296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Отслуживший в ВС (для военнообязанных). Имеющий образование не ниже среднего(полного).",
+                "responsibility": "Охрана общественного порядка и общественной безопасности. Пресечение преступлений и административных правонарушений."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        }
+    ],
+    "found": 56627,
+    "pages": 100,
+    "per_page": 20,
+    "page": 0,
+    "clusters": null,
+    "arguments": null,
+    "alternate_url": "https://hh.ru/search/vacancy?area=2019&enable_snippets=true"
+}

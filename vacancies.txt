@@ -1,0 +1,1606 @@
+2021-03-27T15:50:53
+
+{
+    "items": [
+        {
+            "id": "12155000",
+            "premium": false,
+            "name": "Управляющий / Директор магазина",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": null,
+                "to": 70000,
+                "currency": "RUR",
+                "gross": true
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-22T11:25:05+0300",
+            "created_at": "2021-03-22T11:25:05+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=12155000",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/12155000?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/12155000",
+            "relations": [],
+            "employer": {
+                "id": "157215",
+                "name": "Федеральная сеть книжных магазинов Читай-город",
+                "url": "https://api.hh.ru/employers/157215",
+                "alternate_url": "https://hh.ru/employer/157215",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/771033.jpg",
+                    "90": "https://hhcdn.ru/employer-logo/3525089.jpeg",
+                    "240": "https://hhcdn.ru/employer-logo/3525090.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=157215",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Опыт руководящей работы в розничной торговле обязателен (от 1 года). Лидерские качества, ориентированность на результат, активная жизненная позиция. ",
+                "responsibility": "Организация эффективного торгового процесса: Выполнение плановых показателей продаж, прироста и развития магазина. Организация, управление и контроль над эффективной работой коллектива. "
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "12651920",
+            "premium": false,
+            "name": "Финансовый консультант",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": null,
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Овчинниковская набережная",
+                "building": "20 Стр 1",
+                "description": null,
+                "lat": 55.743953,
+                "lng": 37.635009,
+                "raw": "Москва, Овчинниковская набережная, 20 Стр 1",
+                "metro": {
+                    "station_name": "Новокузнецкая",
+                    "line_name": "Замоскворецкая",
+                    "station_id": "2.89",
+                    "line_id": "2",
+                    "lat": 55.742391,
+                    "lng": 37.62928
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Новокузнецкая",
+                        "line_name": "Замоскворецкая",
+                        "station_id": "2.89",
+                        "line_id": "2",
+                        "lat": 55.742391,
+                        "lng": 37.62928
+                    }
+                ],
+                "id": "87990"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-22T09:59:07+0300",
+            "created_at": "2021-03-22T09:59:07+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=12651920",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/12651920?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/12651920",
+            "relations": [],
+            "employer": {
+                "id": "46387",
+                "name": "АТОН",
+                "url": "https://api.hh.ru/employers/46387",
+                "alternate_url": "https://hh.ru/employer/46387",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/501235.jpg",
+                    "90": "https://hhcdn.ru/employer-logo/2446693.jpeg",
+                    "240": "https://hhcdn.ru/employer-logo/2446694.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=46387",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Опыт работы в сфере продаж инвестиционных и/или банковских продуктов. Желание развиваться в области продаж в инвестиционной компании. ",
+                "responsibility": "Продажи услуг и продуктов Компании (брокеридж, ПИФы, ДУ, структурные продукты, хедж-фонд, еврооблигации, западные рынки). Консультирование клиентов по продуктам и..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "12651926",
+            "premium": false,
+            "name": "Финансовый советник",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": null,
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Овчинниковская набережная",
+                "building": "20 Стр 1",
+                "description": null,
+                "lat": 55.743953,
+                "lng": 37.635009,
+                "raw": "Москва, Овчинниковская набережная, 20 Стр 1",
+                "metro": {
+                    "station_name": "Новокузнецкая",
+                    "line_name": "Замоскворецкая",
+                    "station_id": "2.89",
+                    "line_id": "2",
+                    "lat": 55.742391,
+                    "lng": 37.62928
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Новокузнецкая",
+                        "line_name": "Замоскворецкая",
+                        "station_id": "2.89",
+                        "line_id": "2",
+                        "lat": 55.742391,
+                        "lng": 37.62928
+                    }
+                ],
+                "id": "87990"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-22T09:59:07+0300",
+            "created_at": "2021-03-22T09:59:07+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=12651926",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/12651926?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/12651926",
+            "relations": [],
+            "employer": {
+                "id": "46387",
+                "name": "АТОН",
+                "url": "https://api.hh.ru/employers/46387",
+                "alternate_url": "https://hh.ru/employer/46387",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/501235.jpg",
+                    "90": "https://hhcdn.ru/employer-logo/2446693.jpeg",
+                    "240": "https://hhcdn.ru/employer-logo/2446694.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=46387",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Опыт работы с состоятельными частными клиентами в инвестиционных компаниях и/или банках. Навыки продаж, консультирования и ведения клиентов. Коммуникабельность, респектабельность. ",
+                "responsibility": "Профессиональное сопровождение капиталов крупных частных клиентов. Привлечение новых крупных частных и корпоративных клиентов. Оказание консультационных услуг по вопросам защиты и..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "13994278",
+            "premium": false,
+            "name": "Investment advisor (Private Banking)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": null,
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Овчинниковская набережная",
+                "building": "20 Стр 1",
+                "description": null,
+                "lat": 55.743953,
+                "lng": 37.635009,
+                "raw": "Москва, Овчинниковская набережная, 20 Стр 1",
+                "metro": {
+                    "station_name": "Новокузнецкая",
+                    "line_name": "Замоскворецкая",
+                    "station_id": "2.89",
+                    "line_id": "2",
+                    "lat": 55.742391,
+                    "lng": 37.62928
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Новокузнецкая",
+                        "line_name": "Замоскворецкая",
+                        "station_id": "2.89",
+                        "line_id": "2",
+                        "lat": 55.742391,
+                        "lng": 37.62928
+                    }
+                ],
+                "id": "87990"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-22T11:13:47+0300",
+            "created_at": "2021-03-22T11:13:47+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=13994278",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/13994278?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/13994278",
+            "relations": [],
+            "employer": {
+                "id": "46387",
+                "name": "АТОН",
+                "url": "https://api.hh.ru/employers/46387",
+                "alternate_url": "https://hh.ru/employer/46387",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/501235.jpg",
+                    "90": "https://hhcdn.ru/employer-logo/2446693.jpeg",
+                    "240": "https://hhcdn.ru/employer-logo/2446694.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=46387",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Опыт работы с состоятельными частными клиентами уровня Private Banking в российских и зарубежных банках/инвестиционных/управляющих компаниях. Владение инструментарием финансовых...",
+                "responsibility": "Профессиональное сопровождение капиталов крупных частных/семейных клиентов (от $1m). Установление отношений и привлечение новых крупных частных и корпоративных клиентов. "
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "14659840",
+            "premium": false,
+            "name": "Риэлтор в отдел аренды жилья",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": null,
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": null,
+                "street": null,
+                "building": null,
+                "description": null,
+                "lat": 0.0,
+                "lng": 0.0,
+                "raw": "г. Москва, м. Таганская, Николоямская ул., д.40, стр. 1",
+                "metro": null,
+                "metro_stations": [],
+                "id": "164958"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-16T11:57:17+0300",
+            "created_at": "2021-03-16T11:57:17+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=14659840",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/14659840?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/14659840",
+            "relations": [],
+            "employer": {
+                "id": "128645",
+                "name": "МИЭЛЬ",
+                "url": "https://api.hh.ru/employers/128645",
+                "alternate_url": "https://hh.ru/employer/128645",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/368473.jpg",
+                    "90": "https://hhcdn.ru/employer-logo/1916150.jpeg",
+                    "240": "https://hhcdn.ru/employer-logo/1916151.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=128645",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Приветствуется успешный опыт работы с клиентами, в том числе и на рынке купли-продажи, рассматриваются кандидаты и без опыта работы. ",
+                "responsibility": "Помощь клиентам Компании в подборе жилья в наем/аренду по их запросу (без поиска клиентов - собственная база). Организация показов объектов..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "14659851",
+            "premium": false,
+            "name": "Агент по аренде жилья",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": null,
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Николоямская улица",
+                "building": "40с1",
+                "description": null,
+                "lat": 55.746998,
+                "lng": 37.65947,
+                "raw": "Москва, Николоямская улица, 40с1",
+                "metro": null,
+                "metro_stations": [],
+                "id": "438911"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-26T11:36:09+0300",
+            "created_at": "2021-03-26T11:36:09+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=14659851",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/14659851?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/14659851",
+            "relations": [],
+            "employer": {
+                "id": "128645",
+                "name": "МИЭЛЬ",
+                "url": "https://api.hh.ru/employers/128645",
+                "alternate_url": "https://hh.ru/employer/128645",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/368473.jpg",
+                    "90": "https://hhcdn.ru/employer-logo/1916150.jpeg",
+                    "240": "https://hhcdn.ru/employer-logo/1916151.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=128645",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Приветствуется успешный опыт работы с клиентами, рассматриваются кандидаты и без опыта работы. Грамотная устная и письменная речь. Личные качества: высокие...",
+                "responsibility": "Проведение переговоров и консультаций с клиентами по вопросам аренды жилья. Подбор предложений по заявкам и организация показа объектов недвижимости. "
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "16949989",
+            "premium": false,
+            "name": "Упаковщица/упаковщик (2/2 и 15/15)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 40000,
+                "to": null,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Огородный проезд",
+                "building": "18с3",
+                "description": null,
+                "lat": 55.816227,
+                "lng": 37.599094,
+                "raw": "Москва, Огородный проезд, 18с3",
+                "metro": {
+                    "station_name": "Бутырская ",
+                    "line_name": "Люблинско-Дмитровская",
+                    "station_id": "10.546",
+                    "line_id": "10",
+                    "lat": 55.813333,
+                    "lng": 37.602778
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Бутырская ",
+                        "line_name": "Люблинско-Дмитровская",
+                        "station_id": "10.546",
+                        "line_id": "10",
+                        "lat": 55.813333,
+                        "lng": 37.602778
+                    },
+                    {
+                        "station_name": "Тимирязевская",
+                        "line_name": "Серпуховско-Тимирязевская",
+                        "station_id": "9.141",
+                        "line_id": "9",
+                        "lat": 55.81866,
+                        "lng": 37.574498
+                    }
+                ],
+                "id": "709840"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-22T09:46:00+0300",
+            "created_at": "2021-03-22T09:46:00+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=16949989",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/16949989?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/16949989",
+            "relations": [],
+            "employer": {
+                "id": "12917",
+                "name": "Останкинский мясоперерабатывающий холдинг",
+                "url": "https://api.hh.ru/employers/12917",
+                "alternate_url": "https://hh.ru/employer/12917",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/794252.png",
+                    "90": "https://hhcdn.ru/employer-logo/3617895.png",
+                    "240": "https://hhcdn.ru/employer-logo/3617896.png"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=12917",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Приветствуется опыт работы на производстве и складах. Приветствуется опыт работы с продуктами питания. Готовность работать при низкой температуре. ",
+                "responsibility": "Работа за конвейерной линией. Фасовка, упаковка, укладка готовой продукции. Поддержание чистоты на рабочем месте."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "flyInFlyOut",
+                "name": "Вахтовый метод"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "17503744",
+            "premium": false,
+            "name": "Транспортировщик/Грузчик",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 39000,
+                "to": 73000,
+                "currency": "RUR",
+                "gross": true
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Бирюлёвская улица",
+                "building": "38",
+                "description": null,
+                "lat": 55.588613,
+                "lng": 37.663252,
+                "raw": "Москва, Бирюлёвская улица, 38",
+                "metro": {
+                    "station_name": "Царицыно",
+                    "line_name": "Замоскворецкая",
+                    "station_id": "2.153",
+                    "line_id": "2",
+                    "lat": 55.620982,
+                    "lng": 37.669612
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Царицыно",
+                        "line_name": "Замоскворецкая",
+                        "station_id": "2.153",
+                        "line_id": "2",
+                        "lat": 55.620982,
+                        "lng": 37.669612
+                    }
+                ],
+                "id": "636988"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-24T16:04:45+0300",
+            "created_at": "2021-03-24T16:04:45+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=17503744",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/17503744?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/17503744",
+            "relations": [],
+            "employer": {
+                "id": "102441",
+                "name": "КуулКлевер (МясновЪ, Отдохни)",
+                "url": "https://api.hh.ru/employers/102441",
+                "alternate_url": "https://hh.ru/employer/102441",
+                "logo_urls": {
+                    "240": "https://hhcdn.ru/employer-logo/2913353.png",
+                    "90": "https://hhcdn.ru/employer-logo/2913352.png",
+                    "original": "https://hhcdn.ru/employer-logo-original/618050.png"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=102441",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Опыт работы необязателен.",
+                "responsibility": "Перемещение производственных грузов."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "18330133",
+            "premium": false,
+            "name": "Агент по недвижимости (м. Пролетарская)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": true,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 60000,
+                "to": null,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Волгоградский проспект",
+                "building": "1с1",
+                "description": null,
+                "lat": 55.733498,
+                "lng": 37.671022,
+                "raw": "Москва, Волгоградский проспект, 1с1",
+                "metro": {
+                    "station_name": "Крестьянская застава",
+                    "line_name": "Люблинско-Дмитровская",
+                    "station_id": "10.63",
+                    "line_id": "10",
+                    "lat": 55.732278,
+                    "lng": 37.665325
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Крестьянская застава",
+                        "line_name": "Люблинско-Дмитровская",
+                        "station_id": "10.63",
+                        "line_id": "10",
+                        "lat": 55.732278,
+                        "lng": 37.665325
+                    },
+                    {
+                        "station_name": "Марксистская",
+                        "line_name": "Калининская",
+                        "station_id": "8.78",
+                        "line_id": "8",
+                        "lat": 55.740746,
+                        "lng": 37.65604
+                    },
+                    {
+                        "station_name": "Новохохловская",
+                        "line_name": "МЦД - 2",
+                        "station_id": "132.729",
+                        "line_id": "132",
+                        "lat": 55.718523,
+                        "lng": 37.719236
+                    },
+                    {
+                        "station_name": "Пролетарская",
+                        "line_name": "Таганско-Краснопресненская",
+                        "station_id": "7.62",
+                        "line_id": "7",
+                        "lat": 55.731546,
+                        "lng": 37.666917
+                    }
+                ],
+                "id": "366450"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-24T17:44:41+0300",
+            "created_at": "2021-03-24T17:44:41+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=18330133",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/18330133?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/18330133",
+            "relations": [],
+            "employer": {
+                "id": "1464",
+                "name": "ИНКОМ-НЕДВИЖИМОСТЬ",
+                "url": "https://api.hh.ru/employers/1464",
+                "alternate_url": "https://hh.ru/employer/1464",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/816780.jpg",
+                    "240": "https://hhcdn.ru/employer-logo/3708008.jpeg",
+                    "90": "https://hhcdn.ru/employer-logo/3708007.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1464",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Энергичных. Целеустремленных. Готовых работать и зарабатывать. Коммуникабельных. Ответственных.",
+                "responsibility": "Обработка входящих заявок клиентов. Презентация услуг компании. Переговоры с собственниками, покупателями недвижимости и контрагентами. Заключение договоров на оказание риелторских услуг. "
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "18543338",
+            "premium": false,
+            "name": "Senior Unity программист",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": null,
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Овчинниковская набережная",
+                "building": "20с1",
+                "description": null,
+                "lat": 55.743776,
+                "lng": 37.634982,
+                "raw": "Москва, Овчинниковская набережная, 20с1",
+                "metro": {
+                    "station_name": "Новокузнецкая",
+                    "line_name": "Замоскворецкая",
+                    "station_id": "2.89",
+                    "line_id": "2",
+                    "lat": 55.742391,
+                    "lng": 37.62928
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Новокузнецкая",
+                        "line_name": "Замоскворецкая",
+                        "station_id": "2.89",
+                        "line_id": "2",
+                        "lat": 55.742391,
+                        "lng": 37.62928
+                    }
+                ],
+                "id": "520897"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-25T17:56:07+0300",
+            "created_at": "2021-03-25T17:56:07+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=18543338",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/18543338?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/18543338",
+            "relations": [],
+            "employer": {
+                "id": "954249",
+                "name": "KamaGames Studio",
+                "url": "https://api.hh.ru/employers/954249",
+                "alternate_url": "https://hh.ru/employer/954249",
+                "logo_urls": {
+                    "90": "https://hhcdn.ru/employer-logo/3291704.png",
+                    "240": "https://hhcdn.ru/employer-logo/3291705.png",
+                    "original": "https://hhcdn.ru/employer-logo-original/712647.png"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=954249",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Опыт разработки игр на C#. Опыт разработки с использованием Unity 3D. Суммарный опыт программирования от 5 лет. ",
+                "responsibility": "Разработка игр с использованием Unity3D."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "18782702",
+            "premium": false,
+            "name": "Senior Software Developer (IntelliJ IDEA)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": true,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 200000,
+                "to": null,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Лесная улица",
+                "building": "7",
+                "description": null,
+                "lat": 55.778639,
+                "lng": 37.587901,
+                "raw": "Москва, Лесная улица, 7",
+                "metro": {
+                    "station_name": "Белорусская",
+                    "line_name": "Кольцевая",
+                    "station_id": "5.20",
+                    "line_id": "5",
+                    "lat": 55.775179,
+                    "lng": 37.582303
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Белорусская",
+                        "line_name": "Кольцевая",
+                        "station_id": "5.20",
+                        "line_id": "5",
+                        "lat": 55.775179,
+                        "lng": 37.582303
+                    }
+                ],
+                "id": "3453412"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-18T16:11:41+0300",
+            "created_at": "2021-03-18T16:11:41+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=18782702",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/18782702?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/18782702",
+            "relations": [],
+            "employer": {
+                "id": "9281",
+                "name": "JetBrains",
+                "url": "https://api.hh.ru/employers/9281",
+                "alternate_url": "https://hh.ru/employer/9281",
+                "logo_urls": {
+                    "240": "https://hhcdn.ru/employer-logo/1647147.png",
+                    "original": "https://hhcdn.ru/employer-logo-original/301193.png",
+                    "90": "https://hhcdn.ru/employer-logo/1647146.png"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=9281",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Имеешь опыт разработки на Java от 5 лет. Умеешь проектировать и писать код, который легко читать и поддерживать. ",
+                "responsibility": "Для организации командной работы используются наши собственные продукты: UpSource для ревью кода, TeamCity для автоматического запуска тестов и сборки продуктов..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "flexible",
+                "name": "Гибкий график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "18981439",
+            "premium": true,
+            "name": "Менеджер по продажам",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 115000,
+                "to": 700000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Профсоюзная улица",
+                "building": "56",
+                "description": null,
+                "lat": 55.670133,
+                "lng": 37.552427,
+                "raw": "Москва, Профсоюзная улица, 56",
+                "metro": {
+                    "station_name": "Новые Черемушки",
+                    "line_name": "Калужско-Рижская",
+                    "station_id": "6.92",
+                    "line_id": "6",
+                    "lat": 55.670077,
+                    "lng": 37.554493
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Новые Черемушки",
+                        "line_name": "Калужско-Рижская",
+                        "station_id": "6.92",
+                        "line_id": "6",
+                        "lat": 55.670077,
+                        "lng": 37.554493
+                    }
+                ],
+                "id": "5048662"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-22T11:38:40+0300",
+            "created_at": "2021-03-22T11:38:40+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=18981439",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/18981439?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/18981439",
+            "relations": [],
+            "employer": {
+                "id": "5123165",
+                "name": "Этажи Центр",
+                "url": "https://api.hh.ru/employers/5123165",
+                "alternate_url": "https://hh.ru/employer/5123165",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=5123165",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Ответственный бизнес-партнёр, способный влиять на свой результат, и с мотивацией на высокий уровень дохода. С активной жизненной позицией и...",
+                "responsibility": "Партнерство со стабильной компанией на перспективном рынке, где нет случайных продаж. Управлять своим временем, процессами и командой помощников. "
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "flexible",
+                "name": "Гибкий график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "19075115",
+            "premium": false,
+            "name": "Инспектор отдела кадров",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 54000,
+                "to": 71500,
+                "currency": "RUR",
+                "gross": true
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": null,
+                "street": null,
+                "building": null,
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "raw": null,
+                "metro": {
+                    "station_name": "Павелецкая",
+                    "line_name": "Замоскворецкая",
+                    "station_id": "2.101",
+                    "line_id": "2",
+                    "lat": 55.729741,
+                    "lng": 37.638693
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Павелецкая",
+                        "line_name": "Замоскворецкая",
+                        "station_id": "2.101",
+                        "line_id": "2",
+                        "lat": 55.729741,
+                        "lng": 37.638693
+                    }
+                ],
+                "id": "503513"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-10T11:28:08+0300",
+            "created_at": "2021-03-10T11:28:08+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=19075115",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/19075115?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/19075115",
+            "relations": [],
+            "employer": {
+                "id": "600589",
+                "name": "NEW YORKER",
+                "url": "https://api.hh.ru/employers/600589",
+                "alternate_url": "https://hh.ru/employer/600589",
+                "logo_urls": {
+                    "90": "https://hhcdn.ru/employer-logo/1510710.jpeg",
+                    "original": "https://hhcdn.ru/employer-logo-original/267045.jpg",
+                    "240": "https://hhcdn.ru/employer-logo/1510711.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=600589",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Законченное высшее образование, дополнительное профильное образование (повышение квалификации) как преимущество. Опыт работы в кадровом администрировании в \"белой\" компании со штатом...",
+                "responsibility": "Ведение полного цикла кадрового делопроизводства (прием, перемещение, увольнение, отпуска, командировки и проч.). Заполнение трудовых книжек. Учет и регистрация кадровых документов. "
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "19087587",
+            "premium": false,
+            "name": "Специалист по продажам",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 120000,
+                "to": null,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Профсоюзная улица",
+                "building": "56",
+                "description": null,
+                "lat": 55.670133,
+                "lng": 37.552427,
+                "raw": "Москва, Профсоюзная улица, 56",
+                "metro": {
+                    "station_name": "Новые Черемушки",
+                    "line_name": "Калужско-Рижская",
+                    "station_id": "6.92",
+                    "line_id": "6",
+                    "lat": 55.670077,
+                    "lng": 37.554493
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Новые Черемушки",
+                        "line_name": "Калужско-Рижская",
+                        "station_id": "6.92",
+                        "line_id": "6",
+                        "lat": 55.670077,
+                        "lng": 37.554493
+                    }
+                ],
+                "id": "5048662"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-18T17:19:49+0300",
+            "created_at": "2021-03-18T17:19:49+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=19087587",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/19087587?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/19087587",
+            "relations": [],
+            "employer": {
+                "id": "5123165",
+                "name": "Этажи Центр",
+                "url": "https://api.hh.ru/employers/5123165",
+                "alternate_url": "https://hh.ru/employer/5123165",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=5123165",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": null,
+                "responsibility": "Организовывать сделки с недвижимостью в интересах клиентов (вторичный рынок и новостройки). Анализировать рынок и объекты недвижимости. Подбирать варианты, предварительно оценивая..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "20155035",
+            "premium": false,
+            "name": "Руководитель отдела продаж (Private Banking)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": null,
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Овчинниковская набережная",
+                "building": "20 Стр 1",
+                "description": null,
+                "lat": 55.743953,
+                "lng": 37.635009,
+                "raw": "Москва, Овчинниковская набережная, 20 Стр 1",
+                "metro": {
+                    "station_name": "Новокузнецкая",
+                    "line_name": "Замоскворецкая",
+                    "station_id": "2.89",
+                    "line_id": "2",
+                    "lat": 55.742391,
+                    "lng": 37.62928
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Новокузнецкая",
+                        "line_name": "Замоскворецкая",
+                        "station_id": "2.89",
+                        "line_id": "2",
+                        "lat": 55.742391,
+                        "lng": 37.62928
+                    }
+                ],
+                "id": "87990"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-22T11:13:47+0300",
+            "created_at": "2021-03-22T11:13:47+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=20155035",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/20155035?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/20155035",
+            "relations": [],
+            "employer": {
+                "id": "46387",
+                "name": "АТОН",
+                "url": "https://api.hh.ru/employers/46387",
+                "alternate_url": "https://hh.ru/employer/46387",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/501235.jpg",
+                    "90": "https://hhcdn.ru/employer-logo/2446693.jpeg",
+                    "240": "https://hhcdn.ru/employer-logo/2446694.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=46387",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Высшее образование (желательно экономическое). Успешный опыт работы в области продаж инвестиционных продуктов от 5-ти лет. Обязателен опыт работы с...",
+                "responsibility": "Руководство группой финансовых консультантов. Формирование команды, подбор новых сотрудников (3-4 новых человека). Наставничество и управление командой. Развитие бизнеса компании..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "20331334",
+            "premium": false,
+            "name": "Менеджер по продажам недвижимости",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 115000,
+                "to": 700000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Профсоюзная улица",
+                "building": "56",
+                "description": null,
+                "lat": 55.670133,
+                "lng": 37.552427,
+                "raw": "Москва, Профсоюзная улица, 56",
+                "metro": {
+                    "station_name": "Новые Черемушки",
+                    "line_name": "Калужско-Рижская",
+                    "station_id": "6.92",
+                    "line_id": "6",
+                    "lat": 55.670077,
+                    "lng": 37.554493
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Новые Черемушки",
+                        "line_name": "Калужско-Рижская",
+                        "station_id": "6.92",
+                        "line_id": "6",
+                        "lat": 55.670077,
+                        "lng": 37.554493
+                    }
+                ],
+                "id": "5048662"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-16T15:40:01+0300",
+            "created_at": "2021-03-16T15:40:01+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=20331334",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/20331334?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/20331334",
+            "relations": [],
+            "employer": {
+                "id": "5123165",
+                "name": "Этажи Центр",
+                "url": "https://api.hh.ru/employers/5123165",
+                "alternate_url": "https://hh.ru/employer/5123165",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=5123165",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": null,
+                "responsibility": "Ваша основная задача - совершать сделки с недвижимостью. Для этого необходимо: Искать новых клиентов (есть различные способы привлечения клиентов). "
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "20436447",
+            "premium": false,
+            "name": "Водитель автобуса регулярных пассажирских маршрутов",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 45900,
+                "to": 71200,
+                "currency": "RUR",
+                "gross": true
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-26T10:47:34+0300",
+            "created_at": "2021-03-26T10:47:34+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=20436447",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/20436447?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/20436447",
+            "relations": [],
+            "employer": {
+                "id": "1435226",
+                "name": "ГУП Мосгортранс",
+                "url": "https://api.hh.ru/employers/1435226",
+                "alternate_url": "https://hh.ru/employer/1435226",
+                "logo_urls": {
+                    "240": "https://hhcdn.ru/employer-logo/1901843.png",
+                    "original": "https://hhcdn.ru/employer-logo-original/364896.png",
+                    "90": "https://hhcdn.ru/employer-logo/1901842.png"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1435226",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Наличие среднего образования. Водительское удостоверение категории «D». Знание особенностей законодательства в области организации регулярных перевозок пассажиров автобусами. Знание основ законодательства...",
+                "responsibility": "Перевозка пассажиров на регулярных городских пассажирских маршрутах города Москвы."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "21714125",
+            "premium": false,
+            "name": "Грузчик",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 38000,
+                "to": null,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Огородный проезд",
+                "building": "18с3",
+                "description": null,
+                "lat": 55.816227,
+                "lng": 37.599094,
+                "raw": "Москва, Огородный проезд, 18с3",
+                "metro": {
+                    "station_name": "Бутырская ",
+                    "line_name": "Люблинско-Дмитровская",
+                    "station_id": "10.546",
+                    "line_id": "10",
+                    "lat": 55.813333,
+                    "lng": 37.602778
+                },
+                "metro_stations": [
+                    {
+                        "station_name": "Бутырская ",
+                        "line_name": "Люблинско-Дмитровская",
+                        "station_id": "10.546",
+                        "line_id": "10",
+                        "lat": 55.813333,
+                        "lng": 37.602778
+                    },
+                    {
+                        "station_name": "Тимирязевская",
+                        "line_name": "Серпуховско-Тимирязевская",
+                        "station_id": "9.141",
+                        "line_id": "9",
+                        "lat": 55.81866,
+                        "lng": 37.574498
+                    }
+                ],
+                "id": "709840"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-22T17:09:16+0300",
+            "created_at": "2021-03-22T17:09:16+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=21714125",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/21714125?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/21714125",
+            "relations": [],
+            "employer": {
+                "id": "12917",
+                "name": "Останкинский мясоперерабатывающий холдинг",
+                "url": "https://api.hh.ru/employers/12917",
+                "alternate_url": "https://hh.ru/employer/12917",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/794252.png",
+                    "90": "https://hhcdn.ru/employer-logo/3617895.png",
+                    "240": "https://hhcdn.ru/employer-logo/3617896.png"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=12917",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Приветствуется опыт работы на производстве или на складах.",
+                "responsibility": "Погрузочно-разгрузочные работы в цехе."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "21805242",
+            "premium": false,
+            "name": "Ведущий специалист операционного отдела",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 55000,
+                "to": null,
+                "currency": "RUR",
+                "gross": true
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-04T14:29:02+0300",
+            "created_at": "2021-03-04T14:29:02+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=21805242",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/21805242?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/21805242",
+            "relations": [],
+            "employer": {
+                "id": "41296",
+                "name": "Группа СМП Банк",
+                "url": "https://api.hh.ru/employers/41296",
+                "alternate_url": "https://hh.ru/employer/41296",
+                "logo_urls": {
+                    "240": "https://hhcdn.ru/employer-logo/511275.png",
+                    "original": "https://hhcdn.ru/employer-logo-original/223376.jpeg",
+                    "90": "https://hhcdn.ru/employer-logo/511274.png"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=41296",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Образование среднее профессиональное или выше. Опыт операционной работы (обслуживание физических лиц) не менее 1-го года. Желание расти и развиваться...",
+                "responsibility": "Расчетно-кассовое обслуживание физических лиц. Осуществление переводов по системам ЮНИСТРИМ, CONTACT, МОПС и переводов без открытия счета. Открытие и ведение..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "22026701",
+            "premium": false,
+            "name": "Начинающий специалист по недвижимости",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 50000,
+                "to": 150000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-03-16T07:10:55+0300",
+            "created_at": "2021-03-16T07:10:55+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=22026701",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/22026701?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/22026701",
+            "relations": [],
+            "employer": {
+                "id": "51395",
+                "name": "МИЦ-Столичный ипотечный центр",
+                "url": "https://api.hh.ru/employers/51395",
+                "alternate_url": "https://hh.ru/employer/51395",
+                "logo_urls": {
+                    "90": "https://hhcdn.ru/employer-logo/3273988.jpeg",
+                    "240": "https://hhcdn.ru/employer-logo/3273989.jpeg",
+                    "original": "https://hhcdn.ru/employer-logo-original/708218.jpg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=51395",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Возможно без опыта работы, но нацеленные на достижение материального и карьерного успеха в работе. Личные качества: коммуникабельность, энергичность, умение вести...",
+                "responsibility": "Работа с впервые обратившимися клиентами. Деловые переговоры с собственниками и покупателями недвижимости. Заключение договоров на оказание риелторских услуг. "
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "flexible",
+                "name": "Гибкий график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        }
+    ],
+    "found": 219561,
+    "pages": 100,
+    "per_page": 20,
+    "page": 0,
+    "clusters": null,
+    "arguments": null,
+    "alternate_url": "https://hh.ru/search/vacancy?area=1&area=2019&enable_snippets=true"
+}

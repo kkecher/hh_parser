@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+"""
+"""
+
+def is_passed_test_vacancies(r, vacancies):
+    """
+    Test data got in get_vacancies function.
+    """
+    assert r.status_code == 200, 'expected status code == 200.\nGot status code == %s' % r.status_code
+
+    #Check if all fields is in response. It is especially useful if FILTERS == {}
+    check_fields = ["items", "found",   "pages",  "per_page",  "page", "clusters",  "arguments",  "alternate_url"]
+    for check_field in check_fields:
+        assert check_field  in vacancies, 'expected "%s" in JSON first level' % check_field
+
+    #Check if only data with valid filters' values is in response.
+    for vacancy in vacancies["items"]:
+        area = FILTERS["area"]
+        for value in area:
+            print ('vacancy = ', vacancy)
+            print ('area = ', area)
+            print ('value = ', value)
+            print ('vacancy["area"]["id"] = ', vacancy["area"]["id"])
+            input ('enter')
+            area_in_json = [value for value in area if str(value) in vacancy["area"]["id"]]
+            assert  area_in_json != [], "expected all keys of %s in JSON\nGot %s" % (FILTERS, area_in_json)
+    return True
+
+
+def is_passed_test_write_to_file(vacancy_file, write_to_file_time):
+    with open(vacancy_file) as f:
+        return (f.readline().strip() == write_to_file_time)
+
+def is_passed_all_tests():
+    pass
