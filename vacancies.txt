@@ -1,4 +1,4 @@
-2021-03-27T15:50:53
+2021-04-08T13:58:56
 
 {
     "items": [
@@ -27,8 +27,8 @@
             "address": null,
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-22T11:25:05+0300",
-            "created_at": "2021-03-22T11:25:05+0300",
+            "published_at": "2021-04-08T09:15:36+0300",
+            "created_at": "2021-04-08T09:15:36+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=12155000",
             "insider_interview": null,
@@ -109,8 +109,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-22T09:59:07+0300",
-            "created_at": "2021-03-22T09:59:07+0300",
+            "published_at": "2021-04-05T08:53:54+0300",
+            "created_at": "2021-04-05T08:53:54+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=12651920",
             "insider_interview": null,
@@ -191,8 +191,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-22T09:59:07+0300",
-            "created_at": "2021-03-22T09:59:07+0300",
+            "published_at": "2021-04-05T08:53:54+0300",
+            "created_at": "2021-04-05T08:53:54+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=12651926",
             "insider_interview": null,
@@ -273,8 +273,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-22T11:13:47+0300",
-            "created_at": "2021-03-22T11:13:47+0300",
+            "published_at": "2021-04-07T16:47:54+0300",
+            "created_at": "2021-04-07T16:47:54+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=13994278",
             "insider_interview": null,
@@ -339,8 +339,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-16T11:57:17+0300",
-            "created_at": "2021-03-16T11:57:17+0300",
+            "published_at": "2021-04-08T13:06:36+0300",
+            "created_at": "2021-04-08T13:06:36+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=14659840",
             "insider_interview": null,
@@ -405,8 +405,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-26T11:36:09+0300",
-            "created_at": "2021-03-26T11:36:09+0300",
+            "published_at": "2021-04-06T10:34:35+0300",
+            "created_at": "2021-04-06T10:34:35+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=14659851",
             "insider_interview": null,
@@ -434,101 +434,6 @@
             "schedule": {
                 "id": "fullDay",
                 "name": "Полный день"
-            },
-            "working_days": [],
-            "working_time_intervals": [],
-            "working_time_modes": [],
-            "accept_temporary": false
-        },
-        {
-            "id": "16949989",
-            "premium": false,
-            "name": "Упаковщица/упаковщик (2/2 и 15/15)",
-            "department": null,
-            "has_test": false,
-            "response_letter_required": false,
-            "area": {
-                "id": "1",
-                "name": "Москва",
-                "url": "https://api.hh.ru/areas/1"
-            },
-            "salary": {
-                "from": 40000,
-                "to": null,
-                "currency": "RUR",
-                "gross": false
-            },
-            "type": {
-                "id": "open",
-                "name": "Открытая"
-            },
-            "address": {
-                "city": "Москва",
-                "street": "Огородный проезд",
-                "building": "18с3",
-                "description": null,
-                "lat": 55.816227,
-                "lng": 37.599094,
-                "raw": "Москва, Огородный проезд, 18с3",
-                "metro": {
-                    "station_name": "Бутырская ",
-                    "line_name": "Люблинско-Дмитровская",
-                    "station_id": "10.546",
-                    "line_id": "10",
-                    "lat": 55.813333,
-                    "lng": 37.602778
-                },
-                "metro_stations": [
-                    {
-                        "station_name": "Бутырская ",
-                        "line_name": "Люблинско-Дмитровская",
-                        "station_id": "10.546",
-                        "line_id": "10",
-                        "lat": 55.813333,
-                        "lng": 37.602778
-                    },
-                    {
-                        "station_name": "Тимирязевская",
-                        "line_name": "Серпуховско-Тимирязевская",
-                        "station_id": "9.141",
-                        "line_id": "9",
-                        "lat": 55.81866,
-                        "lng": 37.574498
-                    }
-                ],
-                "id": "709840"
-            },
-            "response_url": null,
-            "sort_point_distance": null,
-            "published_at": "2021-03-22T09:46:00+0300",
-            "created_at": "2021-03-22T09:46:00+0300",
-            "archived": false,
-            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=16949989",
-            "insider_interview": null,
-            "url": "https://api.hh.ru/vacancies/16949989?host=hh.ru",
-            "alternate_url": "https://hh.ru/vacancy/16949989",
-            "relations": [],
-            "employer": {
-                "id": "12917",
-                "name": "Останкинский мясоперерабатывающий холдинг",
-                "url": "https://api.hh.ru/employers/12917",
-                "alternate_url": "https://hh.ru/employer/12917",
-                "logo_urls": {
-                    "original": "https://hhcdn.ru/employer-logo-original/794252.png",
-                    "90": "https://hhcdn.ru/employer-logo/3617895.png",
-                    "240": "https://hhcdn.ru/employer-logo/3617896.png"
-                },
-                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=12917",
-                "trusted": true
-            },
-            "snippet": {
-                "requirement": "Приветствуется опыт работы на производстве и складах. Приветствуется опыт работы с продуктами питания. Готовность работать при низкой температуре. ",
-                "responsibility": "Работа за конвейерной линией. Фасовка, упаковка, укладка готовой продукции. Поддержание чистоты на рабочем месте."
-            },
-            "contacts": null,
-            "schedule": {
-                "id": "flyInFlyOut",
-                "name": "Вахтовый метод"
             },
             "working_days": [],
             "working_time_intervals": [],
@@ -587,8 +492,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-24T16:04:45+0300",
-            "created_at": "2021-03-24T16:04:45+0300",
+            "published_at": "2021-04-05T11:01:33+0300",
+            "created_at": "2021-04-05T11:01:33+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=17503744",
             "insider_interview": null,
@@ -616,117 +521,6 @@
             "schedule": {
                 "id": "shift",
                 "name": "Сменный график"
-            },
-            "working_days": [],
-            "working_time_intervals": [],
-            "working_time_modes": [],
-            "accept_temporary": false
-        },
-        {
-            "id": "18330133",
-            "premium": false,
-            "name": "Агент по недвижимости (м. Пролетарская)",
-            "department": null,
-            "has_test": false,
-            "response_letter_required": true,
-            "area": {
-                "id": "1",
-                "name": "Москва",
-                "url": "https://api.hh.ru/areas/1"
-            },
-            "salary": {
-                "from": 60000,
-                "to": null,
-                "currency": "RUR",
-                "gross": false
-            },
-            "type": {
-                "id": "open",
-                "name": "Открытая"
-            },
-            "address": {
-                "city": "Москва",
-                "street": "Волгоградский проспект",
-                "building": "1с1",
-                "description": null,
-                "lat": 55.733498,
-                "lng": 37.671022,
-                "raw": "Москва, Волгоградский проспект, 1с1",
-                "metro": {
-                    "station_name": "Крестьянская застава",
-                    "line_name": "Люблинско-Дмитровская",
-                    "station_id": "10.63",
-                    "line_id": "10",
-                    "lat": 55.732278,
-                    "lng": 37.665325
-                },
-                "metro_stations": [
-                    {
-                        "station_name": "Крестьянская застава",
-                        "line_name": "Люблинско-Дмитровская",
-                        "station_id": "10.63",
-                        "line_id": "10",
-                        "lat": 55.732278,
-                        "lng": 37.665325
-                    },
-                    {
-                        "station_name": "Марксистская",
-                        "line_name": "Калининская",
-                        "station_id": "8.78",
-                        "line_id": "8",
-                        "lat": 55.740746,
-                        "lng": 37.65604
-                    },
-                    {
-                        "station_name": "Новохохловская",
-                        "line_name": "МЦД - 2",
-                        "station_id": "132.729",
-                        "line_id": "132",
-                        "lat": 55.718523,
-                        "lng": 37.719236
-                    },
-                    {
-                        "station_name": "Пролетарская",
-                        "line_name": "Таганско-Краснопресненская",
-                        "station_id": "7.62",
-                        "line_id": "7",
-                        "lat": 55.731546,
-                        "lng": 37.666917
-                    }
-                ],
-                "id": "366450"
-            },
-            "response_url": null,
-            "sort_point_distance": null,
-            "published_at": "2021-03-24T17:44:41+0300",
-            "created_at": "2021-03-24T17:44:41+0300",
-            "archived": false,
-            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=18330133",
-            "insider_interview": null,
-            "url": "https://api.hh.ru/vacancies/18330133?host=hh.ru",
-            "alternate_url": "https://hh.ru/vacancy/18330133",
-            "relations": [],
-            "employer": {
-                "id": "1464",
-                "name": "ИНКОМ-НЕДВИЖИМОСТЬ",
-                "url": "https://api.hh.ru/employers/1464",
-                "alternate_url": "https://hh.ru/employer/1464",
-                "logo_urls": {
-                    "original": "https://hhcdn.ru/employer-logo-original/816780.jpg",
-                    "240": "https://hhcdn.ru/employer-logo/3708008.jpeg",
-                    "90": "https://hhcdn.ru/employer-logo/3708007.jpeg"
-                },
-                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1464",
-                "trusted": true
-            },
-            "snippet": {
-                "requirement": "Энергичных. Целеустремленных. Готовых работать и зарабатывать. Коммуникабельных. Ответственных.",
-                "responsibility": "Обработка входящих заявок клиентов. Презентация услуг компании. Переговоры с собственниками, покупателями недвижимости и контрагентами. Заключение договоров на оказание риелторских услуг. "
-            },
-            "contacts": null,
-            "schedule": {
-                "id": "fullDay",
-                "name": "Полный день"
             },
             "working_days": [],
             "working_time_intervals": [],
@@ -780,8 +574,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-25T17:56:07+0300",
-            "created_at": "2021-03-25T17:56:07+0300",
+            "published_at": "2021-04-07T10:16:32+0300",
+            "created_at": "2021-04-07T10:16:32+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=18543338",
             "insider_interview": null,
@@ -816,95 +610,8 @@
             "accept_temporary": false
         },
         {
-            "id": "18782702",
-            "premium": false,
-            "name": "Senior Software Developer (IntelliJ IDEA)",
-            "department": null,
-            "has_test": false,
-            "response_letter_required": true,
-            "area": {
-                "id": "1",
-                "name": "Москва",
-                "url": "https://api.hh.ru/areas/1"
-            },
-            "salary": {
-                "from": 200000,
-                "to": null,
-                "currency": "RUR",
-                "gross": false
-            },
-            "type": {
-                "id": "open",
-                "name": "Открытая"
-            },
-            "address": {
-                "city": "Москва",
-                "street": "Лесная улица",
-                "building": "7",
-                "description": null,
-                "lat": 55.778639,
-                "lng": 37.587901,
-                "raw": "Москва, Лесная улица, 7",
-                "metro": {
-                    "station_name": "Белорусская",
-                    "line_name": "Кольцевая",
-                    "station_id": "5.20",
-                    "line_id": "5",
-                    "lat": 55.775179,
-                    "lng": 37.582303
-                },
-                "metro_stations": [
-                    {
-                        "station_name": "Белорусская",
-                        "line_name": "Кольцевая",
-                        "station_id": "5.20",
-                        "line_id": "5",
-                        "lat": 55.775179,
-                        "lng": 37.582303
-                    }
-                ],
-                "id": "3453412"
-            },
-            "response_url": null,
-            "sort_point_distance": null,
-            "published_at": "2021-03-18T16:11:41+0300",
-            "created_at": "2021-03-18T16:11:41+0300",
-            "archived": false,
-            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=18782702",
-            "insider_interview": null,
-            "url": "https://api.hh.ru/vacancies/18782702?host=hh.ru",
-            "alternate_url": "https://hh.ru/vacancy/18782702",
-            "relations": [],
-            "employer": {
-                "id": "9281",
-                "name": "JetBrains",
-                "url": "https://api.hh.ru/employers/9281",
-                "alternate_url": "https://hh.ru/employer/9281",
-                "logo_urls": {
-                    "240": "https://hhcdn.ru/employer-logo/1647147.png",
-                    "original": "https://hhcdn.ru/employer-logo-original/301193.png",
-                    "90": "https://hhcdn.ru/employer-logo/1647146.png"
-                },
-                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=9281",
-                "trusted": true
-            },
-            "snippet": {
-                "requirement": "Имеешь опыт разработки на Java от 5 лет. Умеешь проектировать и писать код, который легко читать и поддерживать. ",
-                "responsibility": "Для организации командной работы используются наши собственные продукты: UpSource для ревью кода, TeamCity для автоматического запуска тестов и сборки продуктов..."
-            },
-            "contacts": null,
-            "schedule": {
-                "id": "flexible",
-                "name": "Гибкий график"
-            },
-            "working_days": [],
-            "working_time_intervals": [],
-            "working_time_modes": [],
-            "accept_temporary": false
-        },
-        {
             "id": "18981439",
-            "premium": true,
+            "premium": false,
             "name": "Менеджер по продажам",
             "department": null,
             "has_test": false,
@@ -954,8 +661,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-22T11:38:40+0300",
-            "created_at": "2021-03-22T11:38:40+0300",
+            "published_at": "2021-04-06T11:48:44+0300",
+            "created_at": "2021-04-06T11:48:44+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=18981439",
             "insider_interview": null,
@@ -1037,8 +744,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-10T11:28:08+0300",
-            "created_at": "2021-03-10T11:28:08+0300",
+            "published_at": "2021-04-06T11:42:02+0300",
+            "created_at": "2021-04-06T11:42:02+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=19075115",
             "insider_interview": null,
@@ -1061,89 +768,6 @@
             "snippet": {
                 "requirement": "Законченное высшее образование, дополнительное профильное образование (повышение квалификации) как преимущество. Опыт работы в кадровом администрировании в \"белой\" компании со штатом...",
                 "responsibility": "Ведение полного цикла кадрового делопроизводства (прием, перемещение, увольнение, отпуска, командировки и проч.). Заполнение трудовых книжек. Учет и регистрация кадровых документов. "
-            },
-            "contacts": null,
-            "schedule": {
-                "id": "fullDay",
-                "name": "Полный день"
-            },
-            "working_days": [],
-            "working_time_intervals": [],
-            "working_time_modes": [],
-            "accept_temporary": false
-        },
-        {
-            "id": "19087587",
-            "premium": false,
-            "name": "Специалист по продажам",
-            "department": null,
-            "has_test": false,
-            "response_letter_required": false,
-            "area": {
-                "id": "1",
-                "name": "Москва",
-                "url": "https://api.hh.ru/areas/1"
-            },
-            "salary": {
-                "from": 120000,
-                "to": null,
-                "currency": "RUR",
-                "gross": false
-            },
-            "type": {
-                "id": "open",
-                "name": "Открытая"
-            },
-            "address": {
-                "city": "Москва",
-                "street": "Профсоюзная улица",
-                "building": "56",
-                "description": null,
-                "lat": 55.670133,
-                "lng": 37.552427,
-                "raw": "Москва, Профсоюзная улица, 56",
-                "metro": {
-                    "station_name": "Новые Черемушки",
-                    "line_name": "Калужско-Рижская",
-                    "station_id": "6.92",
-                    "line_id": "6",
-                    "lat": 55.670077,
-                    "lng": 37.554493
-                },
-                "metro_stations": [
-                    {
-                        "station_name": "Новые Черемушки",
-                        "line_name": "Калужско-Рижская",
-                        "station_id": "6.92",
-                        "line_id": "6",
-                        "lat": 55.670077,
-                        "lng": 37.554493
-                    }
-                ],
-                "id": "5048662"
-            },
-            "response_url": null,
-            "sort_point_distance": null,
-            "published_at": "2021-03-18T17:19:49+0300",
-            "created_at": "2021-03-18T17:19:49+0300",
-            "archived": false,
-            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=19087587",
-            "insider_interview": null,
-            "url": "https://api.hh.ru/vacancies/19087587?host=hh.ru",
-            "alternate_url": "https://hh.ru/vacancy/19087587",
-            "relations": [],
-            "employer": {
-                "id": "5123165",
-                "name": "Этажи Центр",
-                "url": "https://api.hh.ru/employers/5123165",
-                "alternate_url": "https://hh.ru/employer/5123165",
-                "logo_urls": null,
-                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=5123165",
-                "trusted": true
-            },
-            "snippet": {
-                "requirement": null,
-                "responsibility": "Организовывать сделки с недвижимостью в интересах клиентов (вторичный рынок и новостройки). Анализировать рынок и объекты недвижимости. Подбирать варианты, предварительно оценивая..."
             },
             "contacts": null,
             "schedule": {
@@ -1202,8 +826,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-22T11:13:47+0300",
-            "created_at": "2021-03-22T11:13:47+0300",
+            "published_at": "2021-04-07T16:47:54+0300",
+            "created_at": "2021-04-07T16:47:54+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=20155035",
             "insider_interview": null,
@@ -1289,8 +913,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-16T15:40:01+0300",
-            "created_at": "2021-03-16T15:40:01+0300",
+            "published_at": "2021-04-05T15:12:18+0300",
+            "created_at": "2021-04-05T15:12:18+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=20331334",
             "insider_interview": null,
@@ -1314,66 +938,6 @@
             "schedule": {
                 "id": "fullDay",
                 "name": "Полный день"
-            },
-            "working_days": [],
-            "working_time_intervals": [],
-            "working_time_modes": [],
-            "accept_temporary": false
-        },
-        {
-            "id": "20436447",
-            "premium": false,
-            "name": "Водитель автобуса регулярных пассажирских маршрутов",
-            "department": null,
-            "has_test": false,
-            "response_letter_required": false,
-            "area": {
-                "id": "1",
-                "name": "Москва",
-                "url": "https://api.hh.ru/areas/1"
-            },
-            "salary": {
-                "from": 45900,
-                "to": 71200,
-                "currency": "RUR",
-                "gross": true
-            },
-            "type": {
-                "id": "open",
-                "name": "Открытая"
-            },
-            "address": null,
-            "response_url": null,
-            "sort_point_distance": null,
-            "published_at": "2021-03-26T10:47:34+0300",
-            "created_at": "2021-03-26T10:47:34+0300",
-            "archived": false,
-            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=20436447",
-            "insider_interview": null,
-            "url": "https://api.hh.ru/vacancies/20436447?host=hh.ru",
-            "alternate_url": "https://hh.ru/vacancy/20436447",
-            "relations": [],
-            "employer": {
-                "id": "1435226",
-                "name": "ГУП Мосгортранс",
-                "url": "https://api.hh.ru/employers/1435226",
-                "alternate_url": "https://hh.ru/employer/1435226",
-                "logo_urls": {
-                    "240": "https://hhcdn.ru/employer-logo/1901843.png",
-                    "original": "https://hhcdn.ru/employer-logo-original/364896.png",
-                    "90": "https://hhcdn.ru/employer-logo/1901842.png"
-                },
-                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1435226",
-                "trusted": true
-            },
-            "snippet": {
-                "requirement": "Наличие среднего образования. Водительское удостоверение категории «D». Знание особенностей законодательства в области организации регулярных перевозок пассажиров автобусами. Знание основ законодательства...",
-                "responsibility": "Перевозка пассажиров на регулярных городских пассажирских маршрутах города Москвы."
-            },
-            "contacts": null,
-            "schedule": {
-                "id": "shift",
-                "name": "Сменный график"
             },
             "working_days": [],
             "working_time_intervals": [],
@@ -1440,8 +1004,8 @@
             },
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-22T17:09:16+0300",
-            "created_at": "2021-03-22T17:09:16+0300",
+            "published_at": "2021-04-05T09:22:35+0300",
+            "created_at": "2021-04-05T09:22:35+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=21714125",
             "insider_interview": null,
@@ -1500,8 +1064,8 @@
             "address": null,
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-04T14:29:02+0300",
-            "created_at": "2021-03-04T14:29:02+0300",
+            "published_at": "2021-04-07T18:02:22+0300",
+            "created_at": "2021-04-07T18:02:22+0300",
             "archived": false,
             "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=21805242",
             "insider_interview": null,
@@ -1523,7 +1087,7 @@
             },
             "snippet": {
                 "requirement": "Образование среднее профессиональное или выше. Опыт операционной работы (обслуживание физических лиц) не менее 1-го года. Желание расти и развиваться...",
-                "responsibility": "Расчетно-кассовое обслуживание физических лиц. Осуществление переводов по системам ЮНИСТРИМ, CONTACT, МОПС и переводов без открытия счета. Открытие и ведение..."
+                "responsibility": "Расчетно-кассовое обслуживание физических лиц. Осуществление переводов по системам ЮНИСТРИМ, CONTACT, и переводов без открытия счета. Открытие и ведение текущих..."
             },
             "contacts": null,
             "schedule": {
@@ -1536,9 +1100,9 @@
             "accept_temporary": false
         },
         {
-            "id": "22026701",
+            "id": "22354778",
             "premium": false,
-            "name": "Начинающий специалист по недвижимости",
+            "name": "Специалист по выдаче займов/ Специалист по работе с клиентами",
             "department": null,
             "has_test": false,
             "response_letter_required": false,
@@ -1549,7 +1113,7 @@
             },
             "salary": {
                 "from": 50000,
-                "to": 150000,
+                "to": 55000,
                 "currency": "RUR",
                 "gross": false
             },
@@ -1560,30 +1124,292 @@
             "address": null,
             "response_url": null,
             "sort_point_distance": null,
-            "published_at": "2021-03-16T07:10:55+0300",
-            "created_at": "2021-03-16T07:10:55+0300",
+            "published_at": "2021-04-06T11:16:14+0300",
+            "created_at": "2021-04-06T11:16:14+0300",
             "archived": false,
-            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=22026701",
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=22354778",
             "insider_interview": null,
-            "url": "https://api.hh.ru/vacancies/22026701?host=hh.ru",
-            "alternate_url": "https://hh.ru/vacancy/22026701",
+            "url": "https://api.hh.ru/vacancies/22354778?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/22354778",
             "relations": [],
             "employer": {
-                "id": "51395",
-                "name": "МИЦ-Столичный ипотечный центр",
-                "url": "https://api.hh.ru/employers/51395",
-                "alternate_url": "https://hh.ru/employer/51395",
+                "id": "1617273",
+                "name": "Благо Кредит",
+                "url": "https://api.hh.ru/employers/1617273",
+                "alternate_url": "https://hh.ru/employer/1617273",
                 "logo_urls": {
-                    "90": "https://hhcdn.ru/employer-logo/3273988.jpeg",
-                    "240": "https://hhcdn.ru/employer-logo/3273989.jpeg",
-                    "original": "https://hhcdn.ru/employer-logo-original/708218.jpg"
+                    "original": "https://hhcdn.ru/employer-logo-original/367759.jpg",
+                    "90": "https://hhcdn.ru/employer-logo/1913294.jpeg",
+                    "240": "https://hhcdn.ru/employer-logo/1913295.jpeg"
                 },
-                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=51395",
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1617273",
                 "trusted": true
             },
             "snippet": {
-                "requirement": "Возможно без опыта работы, но нацеленные на достижение материального и карьерного успеха в работе. Личные качества: коммуникабельность, энергичность, умение вести...",
-                "responsibility": "Работа с впервые обратившимися клиентами. Деловые переговоры с собственниками и покупателями недвижимости. Заключение договоров на оказание риелторских услуг. "
+                "requirement": "Активная жизненная позиция. - Опыт работы в сфере продаж обязателен от 1 года (банки, микрофинансовые организации, страховые компании - являются преимуществом). - ",
+                "responsibility": "Работа с клиентами, консультации. - Оценка ювелирных изделий золото/серебро. - Оценка техники: телефоны, планшеты, аудио/видео техника. - Выдача займов под залог..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "22382423",
+            "premium": false,
+            "name": "Полицейский ГУ МВД России по г. Москве",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 55000,
+                "to": 75000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Москва",
+                "street": "Сигнальный проезд",
+                "building": "37Ас1",
+                "description": null,
+                "lat": 55.851187,
+                "lng": 37.594953,
+                "raw": "Москва, Сигнальный проезд, 37Ас1",
+                "metro": null,
+                "metro_stations": [],
+                "id": "786673"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-04-08T05:08:20+0300",
+            "created_at": "2021-04-08T05:08:20+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=22382423",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/22382423?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/22382423",
+            "relations": [],
+            "employer": {
+                "id": "2762747",
+                "name": "Полк охраны и конвоирования подозреваемых и обвиняемых ГУ МВД России по г. Москве (2 рота 1 батальон)",
+                "url": "https://api.hh.ru/employers/2762747",
+                "alternate_url": "https://hh.ru/employer/2762747",
+                "logo_urls": {
+                    "90": "https://hhcdn.ru/employer-logo/2063366.jpeg",
+                    "original": "https://hhcdn.ru/employer-logo-original/405322.jpg",
+                    "240": "https://hhcdn.ru/employer-logo/2063367.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=2762747",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Образование не ниже среднего (полного) общего. Категория годности по здоровью не ниже Б-3.",
+                "responsibility": "Охрана и конвоирование заключённых под стражу лиц. Охрана общественного порядка и общественной безопасности."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "22392798",
+            "premium": false,
+            "name": "Провизор/Фармацевт",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 47400,
+                "to": 70000,
+                "currency": "RUR",
+                "gross": true
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-04-05T09:24:13+0300",
+            "created_at": "2021-04-05T09:24:13+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=22392798",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/22392798?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/22392798",
+            "relations": [],
+            "employer": {
+                "id": "39250",
+                "name": "ЭВАЛАР",
+                "url": "https://api.hh.ru/employers/39250",
+                "alternate_url": "https://hh.ru/employer/39250",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/223861.jpg",
+                    "90": "https://hhcdn.ru/employer-logo/1003022.jpeg",
+                    "240": "https://hhcdn.ru/employer-logo/1003023.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=39250",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Образование среднее специальное/неполное высшее/высшее (фармацевтическое). Опыт работы по специальности от 0,5 года - желательно. Наличие сертификата (справка с...",
+                "responsibility": "Консультирование и отпуск ЛП, БАД, медицинской техники, лечебной косметики. Соблюдение процедур работы аптеки. Выкладка товара в торговом зале, контроль наличия..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "22494957",
+            "premium": false,
+            "name": "Полицейский - водитель",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "2061",
+                "name": "Подольск (Московская область)",
+                "url": "https://api.hh.ru/areas/2061"
+            },
+            "salary": {
+                "from": 30000,
+                "to": 35000,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": {
+                "city": "Подольск",
+                "street": "Железнодорожная улица",
+                "building": "18",
+                "description": null,
+                "lat": 55.424945,
+                "lng": 37.563638,
+                "raw": "Подольск, Железнодорожная улица, 18",
+                "metro": null,
+                "metro_stations": [],
+                "id": "1605093"
+            },
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-04-04T20:47:29+0300",
+            "created_at": "2021-04-04T20:47:29+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=22494957",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/22494957?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/22494957",
+            "relations": [],
+            "employer": {
+                "id": "2980229",
+                "name": "Подольский ОВО-филиал ФГКУ УВО ВНГ России по Московской области",
+                "url": "https://api.hh.ru/employers/2980229",
+                "alternate_url": "https://hh.ru/employer/2980229",
+                "logo_urls": {
+                    "240": "https://hhcdn.ru/employer-logo/2233960.png",
+                    "90": "https://hhcdn.ru/employer-logo/2233959.png",
+                    "original": "https://hhcdn.ru/employer-logo-original/447998.jpg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=2980229",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "На должность полицейского водителя наличие водительского удостоверения. Не имеющие ограничений по здоровью. Служба в армии обязательна для военнообязанных. ",
+                "responsibility": "Обеспечение охраны общественного порядка на объектах и маршрутах патрулирования в городском округе Подольск. Пресечение административных правонарушений и преступлений. "
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "shift",
+                "name": "Сменный график"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
+        },
+        {
+            "id": "22682483",
+            "premium": false,
+            "name": "Агент по работе с недвижимостью (Зеленоград)",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 60000,
+                "to": null,
+                "currency": "RUR",
+                "gross": false
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-04-08T10:29:12+0300",
+            "created_at": "2021-04-08T10:29:12+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=22682483",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/22682483?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/22682483",
+            "relations": [],
+            "employer": {
+                "id": "1464",
+                "name": "ИНКОМ-НЕДВИЖИМОСТЬ",
+                "url": "https://api.hh.ru/employers/1464",
+                "alternate_url": "https://hh.ru/employer/1464",
+                "logo_urls": {
+                    "original": "https://hhcdn.ru/employer-logo-original/816780.jpg",
+                    "240": "https://hhcdn.ru/employer-logo/3708008.jpeg",
+                    "90": "https://hhcdn.ru/employer-logo/3708007.jpeg"
+                },
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1464",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Образование не ниже средне-специального. Желание развиваться в сфере недвижимости. Самостоятельный, тактичный, внимательный, открытый для новых знаний. Мы: 28 лет...",
+                "responsibility": "Полное сопровождение клиентов по купле-продаже недвижимости: Получение клиентского запроса. Проведение переговоров. Показ объектов недвижимости. Документационное оформление сделок (совместно с..."
             },
             "contacts": null,
             "schedule": {
@@ -1594,13 +1420,69 @@
             "working_time_intervals": [],
             "working_time_modes": [],
             "accept_temporary": false
+        },
+        {
+            "id": "23072496",
+            "premium": false,
+            "name": "Врач по паллиативной медицинской помощи",
+            "department": null,
+            "has_test": false,
+            "response_letter_required": false,
+            "area": {
+                "id": "1",
+                "name": "Москва",
+                "url": "https://api.hh.ru/areas/1"
+            },
+            "salary": {
+                "from": 100000,
+                "to": null,
+                "currency": "RUR",
+                "gross": true
+            },
+            "type": {
+                "id": "open",
+                "name": "Открытая"
+            },
+            "address": null,
+            "response_url": null,
+            "sort_point_distance": null,
+            "published_at": "2021-04-08T11:48:34+0300",
+            "created_at": "2021-04-08T11:48:34+0300",
+            "archived": false,
+            "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=23072496",
+            "insider_interview": null,
+            "url": "https://api.hh.ru/vacancies/23072496?host=hh.ru",
+            "alternate_url": "https://hh.ru/vacancy/23072496",
+            "relations": [],
+            "employer": {
+                "id": "3059571",
+                "name": "ГБУЗ Центр паллиативной помощи ДЗМ",
+                "url": "https://api.hh.ru/employers/3059571",
+                "alternate_url": "https://hh.ru/employer/3059571",
+                "logo_urls": null,
+                "vacancies_url": "https://api.hh.ru/vacancies?employer_id=3059571",
+                "trusted": true
+            },
+            "snippet": {
+                "requirement": "Высшее образование \"Лечебное дело\", \"Педиатрия\". Подготовка по специальности: \"Акушерство и гинекология\", \"Анестезиология-реаниматология\", \"Гастроэнтерология\", \"Гематология\", \"Гериатрия\", \"Диабетология\", \"Инфекционные болезни\", \"Кардиология...",
+                "responsibility": "Оказание пациентам с неизлечимыми прогрессирующими заболеваниями и состояниями паллиативной медицинской помощи (проведение комплекса медицинских процедур и мероприятий, направленных на избавление..."
+            },
+            "contacts": null,
+            "schedule": {
+                "id": "fullDay",
+                "name": "Полный день"
+            },
+            "working_days": [],
+            "working_time_intervals": [],
+            "working_time_modes": [],
+            "accept_temporary": false
         }
     ],
-    "found": 219561,
+    "found": 100145,
     "pages": 100,
     "per_page": 20,
     "page": 0,
     "clusters": null,
     "arguments": null,
-    "alternate_url": "https://hh.ru/search/vacancy?area=1&area=2019&enable_snippets=true"
+    "alternate_url": "https://hh.ru/search/vacancy?area=1&area=2019&date_from=03.04.2021&enable_snippets=true"
 }
