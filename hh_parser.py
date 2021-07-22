@@ -34,41 +34,32 @@ def get_areas(headers, tests):
     tests.test_get_areas(response, areas)
     return (areas)
 
-def write_areas_to_file(areas, tests):
+def write_to_file(file_name, json_data, tests):
     """
-    Write json with areas to txt file.
+    Write json to txt file.
     This function is for debugging only purpose.
     """
-    print('Writing geo areas to file...')
-
-    file_name = 'areas.json'
+    print(f'Writing data to file `{file_name}`...')
 
     with open (file_name, 'w') as f:
-        f.write(json.dumps(areas, indent=4, ensure_ascii=False))
+        f.write(json.dumps(json_data, indent=4, ensure_ascii=False))
     tests.test_write_to_file(file_name)
     return ()
 
-def create_areas_database(database):
+def create_database(database, query):
     """
     Create areas table in vacancies database.
     """
-    print ('Creating geo areas database...')
-
-    sqlite_create_table_query = """CREATE TABLE IF NOT EXISTS areas (
-    id INTEGER PRIMARY KEY,
-    parent_id INTEGER,
-    name TEXT NOT NULL COLLATE NOCASE
-    );"""
+    print (f'Creating table at `{database}` database...')
 
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
-    cursor.execute(sqlite_create_table_query)
+    cursor.execute(query)
     connection.commit()
     cursor.close()
-    tests.test_create_areas_database(database)
     if connection:
         connection.close()
-    tests.test_create_areas_database(database)
+    tests.test_create_database(database)
     return ()
 
 def areas_generator(areas):
@@ -157,7 +148,11 @@ def select_areas_by_name(database, names):
     print ("Search geo areas...")
     sqlite_select_query = """SELECT * from areas where name like ?"""
 
-    invalid_names, not_found_names, found_names = [], [], []
+    invalid_names, not_found_names, found_names = set(), set(), set()
+
+    # It will be used to clean duplicates
+    found_ids = set()
+
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
 
@@ -167,66 +162,47 @@ def select_areas_by_name(database, names):
             cursor.execute(sqlite_select_query, (query_name,))
             found = cursor.fetchall()
             if not found:
-                not_found_names.append(name)
+                not_found_names.add(name)
             else:
-                found_names += found
+                for found_area in found:
+                    found_names.add(found_area)
+                    found_ids.add(found_area[0])
         else:
-            invalid_names.append(name)
+            invalid_names.add(name)
     if connection:
         connection.close()
-    return (invalid_names, not_found_names, found_names)
+    return (invalid_names, not_found_names, found_names, found_ids)
 
-def filter_areas(areas):
+def clean_area_duplicates(found_names, found_ids):
     """
-    Filter geo JSON with regard to FILTERS['area']
-    """
-    filtered_areas_ids = []
-    filtered_areas_indexes = []
+    If `select_areas_by_name` returns some areas
+    which are children of others, this function removes such children areas.
 
-    russia = areas[0]
-    russian_regions = russia['areas']
-    for russian_region_index, russian_region in enumerate(russian_regions):
-        if russian_region['name'] in FILTERS['area']:
-            filtered_areas_ids.append(russian_region['id'])
-            filtered_areas_indexes.append(russian_region_index)
-    tests.test_filter_areas(FILTERS['area'], russian_regions, filtered_areas_indexes, filtered_areas_ids)
-    return (filtered_areas_ids)
-
-def get_vacancies():
+    `found_names` is set of tuples with structure {(`id`, `parent_id`, `name`)}.
     """
-    Get vacancies with regard to FILTERS.
-    """
-    #TBD Default get 1 day old vacancies  for Moscow and Moscow Oblast.
-    #TBD for testing: The connection.total_changes method returns the total number of database rows that have been affected.
+    cleaned_names = set()
+    cleaned_ids = set()
 
-    vacancy_file = 'vacancies.txt'
+    for found_name in found_names:
+        parent_id = found_name[1]
+        if parent_id not in found_ids:
+            cleaned_names.add(found_name)
+            cleaned_ids.add(found_name[0])
+    tests.test_clean_area_duplicates(found_names, cleaned_names)
+    return (cleaned_names, cleaned_ids)
+
+def get_vacancies(headers, filters):
+    """
+    Get vacancies under `filters`.
+    """
+    print ('Get vacancies...')
+
     url = 'https://api.hh.ru/vacancies'
 
-    r = requests.get(url, headers=HEADERS, params=FILTERS)
-    vacancies = r.json()
-    if tests.test_get_vacancies_0(FILTERS, r, vacancies):
-        current_time = datetime.datetime.now().replace(microsecond=0).isoformat()
-        with open(vacancy_file,  'w') as f:
-            f.write(current_time)
-            f.write(2*'\n')
-            f.write(json.dumps(r.json(), indent=4, ensure_ascii=False))
-        tests.test_write_to_file(vacancy_file, current_time)
-    else:
-        raise ValueError("ERROR! 'get_vacancies' function hasn't passed tests.")
+    response = requests.get(url, headers=headers, params=filters)
+    vacancies = response.json()
+    tests.test_get_vacancies(response, vacancies, filters)
     return (vacancies)
-
-def create_database(table):
-    """
-    Create the database 'vacancies.db' with table 'hh_vacancies' and row 'id'.
-    - This database may contain tables with vacaincies from other sites in future.
-    - Other columns will be created during JSON parse.
-    """
-    con = sqlite3.connect(DATABASE)
-    cur = con.cursor()
-    create_query = 'CREATE TABLE ' + str(table) + ' (id INTEGER PRIMARY KEY UNIQUE)'
-    cur.execute(create_query)
-    cur.close()
-    con.close()
 
 def write_vacancies_to_database(vacancies, table):
     """
@@ -283,26 +259,47 @@ def add_database_column():
     pass
 
 # areas = get_areas(HEADERS, tests)
-# write_areas_to_file(areas, tests)
-# create_areas_database(DATABASE)
+# write_to_file('areas.json', areas, tests)
+
+# create_database(
+#     database = DATABASE,
+#     query = """CREATE TABLE IF NOT EXISTS areas (
+#     id INTEGER PRIMARY KEY,
+#     parent_id INTEGER,
+#     name TEXT NOT NULL COLLATE NOCASE
+#     );"""
+# )
+
 # write_areas_to_database(areas_generator, areas, DATABASE)
 tests.test_is_valid_area_name(is_valid_area_name)
 tests.test_select_areas_by_name(select_areas_by_name, DATABASE)
 
 names = [
-    'влад',
     'москва',
-    'петербург',
-    'drop database',
-    'благов',
-    'дальнег',
-    'nyc',
-    'жоп',
-    'ху',
-    'пиз',
+    'московская область'
 ]
-invalid_names, not_found_names, found_names = \
+invalid_names, not_found_names, found_names, found_ids = \
     select_areas_by_name(DATABASE, names)
+
+cleaned_names, cleaned_ids = clean_area_duplicates(found_names, found_ids)
+
+print ('cleaned_names = ', cleaned_names)
+print ('cleaned_ids = ', cleaned_ids)
+
+vacancy_filters = {
+    'area': list(cleaned_ids),
+    'period': '1'
+}
+
+vacancies = get_vacancies(HEADERS, vacancy_filters)
+write_to_file('vacancies.json', vacancies, tests)
+
+create_database(
+    DATABASE,
+    """CREATE TABLE IF NOT EXISTS vacancies (
+    id INTEGER PRIMARY KEY
+    );"""
+)
 
 print ()
 print ('Invalid names: ')
@@ -317,7 +314,7 @@ print ('Found names: ')
 for found_name in found_names:
     print (found_name)
 
-#print (
+    #print (
 #    'Where do you want to search vacancies?\n\
 #    Write cities, regions or countries on Russian separated by commas \
 #    and press `ENTER`.'
