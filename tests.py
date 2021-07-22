@@ -6,14 +6,15 @@ Test functions for hh_parser.py
 
 import json
 import requests
-import datetime
+import os.path
+import sqlite3
 
-def test_write_to_file(file_name, current_time):
-      with open(file_name) as f:
-          file_time = f.readline().strip()
-      assert file_time == current_time,\
-            'Expected record timestamp == %s.\n\
-            Got file timestamp == %s' % (current_time, file_time)
+def test_write_to_file(file_name):
+      """
+      Test if data was written to file.
+      """
+      assert os.path.isfile(file_name),\
+            "file `%s` was not created." % file_name
       return ()
 
 def test_get_areas_status_code(response, areas):
@@ -57,9 +58,127 @@ def test_get_areas_root_dict_keys(response, areas):
       return ()
 
 def test_get_areas(response, areas):
+      """
+      Combine all area tests.
+      """
       test_get_areas_status_code(response, areas)
       test_get_areas_root_areas_quantity(response, areas)
       test_get_areas_root_dict_keys(response, areas)
+
+def test_create_areas_database(database):
+      """
+      Check if database file was created.
+      """
+      assert os.path.isfile(database),\
+            "Database `%s` was not created." % database
+      return ()
+
+def test_write_areas_to_database(database, area_counter):
+      """
+      Check if all areas were written to database.
+      """
+      connection = sqlite3.connect(database)
+      cursor = connection.cursor()
+      cursor.execute('SELECT * FROM areas')
+      table_counter = len(cursor.fetchall())
+      assert table_counter == area_counter,\
+      "Expected %s rows in the table.\n\
+      Got %s rows." % (area_counter, table_counter)
+      return ()
+
+def test_is_valid_area_name(is_valid_area_name):
+      """
+      Test `is_valid_area_name` function using some specific cases.
+      """
+      valid_names = [
+            'а',
+            'Я',
+            '-',
+            '-в',
+            'с.п',
+            'Москва',
+            'владивосток',
+            'ростов-на-Дону',
+            25*'пиза',
+            'благовещенск (амурская область)',
+            'ёбург',
+            'Ёлки-п.к',
+            '1',
+            'Горки-10 (Московская область, Одинцовский район)',
+            'Мосолово (Рязанская область, Шиловский район)',
+            'Алекса́ндров Гай',
+            'Республика Кот-д’Ивуар'
+      ]
+      invalid_names = [
+            'nyc',
+            '',
+            'w-e',
+            25*'пиза' + 'п',
+      ]
+
+      for valid_name in valid_names:
+            assert is_valid_area_name(valid_name),\
+            "Expected `True` for `%s`.\n\
+            Got False." % valid_name
+
+      for invalid_name in invalid_names:
+            assert not is_valid_area_name(invalid_name),\
+            "Expected `False` for `%s`.\n\
+            Got True." % invalid_name
+      return ()
+
+def test_select_areas_by_name(select_areas_by_name, database):
+      """
+      Test `select_areas_by_name` function using some specific cases.
+      """
+      names = [
+            'drop table areas',
+            'nyc',
+            'пиз',
+            'влад',
+            'москва'
+      ]
+
+      control_invalid_names = [
+            'drop table areas',
+            'nyc'
+      ]
+      control_not_found_names = [
+            'пиз',
+      ]
+      control_found_names = [
+            (22, 1948, 'владивосток'),
+            (23, 1716, 'владимир'),
+            (82, 1475, 'владикавказ'),
+            (1716, 113, 'владимирская область'),
+            (1733, 1716, 'радужный (владимирская область)'),
+            (3493, 2198, 'владимирец'),
+            (3604, 2123, 'владимир-волынский'),
+            (5514, 1438, 'владимирская (краснодарский край)'),
+            (1, 113, 'москва')
+      ]
+
+      returned_invalid_names, returned_not_found_names, returned_found_names =\
+            select_areas_by_name(database, names)
+
+      assert control_invalid_names == returned_invalid_names,\
+            "Returned and control data are not even.\n\
+            control_invalid_names == %s\n\
+            returned_invalid_names == %s" %\
+            (control_invalid_names, returned_invalid_names)
+
+      assert control_not_found_names == returned_not_found_names,\
+            "Returned and control data are not even.\n\
+            control_not_found_names == %s\n\
+            returned_not_found_names == %s" %\
+            (control_not_found_names, returned_not_found_names)
+
+      assert control_found_names == returned_found_names,\
+            "Returned and control data are not even.\n\
+            control_found_names == %s\n\
+            returned_found_names == %s" %\
+            (control_found_names, returned_found_names)
+      return ()
 
 def test_filter_areas(FILTERS_areas, russian_regions, filtered_areas_indexes, filtered_areas_ids):
       """

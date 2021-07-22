@@ -1,16 +1,16 @@
-import sqlite3
+with open('areas.json') as f:
+    data = f.readlines()
 
-DATABASE = 'vacancies.db'
-table = 'hh_vacancies'
-
-con = sqlite3.connect(DATABASE)
-cur = con.cursor()
-create_query = 'CREATE TABLE ' + str(table) + ' (id integer)'
-cur.execute(create_query)
-
-insert_query = 'INSERT INTO hh_vacancies (id) VALUES (21714125);'
-cur.execute(insert_query)
-con.commit ()
-cur.close()
-con.close()
-print ('The SQLite connection is closed')
+length = 0
+counter = 0
+for line in data:
+    counter += 1
+    if len(line) > length:
+        length = len(line)
+        max_line_number = counter
+        
+    
+    
+print ('length = ', length)
+print ('line number = ', max_line_number)
+    
