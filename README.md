@@ -1,7 +1,8 @@
-This script can:
+This program can:
 <ul>
-  <li>Parse HH vacancies
-  <li>Store them in SQLite database
-  <li>Filter vacancies
-  <li>Send filtered list to Telegram
+  <li>Parse hh vacancies.</li>
+  <li>Store them in sqlite database.</li>
+  <li>Filter vacancies.</li>
+  <li>Send vacancies to Telegram.</li>
+  <li>Cron these tasks.</li>
 </ul>
