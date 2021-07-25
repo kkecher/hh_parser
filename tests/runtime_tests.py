@@ -1,29 +1,21 @@
 #!/usr/bin/env python3
 
 """
-Test functions for hh_parser.py
+Runtime tests for hh_parser.py
 """
 
 import json
-import requests
 import os.path
+import requests
 import sqlite3
-
-def test_write_to_file(file_name):
-      """
-      Test if data was written to file.
-      """
-      assert os.path.isfile(file_name),\
-            "file `%s` was not created." % file_name
-      return ()
 
 def test_is_status_code_200(response):
       """
       Test if we got status code 200.
       """
       assert response.status_code == 200,\
-            'Expected status code == 200.\n\
-            Got status code == %s' % response.status_code
+            "Expected status code == 200.\n\
+            Got status code == %s" % response.status_code
       return ()
 
 def test_get_areas_root_length(response, areas):
@@ -64,6 +56,14 @@ def test_get_areas(response, areas):
       test_is_status_code_200(response)
       test_get_areas_root_length(response, areas)
       test_get_areas_root_keys(response, areas)
+
+def test_write_to_file(file_name):
+      """
+      Test if data was written to file.
+      """
+      assert os.path.isfile(file_name),\
+            "file `%s` was not created." % file_name
+      return ()
 
 def test_create_database(database):
       """

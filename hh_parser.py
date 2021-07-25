@@ -1,34 +1,35 @@
 #!/usr/bin/env python3.6
 
 """
-Get and filter HH vacancies.
+Get and filter hh vacancies.
 
 API resources:
 https://github.com/hhru/api/blob/master/docs_eng/README.md
 https://github.com/hhru/api/blob/master/docs_eng/vacancies.md
 """
-#TBD send to Telegram if error
+
+import json
+import re
+import sqlite3
 
 import requests
-import json
-import tests
-import sqlite3
-import re
 
-HEADERS  = {'user-agent': 'kkecher (kkecher@gmail.com)'}
+import tests.runtime_tests as tests
+
+HEADERS  = {"user-agent": "kkecher (kkecher@gmail.com)"}
 
 # The database may contain vacancies from other sites in the future
 # so it has name `vacancies.db`, not `hh.db`
-DATABASE = 'vacancies.db'
+DATABASE = "vacancies.db"
 
 def get_areas(headers, tests):
     """
     Get json with geo (countries, regions, cities) and their ids.
-    We'll write this json to sqlite database to filter user required areas.
+    We'll write this json to sqlite database to search by areas.
     """
-    print ('Getting geo areas from hh...')
+    print ("Getting geo areas from hh...")
 
-    url = 'https://api.hh.ru/areas'
+    url = "https://api.hh.ru/areas"
     response = requests.get(url, headers=headers)
     areas = response.json()
     tests.test_get_areas(response, areas)
@@ -36,7 +37,7 @@ def get_areas(headers, tests):
 
 def write_to_file(file_name, json_data, tests):
     """
-    Write json to txt file.
+    Write json to file.
     This function is for debugging only purpose.
     """
     print(f'Writing data to file `{file_name}`...')
@@ -46,12 +47,16 @@ def write_to_file(file_name, json_data, tests):
     tests.test_write_to_file(file_name)
     return ()
 
-def create_database(database, query):
+def create_table(database, table, columns):
     """
-    Create areas table in vacancies database.
+    Create table at `database`.
+    `columns`: list of strings with columns name and attributes
     """
-    print (f'Creating table at `{database}` database...')
+    print (f'Creating table `{table}` at `{database}` database...')
 
+    query = f"CREATE TABLE {table} (\
+    {column for column in columns},\
+    );"
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
     cursor.execute(query)
@@ -81,20 +86,19 @@ def areas_generator(areas):
         print ('Unhandled data type: ', type(areas))
         raise TypeError
 
-def write_areas_to_database(areas_generator, areas, database):
+def write_areas_to_database(db, areas_generator, areas):
     """
-    Iterate over areas generator and fill areas table.
+    Iterate over areas generator and fill `areas` table.
     """
     print ('Writing geo areas to database...')
 
-    connection = sqlite3.connect(database)
+    connection = sqlite3.connect(db)
     cursor = connection.cursor()
 
     area = {}
     area_counter = 0
-    sqlite_insert_with_param_query = """INSERT OR REPLACE INTO areas
-    ('id', 'parent_id', 'name')
-    VALUES (?, ?, ?);"""
+    sqlite_insert_with_param_query = """INSERT OR REPLACE INTO areas\
+    ('id', 'parent_id', 'name') VALUES (?, ?, ?);"""
 
     for item in areas_generator(areas):
         key, value = item[0], item[1]
@@ -120,9 +124,11 @@ def write_areas_to_database(areas_generator, areas, database):
             area_counter += 1
             area = {}
     cursor.close()
+    database_changes_number = connection.total_changes
     if connection:
         connection.close()
-    tests.test_write_areas_to_database(database, area_counter)
+
+    tests.test_write_to_database(database_changes_number, area_counter)
     return ()
 
 def is_valid_area_name(name):
@@ -204,9 +210,83 @@ def get_vacancies(headers, filters):
     tests.test_get_vacancies(response, vacancies, filters)
     return (vacancies)
 
-def write_vacancies_to_database(vacancies, table):
+def vacancies_generator(vacancies, parent_key = ''):
     """
-    Write vacancies to SQLite database
+    Create vacancies iterator to flatten multilevel json
+    into one-level database table.
+    """
+    if isinstance(vacancies, dict):
+        for key, value in vacancies.items():
+            if isinstance(value, (dict, list)):
+                yield from vacancies_generator(value, parent_key+key+'_')
+            else:
+                yield (parent_key+key, value)
+    elif isinstance(vacancies, list):
+        for item in vacancies:
+            yield from vacancies_generator(item, parent_key)
+    else:
+        print ()
+        print ('Unhandled data type: ', type(vacancies))
+        raise TypeError
+
+def write_vacancies_to_database(db, vacancies_generator, vacancies):
+    """
+    Iterate over vacancies generator and fill `vacancies` table.
+    """
+    print ()
+    print ('Writing vacancies to database...')
+
+    connection = sqlite3.connect(db)
+    cursor = connection.cursor()
+    table_columns = [column[0] for column in\
+               cursor.execute("""SELECT * FROM vacancies""").description]
+    print ('table_columns = ', table_columns)
+
+    vacancy = {}
+    vacancy_counter = 0
+
+    for item in vacancies_generator(vacancies):
+        key, value = item[0], item[1]
+
+        # Lowercase text to have case-insensitive search.
+        # `COLLATE NOCASE` doesn't work for cyrillic.
+        try:
+            value = value.lower()
+        except AttributeError:
+            pass
+
+        vacancy[key] = value
+        if key == 'id' and len(vacancy) > 1:
+            print('vacancy = ', vacancy)
+            keys = vacancy.keys()
+            values = vacancy.values()
+            for key in keys:
+                if key not in table_columns:
+                    cursor.execute(
+                        'ALTER TABLE vacancies ADD COLUMN %s TEXT' % key
+                    )
+                    table_columns.append(key)
+            # cursor.execute(
+            #     '''INSERT OR REPLACE INTO vacancies (%s) VALUES (?)''' %\
+            #     (keys), (values,)
+            # )
+            connection.commit()
+            vacancy_counter += 1
+            vacancy = {}
+        else:
+            continue
+
+    cursor.close()
+    database_changes_number = connection.total_changes
+    if connection:
+        connection.close()
+
+    # tests.test_write_to_database(database_changes_number, vacancy_counter)
+    return ()
+
+def write_vacancies_to_database_old(database, table, vacancies):
+    """
+    Write vacancies json to `table`.
     """
     con = sqlite3.connect(DATABASE,
                           detect_types=sqlite3.PARSE_DECLTYPES |
@@ -227,6 +307,7 @@ def write_vacancies_to_database(vacancies, table):
     cur.close()
     con.close()
     print ('The SQLite connection is closed')
+
 
 def write_vacancy_fields_to_database(vacancy, field_name=''):
     """
@@ -258,61 +339,55 @@ def combine_python_database_types():
 def add_database_column():
     pass
 
-# areas = get_areas(HEADERS, tests)
-# write_to_file('areas.json', areas, tests)
 
-# create_database(
-#     database = DATABASE,
-#     query = """CREATE TABLE IF NOT EXISTS areas (
-#     id INTEGER PRIMARY KEY,
-#     parent_id INTEGER,
-#     name TEXT NOT NULL COLLATE NOCASE
+
+# Create table `areas`
+
+
+# write_areas_to_database(DATABASE, areas_generator, areas)
+# tests.test_is_valid_area_name(is_valid_area_name)
+# tests.test_select_areas_by_name(select_areas_by_name, DATABASE)
+
+# names = [
+#     'Москва',
+#     'московская область'
+# ]
+# invalid_names, not_found_names, found_names, found_ids = \
+#    select_areas_by_name(DATABASE, names)
+
+# cleaned_names, cleaned_ids = clean_area_duplicates(found_names, found_ids)
+# 
+# print ('cleaned_names = ', cleaned_names)
+# print ('cleaned_ids = ', cleaned_ids)
+
+# create_table(
+#     DATABASE,
+#     """CREATE TABLE IF NOT EXISTS vacancies (
+#     id INTEGER PRIMARY KEY
 #     );"""
 # )
+# vacancy_filters = {
+#     'area': list(cleaned_ids),
+#     'period': '1'
+# }
+# 
+# vacancies = get_vacancies(HEADERS, vacancy_filters)['items']
+#write_to_file('vacancies.json', vacancies, tests)
 
-# write_areas_to_database(areas_generator, areas, DATABASE)
-tests.test_is_valid_area_name(is_valid_area_name)
-tests.test_select_areas_by_name(select_areas_by_name, DATABASE)
+# write_vacancies_to_database(DATABASE, vacancies_generator, vacancies)
 
-names = [
-    'москва',
-    'московская область'
-]
-invalid_names, not_found_names, found_names, found_ids = \
-    select_areas_by_name(DATABASE, names)
-
-cleaned_names, cleaned_ids = clean_area_duplicates(found_names, found_ids)
-
-print ('cleaned_names = ', cleaned_names)
-print ('cleaned_ids = ', cleaned_ids)
-
-vacancy_filters = {
-    'area': list(cleaned_ids),
-    'period': '1'
-}
-
-vacancies = get_vacancies(HEADERS, vacancy_filters)
-write_to_file('vacancies.json', vacancies, tests)
-
-create_database(
-    DATABASE,
-    """CREATE TABLE IF NOT EXISTS vacancies (
-    id INTEGER PRIMARY KEY
-    );"""
-)
-
-print ()
-print ('Invalid names: ')
-for invalid_name in invalid_names:
-    print (invalid_name)
-print ()
-print ('Not found names: ')
-for not_found_name in not_found_names:
-    print (not_found_name)
-print ()
-print ('Found names: ')
-for found_name in found_names:
-    print (found_name)
+# print ()
+# print ('Invalid names: ')
+# for invalid_name in invalid_names:
+#     print (invalid_name)
+# print ()
+# print ('Not found names: ')
+# for not_found_name in not_found_names:
+#     print (not_found_name)
+# print ()
+# print ('Found names: ')
+# for found_name in found_names:
+#     print (found_name)
 
     #print (
 #    'Where do you want to search vacancies?\n\
@@ -339,7 +414,19 @@ for found_name in found_names:
 #except sqlite3.Error:
 #    write_vacancies_to_database(vacancies, table)
 #
-print ()
-print ('Done!')
+
 
 #TBD use Etag / Cache-Control / Expires to get only new vacancies https://github.com/hhru/api/blob/master/docs_eng/cache.md
+
+
+# create_areas_query = '    id INTEGER PRIMARY KEY,
+#     name TEXT NOT NULL COLLATE NOCASE'
+
+def main():
+    areas = get_areas(HEADERS, tests)
+    # write_to_file('areas.json', areas, tests)
+    print ()
+    print ('Done!')    
+
+if __name__ == "__main__":
+    main()
