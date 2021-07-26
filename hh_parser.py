@@ -7,25 +7,33 @@ API resources:
 https://github.com/hhru/api/blob/master/docs_eng/README.md
 https://github.com/hhru/api/blob/master/docs_eng/vacancies.md
 """
-
 import json
 import re
 import sqlite3
 
+from contracts import contract
 import requests
 
 import tests.runtime_tests as tests
+from  tests.user_contracts import *
 
 HEADERS  = {"user-agent": "kkecher (kkecher@gmail.com)"}
 
-# The database may contain vacancies from other sites in the future
+# The database may contain vacancies from other sites in future
 # so it has name `vacancies.db`, not `hh.db`
-DATABASE = "vacancies.db"
+DATABASE = "./data/vacancies.db"
+AREAS_TABLE = "areas"
+AREAS_FILE = "areas.json"
+VACANCIES_TABLE = "hh"
 
-def get_areas(headers, tests):
+@contract
+def get_areas(headers):
     """
     Get json with geo (countries, regions, cities) and their ids.
     We'll write this json to sqlite database to search by areas.
+
+    :type headers: dict(str: str)
+    :rtype: list[>=9]
     """
     print ("Getting geo areas from hh...")
 
@@ -35,42 +43,59 @@ def get_areas(headers, tests):
     tests.test_get_areas(response, areas)
     return (areas)
 
-def write_to_file(file_name, json_data, tests):
+@contract
+def write_to_file(file_name, json_data):
     """
     Write json to file.
     This function is for debugging only purpose.
-    """
-    print(f'Writing data to file `{file_name}`...')
 
-    with open (file_name, 'w') as f:
+    : type file_name: str[>0]
+    : type json_data: list | dict
+    """
+    file_name = f"./data/{file_name}"
+    print(f"Writing json to `{file_name}`...")
+
+    with open (file_name, "w") as f:
         f.write(json.dumps(json_data, indent=4, ensure_ascii=False))
     tests.test_write_to_file(file_name)
     return ()
 
+@contract
 def create_table(database, table, columns):
     """
-    Create table at `database`.
-    `columns`: list of strings with columns name and attributes
-    """
-    print (f'Creating table `{table}` at `{database}` database...')
+    Create table at `./data/{database}`.
+    `columns`: list of strings with columns params
 
-    query = f"CREATE TABLE {table} (\
-    {column for column in columns},\
-    );"
+    : type database: str[>0]
+    : type table: str[>0]
+    : type columns: list[>0](str[>0])
+    """
+    print (f"Creating table `{table}` at `{database}` database...")
+
+    if len(columns) == 1:
+        query = f"CREATE TABLE IF NOT EXISTS {table} ("+\
+            "".join([column for column in columns]) +\
+            ");"
+    else:
+        query = f"CREATE TABLE IF NOT EXISTS {table} ("+\
+            ", ".join([column for column in columns]) +\
+            ");"
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
     cursor.execute(query)
     connection.commit()
+    tests.test_create_table(cursor, table, columns)
     cursor.close()
-    if connection:
-        connection.close()
-    tests.test_create_database(database)
+    connection.close()
     return ()
 
+@contract
 def areas_generator(areas):
     """
     Create areas iterator to flatten multilevel json
     (countries > regions > cities) into one-level database table.
+
+    : type areas: list | dict
     """
     if isinstance(areas, dict):
         for key, value in areas.items():
@@ -83,22 +108,95 @@ def areas_generator(areas):
             yield from areas_generator(item)
     else:
         print ()
-        print ('Unhandled data type: ', type(areas))
+        print ("Unhandled data type: ", type(areas))
         raise TypeError
 
-def write_areas_to_database(db, areas_generator, areas):
+@contract
+def get_table_columns(database, table):
     """
-    Iterate over areas generator and fill `areas` table.
-    """
-    print ('Writing geo areas to database...')
+    Get table column names.
 
-    connection = sqlite3.connect(db)
+    : type database: str[>0]
+    : type table: str[>0]
+    : rtype: list[>0](str[>0])
+    """
+    print (f"Getting `{database} > {table}` column names...")
+
+    connection = sqlite3.connect(database)
     cursor = connection.cursor()
+    get_columns_query = "PRAGMA table_info(" + str(table) + ")"
+    columns = cursor.execute(get_columns_query)
+    columns_names = [column[1] for column in columns]
+
+    cursor.close()
+    connection.close()
+    return (columns_names)
+
+def create_table_column(database, table, column):
+    return ()
+
+@contract
+def write_areas_to_database(database, table, areas_generator):
+    """
+    Iterate over areas generator and fill database areas table.
+
+    : type database: str[>0]
+    : type table: str[>0]
+    : type areas_generator: isinstance(generator)
+    """
+    print (f"Writing geo areas to `{database} > {table}`...")
+
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    columns_names = get_table_columns(database, table)
+
+    for area in areas_generator(areas):
+        key, value = area[0], area[1]
+
+        # Lowercase text to have case-insensitive search.
+        # `COLLATE NOCASE` doesn't work for cyrillic.
+        try:
+            value = value.lower()
+        except AttributeError:
+            pass
+        if key not in columns_names:
+            create_column
+
+        print (f"key =  {key}, value = {value}") #dd
+        input ("enter")
+        # a[key] = value
+        # key == 'id' and len(vacancy) > 1:
+        #  print('vacancy = ', vacancy)
+        #  keys = vacancy.keys()
+        #  values = vacancy.values()
+        #  for key in keys:
+        #      if key not in table_columns:
+        #          cursor.execute(
+        #              'ALTER TABLE vacancies ADD COLUMN %s TEXT' % key
+        #          )
+        #          table_columns.append(key)
+        # cursor.execute(
+        #     '''INSERT OR REPLACE INTO vacancies (%s) VALUES (?)''' %\
+        #     (keys), (values,)
+        # )
+        # connection.commit()
+        # vacancy_counter += 1
+        # vacancy = {}
+        # else:
+        #    continue
+
+        #    cursor.close()
+        #    database_changes_number = connection.total_changes
+        #    if connection:
+        #        connection.close()
+
+    # tests.test_write_to_database(database_changes_number, vacancy_counter)
+    return ()
 
     area = {}
     area_counter = 0
     sqlite_insert_with_param_query = """INSERT OR REPLACE INTO areas\
-    ('id', 'parent_id', 'name') VALUES (?, ?, ?);"""
+    ("id", "parent_id", "name") VALUES (?, ?, ?);"""
 
     for item in areas_generator(areas):
         key, value = item[0], item[1]
@@ -115,7 +213,7 @@ def write_areas_to_database(db, areas_generator, areas):
             continue
         else:
             keys = list(area.keys())
-            assert keys == ['id', 'parent_id', 'name'],\
+            assert keys == ["id", "parent_id", "name"],\
                 'Expected keys structure: ["id", "parent_id", "name"]\n\
                 Got keys structure: %s' % keys
             values = tuple(area.values())
@@ -229,14 +327,14 @@ def vacancies_generator(vacancies, parent_key = ''):
         print ('Unhandled data type: ', type(vacancies))
         raise TypeError
 
-def write_vacancies_to_database(db, vacancies_generator, vacancies):
+def write_vacancies_to_database(database, vacancies_generator, vacancies):
     """
     Iterate over vacancies generator and fill `vacancies` table.
     """
     print ()
     print ('Writing vacancies to database...')
 
-    connection = sqlite3.connect(db)
+    connection = sqlite3.connect(database)
     cursor = connection.cursor()
     table_columns = [column[0] for column in\
                cursor.execute("""SELECT * FROM vacancies""").description]
@@ -356,7 +454,7 @@ def add_database_column():
 #    select_areas_by_name(DATABASE, names)
 
 # cleaned_names, cleaned_ids = clean_area_duplicates(found_names, found_ids)
-# 
+#
 # print ('cleaned_names = ', cleaned_names)
 # print ('cleaned_ids = ', cleaned_ids)
 
@@ -370,7 +468,7 @@ def add_database_column():
 #     'area': list(cleaned_ids),
 #     'period': '1'
 # }
-# 
+#
 # vacancies = get_vacancies(HEADERS, vacancy_filters)['items']
 #write_to_file('vacancies.json', vacancies, tests)
 
@@ -399,9 +497,9 @@ def add_database_column():
 #
 #while user_area.lower() != 'stop' or user_area.lower() != 'стоп':
 #    user_area = input()
-#    # TBD search user_area at db,
+#    # TBD search user_area at database,
 #    # return area name if success, return error otherwise
-#    # user_area_id = db search
+#    # user_area_id = database search
 #    user_areas_id.append(user_area_id)
 
 
@@ -423,10 +521,16 @@ def add_database_column():
 #     name TEXT NOT NULL COLLATE NOCASE'
 
 def main():
-    areas = get_areas(HEADERS, tests)
-    # write_to_file('areas.json', areas, tests)
+    areas = get_areas(HEADERS)
+    write_to_file(AREAS_FILE, areas)
+    create_table(
+        DATABASE,
+        AREAS_TABLE,
+        ["id INTEGER PRIMARY KEY"]
+    )
+    write_areas_to_database(DATABASE, AREAS_TABLE, areas_generator(areas))
     print ()
-    print ('Done!')    
+    print ('Done!')
 
 if __name__ == "__main__":
     main()

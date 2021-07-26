@@ -25,7 +25,7 @@ setup(
     packages=["hh"],
     include_package_data=True,
     python_requires=">=3.6.0",
-    install_requires=["requests"],
+    install_requires=["PyContracts", "requests"],
     entry_points={
         "console_scripts": [
             "hh_parser=hh.__main__:main",

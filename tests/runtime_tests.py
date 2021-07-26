@@ -3,11 +3,11 @@
 """
 Runtime tests for hh_parser.py
 """
-
 import json
 import os.path
-import requests
 import sqlite3
+
+import requests
 
 def test_is_status_code_200(response):
       """
@@ -18,7 +18,7 @@ def test_is_status_code_200(response):
             Got status code == %s" % response.status_code
       return ()
 
-def test_get_areas_root_length(response, areas):
+def test_get_areas_root_length(areas):
       """
       Today (2021-07-17) hh returns 9 areas at json root:
       1. Россия
@@ -32,11 +32,11 @@ def test_get_areas_root_length(response, areas):
       9. Узбекистан
       """
       assert len(areas) >= 9,\
-            'Expected root length >= 9.\n\
-            Got len(json) == %d' % len(areas)
+            "Expected root length >= 9.\n\
+            Got len(json) == %d" % len(areas)
       return ()
 
-def test_get_areas_root_keys(response, areas):
+def test_get_areas_root_keys(areas):
       """
       Check if root dicts has all keys:
       - id
@@ -44,7 +44,7 @@ def test_get_areas_root_keys(response, areas):
       - name
       - areas
       """
-      assert list(areas[0].keys()) == ['id', 'parent_id', 'name', 'areas'],\
+      assert list(areas[0].keys()) == ["id", "parent_id", "name", "areas"],\
             "Expected top json keys: ['id', 'parrent_id', 'name', 'areas']\n\
             Got top json keys: %s" % list(areas[0].keys())
       return ()
@@ -54,8 +54,9 @@ def test_get_areas(response, areas):
       Combine all area tests.
       """
       test_is_status_code_200(response)
-      test_get_areas_root_length(response, areas)
-      test_get_areas_root_keys(response, areas)
+      test_get_areas_root_length(areas)
+      test_get_areas_root_keys(areas)
+      return ()
 
 def test_write_to_file(file_name):
       """
@@ -65,12 +66,25 @@ def test_write_to_file(file_name):
             "file `%s` was not created." % file_name
       return ()
 
-def test_create_database(database):
+def test_create_table(cursor, table, user_columns):
       """
-      Check if database file was created.
+      Check if database table was created.
       """
-      assert os.path.isfile(database),\
-            "Database `%s` was not created." % database
+      get_columns_query = "PRAGMA table_info(" + str(table) + ")"
+      user_columns_names = [user_column.split()[0]\
+                            for user_column in user_columns]
+      database_columns = cursor.execute(get_columns_query)
+      database_columns_names = [database_column[1]\
+                                for database_column in database_columns]
+      for user_column_name in user_columns_names:
+            assert user_column_name in database_columns_names,\
+            "Table or columns was not created in database.\n\
+            user_columns_names = %s\n\
+            database_columns_names = %s"\
+            % (user_columns_names, database_columns_names)
+      return ()
+
+def test_create_table_column(database, table, column):
       return ()
 
 def test_write_to_database(database_changes_number, json_counter):
@@ -250,4 +264,3 @@ def test_get_vacancies(response, vacancies, filters):
       test_get_vacancies_root_length(response, vacancies)
       test_get_vacancies_is_respect_filters(filters, vacancies)
       return ()
-
