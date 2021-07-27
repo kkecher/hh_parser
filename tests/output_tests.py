@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
 """
-Runtime tests for hh_parser.py
+Output tests for hh_parser.py
 """
+
 import json
 import os.path
 import sqlite3
 
 import requests
+
+from tests.input_tests import test_var_type, test_var_len_more_than
 
 def test_is_status_code_200(response):
       """
@@ -31,9 +34,7 @@ def test_get_areas_root_length(areas):
       8. Кыргызстан
       9. Узбекистан
       """
-      assert len(areas) >= 9,\
-            "Expected root length >= 9.\n\
-            Got len(json) == %d" % len(areas)
+      test_var_len_more_than(areas, "areas", 8)
       return ()
 
 def test_get_areas_root_keys(areas):
@@ -66,16 +67,15 @@ def test_write_to_file(file_name):
             "file `%s` was not created." % file_name
       return ()
 
-def test_create_table(cursor, table, user_columns):
+def test_create_table_columns(
+            database, table, get_table_columns_names, user_columns):
       """
-      Check if database table was created.
+      Test if database table columns was created.
       """
-      get_columns_query = "PRAGMA table_info(" + str(table) + ")"
       user_columns_names = [user_column.split()[0]\
                             for user_column in user_columns]
-      database_columns = cursor.execute(get_columns_query)
-      database_columns_names = [database_column[1]\
-                                for database_column in database_columns]
+      database_columns_names = get_table_columns_names(
+            database,  table)
       for user_column_name in user_columns_names:
             assert user_column_name in database_columns_names,\
             "Table or columns was not created in database.\n\
@@ -84,16 +84,25 @@ def test_create_table(cursor, table, user_columns):
             % (user_columns_names, database_columns_names)
       return ()
 
-def test_create_table_column(database, table, column):
+def test_get_table_columns_names(columns_names):
+      """
+      Test returned list of columns names.
+      """
+      test_var_type(columns_names, "columns_names", list)
+      test_var_len_more_than(columns_names, "columns_names", 0)
+      
+      for column in columns_names:
+            test_var_type(column, "column", str)
+            test_var_len_more_than(column, "column", 0)
       return ()
 
-def test_write_to_database(database_changes_number, json_counter):
+def test_write_to_database(database_changes_number, areas_counter):
       """
       Check if all data were written to database.
       """
-      assert database_changes_number == json_counter,\
-      "Expected %s rows in the table.\n\
-      Got %s rows." % (json_counter, table_counter)
+      assert database_changes_number == areas_counter,\
+      "Expected %s database changes.\n\
+      Got %s database changes." % (areas_counter, database_changes_number)
       return ()
 
 def test_is_valid_area_name(is_valid_area_name):
