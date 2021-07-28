@@ -9,10 +9,8 @@ https://github.com/hhru/api/blob/master/docs_eng/vacancies.md
 """
 
 import json
-import re
 import sqlite3
 
-from contracts import contract
 import requests
 
 import tests.input_tests as in_tests
@@ -57,7 +55,7 @@ def write_to_file(file_name, json_data):
 
 def create_table(database, table, columns):
     """
-    Create table at `./data/{database}`.
+    Create table at database.
     `columns`: list of strings with columns params
     """
     in_tests.test_create_table_columns(database, table, columns)
@@ -71,7 +69,6 @@ def create_table(database, table, columns):
     connection.commit()
     cursor.close()
     connection.close()
-
     out_tests.test_create_table_columns(
         database, table, get_table_columns_names, columns)
     return ()
@@ -106,19 +103,18 @@ def get_table_columns_names(database, table):
 
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
-    get_columns_query = "PRAGMA table_info(" + str(table) + ")"
-    columns = list(cursor.execute(get_columns_query))
+    query = "PRAGMA table_info(" + str(table) + ")"
+    columns = list(cursor.execute(query))
     columns_names = [column[1] for column in columns]
 
     cursor.close()
     connection.close()
-
     out_tests.test_get_table_columns_names(columns_names)
     return (columns_names)
 
 def create_table_columns(database, table, columns):
     """
-    Create `columns` in table at `./data/{database}`.
+    Create columns in table at database.
     `columns`: list of strings with columns params
     """
     in_tests.test_create_table_columns(database, table, columns)
@@ -127,8 +123,8 @@ def create_table_columns(database, table, columns):
     cursor = connection.cursor()
 
     for column in columns:
-        add_column_query = f"ALTER TABLE {table} ADD COLUMN {column}"
-        cursor.execute(add_column_query)
+        query = f"ALTER TABLE {table} ADD COLUMN {column}"
+        cursor.execute(query)
     connection.commit()
     cursor.close()
     connection.close()
@@ -137,6 +133,28 @@ def create_table_columns(database, table, columns):
         database, table, get_table_columns_names, columns)
     return ()
 
+def insert_into_table(database, table, data):
+    """
+    Insert or replace data into table at database.
+    `data` = dict of query {key: value}
+    """
+    in_tests.test_insert_into_table(database, table, data)
+    print (f"Insert or update data in `{database} > {table}`...")
+
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    query_columns = ", ".join(data.keys())
+    query_values = f"{'?, ' * len(data)}"[:-2]
+    query =\
+f"INSERT OR REPLACE INTO {table} ({query_columns}) VALUES ({query_values});"
+    cursor.execute(query, list(data.values()))
+    connection.commit()
+    database_changes_count = connection.total_changes
+    cursor.close()
+    connection.close()
+    out_tests.test_insert_into_table(database_changes_count)
+    return (database_changes_count)
+
 def write_areas_to_database(database, table, areas_generator):
     """
     Iterate over areas generator and fill database table.
@@ -144,11 +162,10 @@ def write_areas_to_database(database, table, areas_generator):
     in_tests.test_write_areas_to_database(database, table, areas_generator)
     print (f"Writing geo areas to `{database} > {table}`...")
 
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
     columns_names = get_table_columns_names(database, table)
     area = {}
     area_counter = 0
+    database_changes_count = 0
 
     for item in areas_generator:
         key, value = item[0], item[1]
@@ -168,69 +185,41 @@ def write_areas_to_database(database, table, areas_generator):
         if key != "id" or area == {}:
             area[key] = value
         else:
-            query_columns = ", ".join(area.keys())
-            query_values = f"{'?, ' * len(area)}"[:-2]
-            add_value_query =\
-f"INSERT OR REPLACE INTO {table} ({query_columns}) VALUES ({query_values});"
-            cursor.execute(add_value_query, list(area.values()))
-            connection.commit()
+            database_changes_count += insert_into_table(database, table, area)
             area_counter += 1
-            area = {}
-    database_changes_count = connection.total_changes
-    cursor.close()
-    connection.close()
-
-    out_tests.test_write_to_database(database_changes_count, area_counter)
+            area[key] = value
+    database_changes_count += insert_into_table(database, table, area)
+    area_counter += 1
+    out_tests.test_write_areas_to_database(database_changes_count, area_counter)
     return ()
 
-def is_valid_area_name(name):
-    """
-    Valid name must follow these rules:
-    - can contain only Russian letters
-    - can contain numbers
-    - can contain characters from string "-().,́’" and whitespaces
-    - 1 <= length <= 100 characters
-    """
-    regex = re.compile(r'[0-9ёЁа-яА-Я-́’,()\s\.]')
-
-    if 1 <= len(name) <= 100 and\
-       regex.sub('', name) == '':
-        return (True)
-    else:
-        return (False)
-
-def select_areas_by_name(database, names):
+def select_areas_by_name(database, table, names):
     """
     Select geo areas by name to get their ids.
+    `names` = list of names for search.
     """
+    in_tests.test_select_areas_by_name(database, table, names)
     print ("Search geo areas...")
-
-    sqlite_select_query = """SELECT * from areas where name like ?"""
-
-    invalid_names, not_found_names, found_names = set(), set(), set()
-
-    # It will be used to clean duplicates
-    found_ids = set()
 
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
+    query = f"SELECT * FROM {table} WHERE name LIKE ?"
+    not_found_names, found_names, found_ids = set(), set(), set()
 
     for name in names:
-        if is_valid_area_name(name):
-            query_name = '%' + name.lower() + '%'
-            cursor.execute(sqlite_select_query, (query_name,))
-            found = cursor.fetchall()
-            if not found:
-                not_found_names.add(name)
-            else:
-                for found_area in found:
-                    found_names.add(found_area)
-                    found_ids.add(found_area[0])
+        query_name = f"%{name.lower()}%"
+        cursor.execute(query, (query_name,))
+        found = cursor.fetchall()
+        if not found:
+            not_found_names.add(name)
         else:
-            invalid_names.add(name)
-    if connection:
-        connection.close()
-    return (invalid_names, not_found_names, found_names, found_ids)
+            for found_area in found:
+                found_names.add(found_area)
+                found_ids.add(found_area[0])
+    cursor.close()
+    connection.close()
+    out_tests.test_select_areas_by_name(not_found_names, found_names, found_ids)
+    return (not_found_names, found_names, found_ids)
 
 def clean_area_duplicates(found_names, found_ids):
     """
@@ -334,7 +323,7 @@ def write_vacancies_to_database(database, vacancies_generator, vacancies):
     if connection:
         connection.close()
 
-    # out_tests.test_write_to_database(database_changes_count, vacancy_counter)
+    # out_tests.test_write_areas_to_database(database_changes_count, vacancy_counter)
     return ()
 
 def write_vacancies_to_database_old(database, table, vacancies):
@@ -398,7 +387,7 @@ def add_database_column():
 
 
 # write_areas_to_database(DATABASE, areas_generator, areas)
-# out_tests.test_is_valid_area_name(is_valid_area_name)
+# out_tests.test_select_areas_by_name(select_areas_by_name)
 # out_tests.test_select_areas_by_name(select_areas_by_name, DATABASE)
 
 # names = [
@@ -477,13 +466,22 @@ def add_database_column():
 
 def main():
     areas = get_areas(HEADERS)
-    write_to_file(AREAS_FILE, areas)
-    create_table(
-        DATABASE,
-        AREAS_TABLE,
-        ["id INTEGER PRIMARY KEY"]
-    )
-    write_areas_to_database(DATABASE, AREAS_TABLE, areas_generator(areas))
+    # write_to_file(AREAS_FILE, areas)
+    # create_table(
+    #     DATABASE,
+    #     AREAS_TABLE,
+    #     ["id INTEGER NOT NULL PRIMARY KEY"]
+    # )
+    # write_areas_to_database(DATABASE, AREAS_TABLE, areas_generator(areas))
+    names = [
+        "моск",
+        "владиво"
+    ]
+    not_found_names, found_names, found_ids =\
+        select_areas_by_name(DATABASE, AREAS_TABLE, names)
+    print (f"not_found_names = {not_found_names}") #dd
+    print (f"found_names = {found_names}") #dd
+    print (f"found_ids = {found_ids}") #dd
     print ()
     print ('Done!')
 

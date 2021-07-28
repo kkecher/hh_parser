@@ -90,13 +90,22 @@ def test_get_table_columns_names(columns_names):
       """
       test_var_type(columns_names, "columns_names", list)
       test_var_len_more_than(columns_names, "columns_names", 0)
-      
+
       for column in columns_names:
             test_var_type(column, "column", str)
             test_var_len_more_than(column, "column", 0)
       return ()
 
-def test_write_to_database(database_changes_number, areas_counter):
+def test_insert_into_table(database_changes_count):
+      """
+      Check if database_changes_count == 1.
+      """
+      assert database_changes_count == 1,\
+      "Expected `database_changes_count` == 1\n\
+      Got `database_changes_count` == %d" % database_changes_count
+      return ()
+
+def test_write_areas_to_database(database_changes_number, areas_counter):
       """
       Check if all data were written to database.
       """
@@ -105,115 +114,22 @@ def test_write_to_database(database_changes_number, areas_counter):
       Got %s database changes." % (areas_counter, database_changes_number)
       return ()
 
-def test_is_valid_area_name(is_valid_area_name):
+def test_select_areas_by_name(not_found_names, found_names, found_ids):
       """
-      Test `is_valid_area_name` function using some specific cases.
+      Tests for `select_areas_by_name` output.
       """
-      valid_names = [
-            'а',
-            'Я',
-            '-',
-            '-в',
-            'с.п',
-            'Москва',
-            'владивосток',
-            'ростов-на-Дону',
-            25*'пиза',
-            'благовещенск (амурская область)',
-            'ёбург',
-            'Ёлки-п.к',
-            '1',
-            'Горки-10 (Московская область, Одинцовский район)',
-            'Мосолово (Рязанская область, Шиловский район)',
-            'Алекса́ндров Гай',
-            'Республика Кот-д’Ивуар'
-      ]
-      invalid_names = [
-            'nyc',
-            '',
-            'w-e',
-            25*'пиза' + 'п',
-      ]
+      test_var_type(not_found_names, "not_found_names", set)
+      test_var_type(found_names, "found_names", set)
+      test_var_type(found_ids, "found_ids", set)
 
-      for valid_name in valid_names:
-            assert is_valid_area_name(valid_name),\
-            "Expected `True` for `%s`.\n\
-            Got False." % valid_name
+      for area_name in not_found_names:
+            test_var_type(area_name, "area_name", str)
 
-      for invalid_name in invalid_names:
-            assert not is_valid_area_name(invalid_name),\
-            "Expected `False` for `%s`.\n\
-            Got True." % invalid_name
-      return ()
+      for area_name in found_names:
+            test_var_type(area_name, "area_name", tuple)
 
-def test_select_areas_by_name(select_areas_by_name, database):
-      """
-      Test `select_areas_by_name` function using some specific cases.
-      """
-      names = [
-            'drop table areas',
-            'nyc',
-            'пиз',
-            'влад',
-            'москва'
-      ]
-
-      control_invalid_names = {
-            'drop table areas',
-            'nyc'
-      }
-      control_not_found_names = {
-            'пиз',
-      }
-      control_found_names = {
-            (22, 1948, 'владивосток'),
-            (23, 1716, 'владимир'),
-            (82, 1475, 'владикавказ'),
-            (1716, 113, 'владимирская область'),
-            (1733, 1716, 'радужный (владимирская область)'),
-            (3493, 2198, 'владимирец'),
-            (3604, 2123, 'владимир-волынский'),
-            (5514, 1438, 'владимирская (краснодарский край)'),
-            (1, 113, 'москва')
-      }
-      control_found_ids = {
-            22,
-            23,
-            82,
-            1716,
-            1733,
-            3493,
-            3604,
-            5514,
-            1,
-      }
-
-      returned_invalid_names,returned_not_found_names,returned_found_names,\
-            returned_found_ids = select_areas_by_name(database, names)
-
-      assert len(control_invalid_names) == len(returned_invalid_names),\
-            "Returned and control data are not even.\n\
-            control_invalid_names == %s\n\
-            returned_invalid_names == %s" %\
-            (control_invalid_names, returned_invalid_names)
-
-      assert len(control_not_found_names) == len(returned_not_found_names),\
-            "Returned and control data are not even.\n\
-            control_not_found_names == %s\n\
-            returned_not_found_names == %s" %\
-            (control_not_found_names, returned_not_found_names)
-
-      assert len(control_found_names) == len(returned_found_names),\
-            "Returned and control data are not even.\n\
-            control_found_names == %s\n\
-            returned_found_names == %s" %\
-            (control_found_names, returned_found_names)
-
-      assert len(control_found_ids) == len(returned_found_ids),\
-            "Returned and control data are not even.\n\
-            control_found_ids == %d\n\
-            returned_found_ids == %d" %\
-            (control_found_names, returned_found_names)
+      for area_name in found_ids:
+            test_var_type(area_name, "area_name", int)
       return ()
 
 def test_clean_area_duplicates(found_names, cleaned_names):
