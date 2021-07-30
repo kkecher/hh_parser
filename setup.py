@@ -19,16 +19,11 @@ setup(
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3"
     ],
     packages=["hh"],
     include_package_data=True,
-    python_requires=">=3.6.0",
-    install_requires=["PyContracts", "requests"],
-    entry_points={
-        "console_scripts": [
-            "hh_parser=hh.__main__:main",
-        ]
+    python_requires=">=3.0.0",
+    install_requires=[requests"]
     },
 )

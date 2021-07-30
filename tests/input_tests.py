@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 """
-Input tests for hh_parser.py
+Input tests for hh_parser.
 """
 import re
 import types
 
+# General tests
 def test_var_type(var, var_name, var_type):
     """
     Test if type(`var`) == `var_type`.
@@ -24,12 +25,11 @@ def test_var_len_more_than(var, var_name, var_len):
         Got len(%s) == %d" % (var_name, var_len, var_name, len(var))
     return ()
 
-def test_get_areas_headers(headers):
+def test_request_headers(headers):
     """
-    Test `headers` input.
+    Test for input request headers.
     """
     test_var_type(headers, "headers", dict)
-
 
     keys = headers.keys()
     values = headers.values()
@@ -39,14 +39,6 @@ def test_get_areas_headers(headers):
     for value in values:
         test_var_type(value, "value", str)
     return ()
-
-def test_get_areas(headers):
-    """
-    Combine all tests for `get_areas`.
-    """
-    test_get_areas_headers(headers)
-    return ()
-
 
 def test_write_to_file_file_name(file_name):
     """
@@ -130,45 +122,75 @@ def test_insert_into_table(database, table, data):
             test_var_len_more_than(value, "value", 0)
     return ()
 
-def test_write_areas_to_database(database, table, areas_generator):
+def test_write_to_database_from_generator(database, table, generator):
     """
-    Combine all tests for `write_areas_to_database`.
+    Tests for writing to database from generator.
     """
     test_database_name(database)
     test_table_name(table)
 
-    assert isinstance(areas_generator, types.GeneratorType),\
-        "Expected type(areas_generator) == generator,\n\
-        Got type(areas_generator) == %s" % type(areas_generator)
+    assert isinstance(generator, types.GeneratorType),\
+        "Expected type(generator) == generator,\n\
+        Got type(generator) == %s" % type(generator)
     return ()
 
-def test_select_areas_by_name(database, table, area_names):
+def test_select_by_name(database, table, names):
     """
-    Valid area name must follow all these rules:
-    - can contain only Russian letters
+    Valid name must follow all these rules:
     - can contain numbers
     - can contain characters: - ́ ’ , ( ) . and whitespaces.
     - 1 <= length <= 100 characters
     """
     test_database_name(database)
     test_table_name(table)
-    test_var_type(area_names, "area_names", list)
-    test_var_len_more_than(area_names, "area_names", 0)
+    test_var_type(names, "names", list)
+    test_var_len_more_than(names, "names", 0)
 
-    regex = re.compile(r'[0-9ёЁа-яА-Я-́’,()\s\.]')
-    for area_name in area_names:
-        test_var_type(area_name, "area_name", str)
-        test_var_len_more_than(area_name, "area_name", 0)    
+    regex = re.compile(r'[0-9a-zA-ZёЁа-яА-Я-́’,()\s\.]')
+    for name in names:
+        test_var_type(name, "name", str)
+        test_var_len_more_than(name, "name", 0)    
 
-        assert len(area_name) <= 100,\
-        "Expected len(area_name) <= 100\n\
-        Got len(area_name) == %d" % len(area_name)
+        assert len(name) <= 100,\
+        "Expected len(name) <= 100\n\
+        Got len(name) == %d" % len(name)
 
-        forbidden_characters = regex.sub("", area_name)
+        forbidden_characters = regex.sub("", name)
         assert forbidden_characters == "",\
-        "Forbidden characters `%s` in `area_name`.\n\n\
-        Valid area name must follow all these rules:\n\
-        - can contain only Russian letters\n\
+        "Forbidden characters `%s` in `name`.\n\n\
+        Valid name must follow all these rules:\n\
         - can contain numbers\n\
         - can contain characters: - ́ ’ , ( ) . and whitespaces." % forbidden_characters
+    return ()
+
+
+# `get_areas` tests
+def test_clean_area_children(found_names, found_ids):
+    """
+    Combine all tests for `clean_area_children`.
+    """
+    test_var_type(found_names, "found_names", set)
+    test_var_type(found_ids, "found_ids", set)
+
+    for area_name in found_names:
+        test_var_type(area_name, "area_name", tuple)
+
+    for area_id in found_ids:
+        test_var_type(area_id, "area_id", int)
+    return ()
+
+
+# `get_vacancies` tests
+def test_get_vacancies(headers, filters):
+    """
+    Test for `get_vacancies`.
+    """
+    test_request_headers(headers)
+    test_var_type(filters, "filters", dict)
+    
+    keys, values = filters.keys(), filters.values()
+    for key in keys:
+        test_var_type(key, "key", str)
+    for value in values:
+        test_var_type(value, "value", (str, list))
     return ()
