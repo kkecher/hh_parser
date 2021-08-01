@@ -6,7 +6,7 @@ Input tests for hh_parser.
 import re
 import types
 
-# General tests
+# Common tests
 def test_var_type(var, var_name, var_type):
     """
     Test if type(`var`) == `var_type`.
@@ -77,7 +77,7 @@ def test_table_name(table):
     """
     test_var_type(table, "table", str)
     test_var_len_more_than(table, "table", 0)
-    assert table.isalnum(),\
+    assert table.isalnum() or "_",\
         "Only numbers and letters are allowed in table name.\n\
         Got `table` = %s" % table
     return ()
@@ -163,6 +163,14 @@ def test_select_by_name(database, table, names):
         - can contain characters: - ́ ’ , ( ) . and whitespaces." % forbidden_characters
     return ()
 
+def test_rename_json_to_database_key(key):
+    """
+    Tests for `rename_json_to_database_key`.
+    """
+    test_var_type(key, "key", str)
+    test_var_len_more_than(key, "key", 0)
+    test_table_name(key)
+    return ()
 
 # `get_areas` tests
 def test_clean_area_children(found_names, found_ids):

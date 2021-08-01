@@ -13,7 +13,9 @@ import sqlite3
 
 import requests
 
-from general import (
+from get_areas import AREAS_TABLE
+
+from common_functions import (
     HEADERS,
     DATABASE,
     write_to_file,
@@ -21,13 +23,15 @@ from general import (
     get_table_columns_names,
     get_table_columns_names,
     create_table_columns,
-    insert_into_table
+    insert_into_table,
+    rename_json_to_database_key
 )
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
-VACANCIES_TABLE = "hh"
+VACANCIES_TABLE = "hh_vacancies"
 VAСANCIES_FILE = "./data/vacancies.json"
+JSON_DATABASE_KEY_MATCHES = {}
 
 def get_vacancies(headers, filters):
     """
@@ -48,7 +52,7 @@ def vacancies_generator(vacancies, parent_key = ""):
     into one-level database table.
     """
     in_tests.test_json_data_type(vacancies)
-    
+
     if isinstance(vacancies, dict):
         for key, value in vacancies.items():
             if isinstance(value, (dict, list)):
@@ -63,11 +67,26 @@ def vacancies_generator(vacancies, parent_key = ""):
         print ("Unhandled data type: ", type(vacancies))
         raise TypeError
 
+def write_vacancies_area_to_database():
+    return ()
+
+def write_vacancies_address_to_database():
+    # can be null #dd
+    # fill it as is except metro stations #dd
+    return ()
+
+def write_vacancies_metro_stations_to_database():
+    return ()
+
+def write_vacancies_employer_to_database():
+    return ()
+
 def write_vacancies_to_database(database, table, vacancies_generator):
     """
     Iterate over vacancies generator and fill `vacancies` table.
     """
-    in_tests.test_write_to_database_from_generator(database, table, vacancies_generator)
+    in_tests.test_write_to_database_from_generator(
+        database, table, vacancies_generator)
     print (f"Writing vacancies to `{database} > {table}`...")
 
     columns_names = get_table_columns_names(database, table)
@@ -75,8 +94,18 @@ def write_vacancies_to_database(database, table, vacancies_generator):
     vacancies_counter = 0
     database_changes_count = 0
 
+    # These keys are stored in separate tables of the database.
+    # They are processed by separate functions.
+    special_keys = {
+        "area": write_vacancies_area_to_database,
+        "address": write_vacancies_address_to_database,
+        "metro_stations": write_vacancies_metro_stations_to_database,
+        "employer": write_vacancies_employer_to_database
+        }
+
     for item in vacancies_generator:
         key, value = item[0], item[1]
+        key = rename_json_to_database_key(key)
 
         # Lowercase text to have case-insensitive search.
         # `COLLATE NOCASE` doesn't work for cyrillic.
@@ -85,20 +114,25 @@ def write_vacancies_to_database(database, table, vacancies_generator):
         except AttributeError:
             pass
 
+        if key in special_keys:
+            key_function = special_keys[key]
+            key_function(database, key)
+            continue
+
         if key not in columns_names:
             column = [(f"{key} TEXT")]
             create_table_columns(database, table, column)
             columns_names.append(key)
 
-        if key != "id" or area == {}:
-            area[key] = value
+        if key != "id" or vacancy == {}:
+            vacancy[key] = value
         else:
-            database_changes_count += insert_into_table(database, table, area)
-            area_counter += 1
-            area[key] = value
-    database_changes_count += insert_into_table(database, table, area)
-    area_counter += 1
-    out_tests.test_write_to_database(database_changes_count, area_counter)
+            database_changes_count += insert_into_table(database, table, vacancy)
+            vacancy_counter += 1
+            vacancy[key] = value
+    database_changes_count += insert_into_table(database, table, vacancy)
+    vacancy_counter += 1
+    out_tests.test_write_to_database(database_changes_count, vacancy_counter)
     return ()
 
     table_columns = [column[0] for column in\
@@ -144,7 +178,8 @@ def write_vacancies_to_database(database, table, vacancies_generator):
     if connection:
         connection.close()
 
-    # out_tests.test_write_areas_to_database(database_changes_count, vacancy_counter)
+    # out_tests.test_write_areas_to_database(
+    #     database_changes_count, vacancy_counter)
     return ()
 
 def write_vacancies_to_database_old(database, table, vacancies):
@@ -259,19 +294,57 @@ def combine_python_database_types():
 #TBD use Etag / Cache-Control / Expires to get only new vacancies https://github.com/hhru/api/blob/master/docs_eng/cache.md
 
 def main():
-    filters = {"area": [22]}
+    filters = {"area": [2019]}
     vacancies = get_vacancies(HEADERS, filters)
     write_to_file(VAСANCIES_FILE, vacancies)
-    # create_table(
-    #     DATABASE,
-    #     VACANCIES_TABLE,
-    #     ["id INTEGER NOT NULL PRIMARY KEY"]
-    # )
-    write_vacancies_to_database(DATABASE, VACANCIES_TABLE, vacancies_generator(vacancies))
-    for key, value in vacancies_generator(vacancies["items"], parent_key = ""):
+
+    create_table(DATABASE, "streets",\
+    ["area_id INTEGER NOT NULL", "city_name TEXT",\
+     "street_name TEXT",\
+     "PRIMARY KEY (area_id, city_name, street_name)",\
+     f"FOREIGN KEY (area_id) REFERENCES {AREAS_TABLE} (id)\
+     ON UPDATE CASCADE ON DELETE RESTRICT"])
+
+    create_table(DATABASE, "metro_stations",\
+    ["station_id TEXT NOT NULL PRIMARY KEY",\
+     "station_name TEXT NOT NULL", "line_name TEXT NOT NULL",\
+     "station_lat TEXT", "station_lng TEXT"])
+
+    create_table(DATABASE, "employers",\
+    ["id INTEGER NOT NULL PRIMARY KEY", "name TEXT NOT NULL",\
+     "url TEXT NOT NULL", "alternate_url TEXT NOT NULL",\
+     "logo_url_original TEXT", "logo_url_240 TEXT",\
+     "logo_url_90 TEXT",\
+     "vacancies_url TEXT NOT NULL", "is_trusted INTEGER"])
+
+    create_table(DATABASE, "vacancies_metro_stations",\
+    ["vacancy_id INTEGER NOT NULL", "metro_station_id TEXT NOT NULL",\
+    "PRIMARY KEY (vacancy_id, metro_station_id)",\
+    f"FOREIGN KEY (vacancy_id) REFERENCES {VACANCIES_TABLE} (id)\
+    ON UPDATE CASCADE ON DELETE CASCADE",\
+    f"FOREIGN KEY (metro_station_id) REFERENCES metro_stations (station_id)\
+    ON UPDATE CASCADE ON DELETE CASCADE"])
+
+    create_table(DATABASE, VACANCIES_TABLE,\
+    ["id INTEGER NOT NULL PRIMARY KEY", "area_id INTEGER",\
+     "address_city  TEXT", "address_street TEXT", "metro_station_id TEXT",\
+     "employer_id TEXT",\
+     f"FOREIGN KEY (area_id) REFERENCES {AREAS_TABLE} (id)\
+    ON UPDATE CASCADE ON DELETE RESTRICT",\
+     f"FOREIGN KEY (area_id, address_city, address_street)\
+     REFERENCES streets (area_id, city_name, street_name)\
+     ON UPDATE CASCADE ON DELETE RESTRICT",\
+     f"FOREIGN KEY (employer_id) REFERENCES employers (id)\
+    ON UPDATE CASCADE ON DELETE RESTRICT"])
+
+    # write_vacancies_to_database(
+    # DATABASE, VACANCIES_TABLE, vacancies_generator(vacancies))
+
+    for key, value in vacancies_generator(vacancies["items"], parent_key = ""): #dd
+        print () #dd
         print (f"{key} = {value}") #dd
         input ("enter") #dd
-        
+
     print ()
     print ('Done!')
 

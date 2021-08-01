@@ -10,9 +10,13 @@ import sqlite3
 
 import requests
 
-from tests.input_tests import test_var_type, test_var_len_more_than
+from tests.input_tests import (
+      test_var_type,
+      test_var_len_more_than,
+      test_table_name
+)
 
-# General tests
+# Common tests
 def test_is_status_code_200(response):
       """
       Test if we got status code 200.
@@ -36,7 +40,8 @@ def test_create_table_columns(
       Test if database table columns was created.
       """
       user_columns_names = [user_column.split()[0]\
-                            for user_column in user_columns]
+                            for user_column in user_columns\
+                            if user_column.split()[0] not in ["PRIMARY", "FOREIGN"]]
       database_columns_names = get_table_columns_names(
             database,  table)
       for user_column_name in user_columns_names:
@@ -95,6 +100,14 @@ def test_select_by_name(not_found_names, found_names, found_ids):
             test_var_type(id_, "id", int)
       return ()
 
+def test_rename_json_to_database_key(key):
+    """
+    Tests for `rename_json_to_database_key`.
+    """
+    test_var_type(key, "key", str)
+    test_var_len_more_than(key, "key", 0)
+    test_table_name(key)
+    return ()
 
 # `get_areas` tests
 def test_get_areas_root_length(areas):

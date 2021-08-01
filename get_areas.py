@@ -13,7 +13,7 @@ import sqlite3
 
 import requests
 
-from general import (
+from common_functions import (
     HEADERS,
     DATABASE,
     write_to_file,
@@ -21,7 +21,7 @@ from general import (
     get_table_columns_names,
     get_table_columns_names,
     create_table_columns,
-    insert_into_table
+    insert_into_table,
 )
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
@@ -65,7 +65,7 @@ def areas_generator(areas):
         print ()
         print ("Unhandled data type: ", type(areas))
         raise TypeError
-
+    
 def write_areas_to_database(database, table, areas_generator):
     """
     Iterate over areas generator and fill the table.
@@ -80,7 +80,7 @@ def write_areas_to_database(database, table, areas_generator):
 
     for item in areas_generator:
         key, value = item[0], item[1]
-
+        
         # Lowercase text to have case-insensitive search.
         # `COLLATE NOCASE` doesn't work for cyrillic.
         try:
@@ -158,12 +158,12 @@ def clean_area_children(found_names, found_ids):
 def main():
     areas = get_areas(HEADERS)
     write_to_file(AREAS_FILE, areas)
-    # create_table(
-    #     DATABASE,
-    #     AREAS_TABLE,
-    #     ["id INTEGER NOT NULL PRIMARY KEY"]
-    # )
-    # write_areas_to_database(DATABASE, AREAS_TABLE, areas_generator(areas))
+    create_table(
+        DATABASE,
+        AREAS_TABLE,
+        ["id INTEGER NOT NULL PRIMARY KEY"]
+    )
+    write_areas_to_database(DATABASE, AREAS_TABLE, areas_generator(areas))
     names = [
         "моск",
         "владиво",
