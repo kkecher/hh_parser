@@ -149,7 +149,7 @@ def test_select_by_name(database, table, names):
     regex = re.compile(r'[0-9a-zA-ZёЁа-яА-Я-́’,()\s\.]')
     for name in names:
         test_var_type(name, "name", str)
-        test_var_len_more_than(name, "name", 0)    
+        test_var_len_more_than(name, "name", 0)
 
         assert len(name) <= 100,\
         "Expected len(name) <= 100\n\
@@ -177,7 +177,7 @@ def test_clean_area_children(found_names, found_ids):
     """
     Combine all tests for `clean_area_children`.
     """
-    test_var_type(found_names, "found_names", set)
+
     test_var_type(found_ids, "found_ids", set)
 
     for area_name in found_names:
@@ -195,10 +195,24 @@ def test_get_vacancies(headers, filters):
     """
     test_request_headers(headers)
     test_var_type(filters, "filters", dict)
-    
+
     keys, values = filters.keys(), filters.values()
     for key in keys:
         test_var_type(key, "key", str)
     for value in values:
         test_var_type(value, "value", (str, list))
+    return ()
+
+def check_if_area_id_is_in_areas_table(cursor, areas_table, milestone_cache):
+    """
+    Test for `check_if_area_id_in_areas_table`.
+    """
+    test_var_type(cursor, "cursor", sqlite3.Cursor)
+    test_table_name(areas_table)
+    test_var_type(milestone_cache, "milestone_cache", dict)
+    test_var_len_more_than(milestone_cache, "milestone_cache", 0)
+
+    for key in milestone_cache:
+        test_var_type(key, "key", str)
+        test_var_len_more_than(key, "key", 0)
     return ()

@@ -13,6 +13,7 @@ import sqlite3
 
 import requests
 
+import get_areas
 from get_areas import AREAS_TABLE
 
 from common_functions import (
@@ -67,15 +68,53 @@ def vacancies_generator(vacancies, parent_key = ""):
         print ("Unhandled data type: ", type(vacancies))
         raise TypeError
 
-def write_vacancies_area_to_database():
+def check_if_area_id_is_in_areas_table(cursor, areas_table, milestone_cache):
+    """
+    1. Check if area_id is in `AREAS_TABLE`.
+    2. If not -> update `AREAS_TABLE` from API
+    3. Check if area_id is in `AREAS_TABLE`.
+    4. If yes -> return key, else -> raise
+    """
+    in_tests.test_check_if_area_id_is_in_areas_table(
+        cursor, areas_table, milestone_cache)
+    area_id = milestone_cache["area_id"]
+    is_area_id_in_areas_table = f"SELECT EXISTS (SELECT 1 FROM {areas_table}\
+    WHERE id = {area_id})"
+    if not cursor.execute(is_area_id_in_areas_table):
+        get_areas.main()
+    if not cursor.execute(is_area_id_in_areas_table):
+        print (f"I've got fresh areas but can't find area_id = {area_id}. ")
+        raise ValueError
+
+def write_street_data_to_streets_table(database, vacancy):
+    """
+    """
+    in_tests.test_write_street_data_to_streets_table(database, vacancy)
+    insert_into_table(database, "streets", {
+        "aread_id": vacancy["area_id"],
+        "city_name": vacancy["address_city"]
+        "street_name": vacancy["address_street"]
+    })
+    out_tests.test_write_street_data_to_streets_table()
     return ()
 
-def write_vacancies_address_to_database():
-    # can be null #dd
-    # fill it as is except metro stations #dd
-    return ()
+def write_station_to_metro_stations_table(database, vacancy):
+    """
+    """
+    in_tests.test_write_station_to_metro_stations_table(database, vacancy)
+    insert_into_table(database, "metro_stations", {
+        "station_id": vacancy["address_metro_stations_station_id"],
+        "station_name": vacancy["address_metro_stations_station_name"],
+        "line_name": vacancy["address_metro_stations_line_name"],
+        "station_lat": vacancy["address_metro_stations_lat"],
+        "station_lng": vacancy["address_metro_stations_lng"]
+    })
 
-def write_vacancies_metro_stations_to_database():
+    insert_into_table(database, "vacancies_metro_stations", {
+        "vacancy_id": vacancy["id"],
+        "metro_station_id": vacancy["address_metro_stations_station_id"]
+    })
+    out_tests.test_write_station_to_metro_stations_table(database, vacancy)
     return ()
 
 def write_vacancies_employer_to_database():
@@ -86,6 +125,7 @@ def write_vacancies_to_database(database, table, vacancies_generator):
     Iterate over vacancies generator and fill `vacancies` table.
     """
     in_tests.test_write_to_database_from_generator(
+
         database, table, vacancies_generator)
     print (f"Writing vacancies to `{database} > {table}`...")
 
@@ -94,14 +134,22 @@ def write_vacancies_to_database(database, table, vacancies_generator):
     vacancies_counter = 0
     database_changes_count = 0
 
-    # These keys are stored in separate tables of the database.
-    # They are processed by separate functions.
-    special_keys = {
-        "area": write_vacancies_area_to_database,
-        "address": write_vacancies_address_to_database,
-        "metro_stations": write_vacancies_metro_stations_to_database,
-        "employer": write_vacancies_employer_to_database
-        }
+    # Dict for temporary accumulation of milestone data
+    milestone_cache = {}
+
+    # After each of these keys we run its connected function.
+    milestone_keys = {
+    "area_id": check_if_area_id_in_areas_table(
+        database, AREAS_TABLE, milestone_cache),
+    "address_raw": write_street_data_to_streets_table(database, milestone_cache),
+    "address_metro_stations_station_name":\
+        write_station_to_metro_stations_table(database, milestone_cache),
+    "employer_id": write_employer_to_employeers_table(database, milestone_cache)
+    }
+
+    # We don’t write these keys to vacancies table
+    # because they are in some other one.
+    skip_key = [area_name, area_url]
 
     for item in vacancies_generator:
         key, value = item[0], item[1]
@@ -114,18 +162,19 @@ def write_vacancies_to_database(database, table, vacancies_generator):
         except AttributeError:
             pass
 
-        if key in special_keys:
-            key_function = special_keys[key]
-            key_function(database, key)
-            continue
-
         if key not in columns_names:
             column = [(f"{key} TEXT")]
             create_table_columns(database, table, column)
             columns_names.append(key)
 
         if key != "id" or vacancy == {}:
-            vacancy[key] = value
+            milestone_cache[key] = value
+            if key in milestone_keys:
+                key_function = milestone_keys[key]
+                key_function
+                milestone_cache = {}
+            if key not in skip_key:
+                vacancy[key] = value
         else:
             database_changes_count += insert_into_table(database, table, vacancy)
             vacancy_counter += 1
@@ -294,7 +343,7 @@ def combine_python_database_types():
 #TBD use Etag / Cache-Control / Expires to get only new vacancies https://github.com/hhru/api/blob/master/docs_eng/cache.md
 
 def main():
-    filters = {"area": [2019]}
+    filters = {"area": [1]}
     vacancies = get_vacancies(HEADERS, filters)
     write_to_file(VAСANCIES_FILE, vacancies)
 
