@@ -78,7 +78,7 @@ def test_table_name(table):
     test_var_type(table, "table", str)
     test_var_len_more_than(table, "table", 0)
 
-    regex = re.compile(r'[0-9a-zA-Z_]')
+    regex = re.compile(r"[0-9a-zA-Z_]")
     forbidden_characters = regex.sub("", table)
     assert forbidden_characters == "",\
         "Only English letters, numbers and underscore are allowed in table name.\n\
