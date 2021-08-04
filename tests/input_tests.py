@@ -77,9 +77,12 @@ def test_table_name(table):
     """
     test_var_type(table, "table", str)
     test_var_len_more_than(table, "table", 0)
-    assert table.isalnum() or "_",\
-        "Only numbers and letters are allowed in table name.\n\
-        Got `table` = %s" % table
+
+    regex = re.compile(r'[0-9a-zA-Z_]')
+    forbidden_characters = regex.sub("", table)
+    assert forbidden_characters == "",\
+        "Only English letters, numbers and underscore are allowed in table name.\n\
+        Got `table` == %s" % table
     return ()
 
 def test_create_table_columns(database, table, columns):
@@ -105,9 +108,9 @@ def test_get_table_columns_names(database, table):
     test_table_name(table)
     return ()
 
-def test_insert_into_table(database, table, data):
+def test_write_to_database_from_dict(database, table, data):
     """
-    Combine all tests for `insert_into_table`.
+    Combine all tests for `write_to_database_from_dict`.
     """
     test_database_name(database)
     test_table_name(table)
@@ -117,8 +120,8 @@ def test_insert_into_table(database, table, data):
     for key, value in data.items():
         test_var_type(key, "key", str)
         test_var_len_more_than(key, "key", 0)
-        test_var_type(value, "value", (str, type(None)))
-        if type(value) != type(None):
+        test_var_type(value, "value", (str, int, float, type(None)))
+        if type(value) not in [type(None), bool, int, float]:
             test_var_len_more_than(value, "value", 0)
     return ()
 
@@ -201,18 +204,4 @@ def test_get_vacancies(headers, filters):
         test_var_type(key, "key", str)
     for value in values:
         test_var_type(value, "value", (str, list))
-    return ()
-
-def check_if_area_id_is_in_areas_table(cursor, areas_table, milestone_cache):
-    """
-    Test for `check_if_area_id_in_areas_table`.
-    """
-    test_var_type(cursor, "cursor", sqlite3.Cursor)
-    test_table_name(areas_table)
-    test_var_type(milestone_cache, "milestone_cache", dict)
-    test_var_len_more_than(milestone_cache, "milestone_cache", 0)
-
-    for key in milestone_cache:
-        test_var_type(key, "key", str)
-        test_var_len_more_than(key, "key", 0)
     return ()

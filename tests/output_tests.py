@@ -64,15 +64,6 @@ def test_get_table_columns_names(columns_names):
             test_var_len_more_than(column, "column", 0)
       return ()
 
-def test_insert_into_table(database_changes_count):
-      """
-      Check if database_changes_count == 1.
-      """
-      assert database_changes_count == 1,\
-      "Expected `database_changes_count` == 1\n\
-      Got `database_changes_count` == %d" % database_changes_count
-      return ()
-
 def test_write_to_database(database_changes_number, counter):
       """
       Check if all data were written to database.

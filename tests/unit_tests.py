@@ -7,7 +7,7 @@ unittests for hh_parser
 import unittest
 import get_areas as ga
 
-# General tests
+# Common tests
 
 
 # `get_areas` tests

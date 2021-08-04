@@ -19,25 +19,22 @@ from common_functions import (
     write_to_file,
     create_table,
     get_table_columns_names,
-    get_table_columns_names,
     create_table_columns,
-    insert_into_table,
+    write_to_database,
 )
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
-# The database may contain vacancies from other sites in future
-# so it has name `vacancies.db`, not `hh.db`
+AREAS_FILE = "./data/areas.json"
 AREAS_TABLE = "areas"
-AREAS_FILE = "areas.json"
 
 def get_areas(headers):
     """
     Get json with geo (countries, regions, cities) and their ids.
     We'll write this json to sqlite database to search by areas.
     """
-    in_tests.test_request_headers(headers)
     print ("Getting geo areas from hh...")
+    in_tests.test_request_headers(headers)
 
     url = "https://api.hh.ru/areas"
     response = requests.get(url, headers=headers)
@@ -45,7 +42,7 @@ def get_areas(headers):
     out_tests.test_get_areas(response, areas)
     return (areas)
 
-def areas_generator(areas):
+def create_areas_generator(areas):
     """
     Create areas iterator to flatten multilevel json
     (countries > regions > cities) into one-level database table.
@@ -55,28 +52,29 @@ def areas_generator(areas):
     if isinstance(areas, dict):
         for key, value in areas.items():
             if isinstance(value, (dict, list)):
-                yield from areas_generator(value)
+                yield from create_areas_generator(value)
             else:
                 yield (key, value)
     elif isinstance(areas, list):
         for item in areas:
-            yield from areas_generator(item)
+            yield from create_areas_generator(item)
     else:
         print ()
         print ("Unhandled data type: ", type(areas))
+        print ()
         raise TypeError
     
 def write_areas_to_database(database, table, areas_generator):
     """
     Iterate over areas generator and fill the table.
     """
-    in_tests.test_write_to_database_from_generator(database, table, areas_generator)
     print (f"Writing geo areas to `{database} > {table}`...")
+    in_tests.test_write_to_database_from_generator(database, table, areas_generator)
 
     columns_names = get_table_columns_names(database, table)
     area = {}
     areas_counter = 0
-    database_changes_count = 0
+    database_changes = 0
 
     for item in areas_generator:
         key, value = item[0], item[1]
@@ -96,12 +94,12 @@ def write_areas_to_database(database, table, areas_generator):
         if key != "id" or area == {}:
             area[key] = value
         else:
-            database_changes_count += insert_into_table(database, table, area)
+            database_changes += write_to_database(database, table, area)
             areas_counter += 1
             area[key] = value
-    database_changes_count += insert_into_table(database, table, area)
+    database_changes += write_to_database(database, table, area)
     areas_counter += 1
-    out_tests.test_write_to_database(database_changes_count, areas_counter)
+    out_tests.test_write_to_database(database_changes, areas_counter)
     return ()
 
 def select_areas_by_name(database, table, names):
@@ -109,8 +107,8 @@ def select_areas_by_name(database, table, names):
     Select geo areas by name to get their ids.
     `names` = list of names for search.
     """
-    in_tests.test_select_by_name(database, table, names)
     print ("Search geo areas...")
+    in_tests.test_select_by_name(database, table, names)
 
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
@@ -163,7 +161,7 @@ def main():
         AREAS_TABLE,
         ["id INTEGER NOT NULL PRIMARY KEY"]
     )
-    write_areas_to_database(DATABASE, AREAS_TABLE, areas_generator(areas))
+    write_areas_to_database(DATABASE, AREAS_TABLE, create_areas_generator(areas))
     names = [
         "моск",
         "владиво",
@@ -172,6 +170,7 @@ def main():
     ]
     not_found_names, found_names, found_ids =\
         select_areas_by_name(DATABASE, AREAS_TABLE, names)
+    print () #dd
     print (f"not_found_names = {not_found_names}") #dd
     print (f"found_names = {found_names}") #dd
     print (f"found_ids = {found_ids}") #dd

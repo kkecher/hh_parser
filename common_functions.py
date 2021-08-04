@@ -10,8 +10,8 @@ import sqlite3
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
+DATABASE = "./data/hh.db"
 HEADERS  = {"user-agent": "kkecher (kkecher@gmail.com)"}
-DATABASE = "./data/vacancies.db"
 
 def write_to_file(file_name, json_data):
     """
@@ -32,7 +32,7 @@ def create_table(database, table, columns):
     `columns`: list of strings with columns params
     """
     in_tests.test_create_table_columns(database, table, columns)
-    print (f"Creating table `{table}` at `{database}`...")
+    print (f"    Creating table `{table}` at `{database}`...")
 
     query = f"CREATE TABLE IF NOT EXISTS {table} ({', '.join(columns)})"
     connection = sqlite3.connect(database)
@@ -50,25 +50,7 @@ def get_table_columns_names(database, table):
     Get table column names.
     """
     in_tests.test_get_table_columns_names(database, table)
-    print (f"Getting `{database} > {table}` column names...")
-
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
-    query = "PRAGMA table_info(" + str(table) + ")"
-    columns = list(cursor.execute(query))
-    columns_names = [column[1] for column in columns]
-
-    cursor.close()
-    connection.close()
-    out_tests.test_get_table_columns_names(columns_names)
-    return (columns_names)
-
-def get_table_columns_names(database, table):
-    """
-    Get table column names.
-    """
-    in_tests.test_get_table_columns_names(database, table)
-    print (f"Getting `{database} > {table}` column names...")
+    print (f"    Getting `{database} > {table}` column names...")
 
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
@@ -102,37 +84,25 @@ def create_table_columns(database, table, columns):
         database, table, get_table_columns_names, columns)
     return ()
 
-def insert_into_table(database, table, data):
+def write_to_database(database, table, data):
     """
     Insert or replace data in table at database.
     `data` = dict of query {key: value}
     """
-    in_tests.test_insert_into_table(database, table, data)
-    print (f"Insert or update data in `{database} > {table}`...")
+    in_tests.test_write_to_database_from_dict(database, table, data)
+    print (f"    Insert or update data in `{database} > {table}`...")
 
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
+    counter = 1
     query_columns = ", ".join(data.keys())
     query_values = f"{'?, ' * len(data)}"[:-2]
     query =\
 f"INSERT OR REPLACE INTO {table} ({query_columns}) VALUES ({query_values});"
     cursor.execute(query, list(data.values()))
     connection.commit()
-    database_changes_count = connection.total_changes
+    database_changes = connection.total_changes
     cursor.close()
     connection.close()
-    out_tests.test_insert_into_table(database_changes_count)
-    return (database_changes_count)
-
-def rename_json_to_database_key(key, json_database_key_matches):
-    """
-    Rename json key to database key.
-    """
-    in_tests.test_rename_json_to_database_key(key)
-    try:
-        key = json_database_key_matches[key]
-        out_tests.test_rename_json_to_database_key(key)
-        return key
-    except KeyError:
-        out_tests.test_rename_json_to_database_key(key)
-        return (key)
+    out_tests.test_write_to_database(database_changes, counter)
+    return (database_changes)
