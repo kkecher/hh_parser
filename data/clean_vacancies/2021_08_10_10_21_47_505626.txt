@@ -1,0 +1,276 @@
+FILTERS: {'vacancies.name': ['продаж']}
+
+#1
+vacancies.name: оператор контакт-центра
+vacancies.alternate_url: https://hh.ru/vacancy/41597838
+vacancies.salary_from: 35000
+vacancies.salary_to: 50000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 1
+vacancies.snippet_responsibility: прием и обработка входящих звонков. без продаж. консультирование клиентов по услугам обязательного медицинского страхования.
+vacancies.snippet_requirement: стаж работы не менее 1 (одного) года в сфере обслуживания населения. образование от среднего специального. готовность работать в сфере клиентского...
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, 2-й южнопортовый проезд, 16с1
+vacancies.created_at: 2021-07-21t14:07:48+0300
+
+
+#2
+vacancies.name: специалист по подбору персонала
+vacancies.alternate_url: https://hh.ru/vacancy/45572653
+vacancies.salary_from: 26000
+vacancies.salary_to: 70000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: главное – подбирать максимальное количество сотрудников в компании наших клиентов. писать продающие вакансии и работать с откликами. выцеплять подходящих кандидатов из...
+vacancies.snippet_requirement: вы уже работали рекрутером (в идеале в hr-агентстве), закрыли от 10 вакансий и умеете нанимать персонал. вы любите общаться...
+vacancies.schedule_name: удаленная работа
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, центральный административный округ, пресненский район, московский международный деловой центр москва-сити
+vacancies.created_at: 2021-07-12t11:53:22+0300
+
+
+#3
+vacancies.name: ведущий менеджер по персоналу
+vacancies.alternate_url: https://hh.ru/vacancy/45619587
+vacancies.salary_from: 46000
+vacancies.salary_to: 75000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: подбор и адаптация персонала по мере необходимости. ведение кдп в полном объеме (2 юр. лица, общий штат до 60 чел...
+vacancies.snippet_requirement: высшее образование. опыт работы в аналогичной должности от 4-х лет. опыт ведения кадрового делопроизводства от 50 чел.. 
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, орджоникидзе, 11
+vacancies.created_at: 2021-07-21t18:10:14+0300
+
+
+#4
+vacancies.name: транскрибатор
+vacancies.alternate_url: https://hh.ru/vacancy/46184252
+vacancies.salary_from: 50000
+vacancies.salary_to: 50000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: быстро и качественно работать над расшифровкой. грамотность и хорошее аудирование.
+vacancies.snippet_requirement: преобразовывать видео-, аудиофайлы в текст. работать с большими объемами информации. обязательное сопроводительное письмо с указанием опыта работы транскрибатором, тематиками работ. 
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, замоскворецкая линия, метро автозаводская
+vacancies.created_at: 2021-07-13t08:54:21+0300
+
+
+#5
+vacancies.name: ночной работник торгового зала в гипермаркете ашан авиапарк
+vacancies.alternate_url: https://hh.ru/vacancy/46189717
+vacancies.salary_from: 44685
+vacancies.salary_to: 160000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 1
+vacancies.snippet_responsibility: меня зовут элина, я специалист по подбору персонала в ашан. выкладка товара в торговом зале. проверка сроков годности.
+vacancies.snippet_requirement: если у вас нет опыта - мы всему обучим.
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, ходынский бульвар, 4
+vacancies.created_at: 2021-07-13t10:02:10+0300
+
+
+#6
+vacancies.name: продавец/мерчендайзер/кассир (м. кантемировская)
+vacancies.alternate_url: https://hh.ru/vacancy/46227053
+vacancies.salary_from: 33800
+vacancies.salary_to: 46700
+vacancies.salary_currency: rur
+vacancies.salary_gross: 1
+vacancies.snippet_responsibility: 1. сотрудника клиентского сервиса (с функционалом кассира). *сканирование товара на станции сканирования; (кассы без наличной оплаты); проверка количества товара, веса...
+vacancies.snippet_requirement: если у вас нет опыта - мы всему обучим. к нам легко добираться:
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, пролетарский проспект, вл30
+vacancies.created_at: 2021-07-23t10:18:47+0300
+
+
+#7
+vacancies.name: кладовщик на склад косметической продукции
+vacancies.alternate_url: https://hh.ru/vacancy/46235532
+vacancies.salary_from: 45000
+vacancies.salary_to: 50000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: приемка товара и размещение на места хранения. сборка, проверка, упаковка и выдача заказов. оптимизация расстановки товара на складе. 
+vacancies.snippet_requirement: опыт работы от 1 года. опыт работы со штучной продукцией. физическая выносливость (участие в погрузочно-разгрузочных работах). внимательность, ответственность, исполнительность.
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, волоколамское шоссе, 73
+vacancies.created_at: 2021-07-14t13:30:33+0300
+
+
+#8
+vacancies.name: администратор стоматологической клиники
+vacancies.alternate_url: https://hh.ru/vacancy/46316698
+vacancies.salary_from: 50000
+vacancies.salary_to: 70000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: встреча и координация пациентов и посетителей клиники в зоне ресепшен. ведение записи пациентов, работа в программе ident (аналог инфодент). 
+vacancies.snippet_requirement: вежливый администратор в элитную стоматологию. являетесь активным пользователем пк. перекладываешь свою ответственность на других.
+vacancies.schedule_name: сменный график
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, замоскворецкая линия, метро автозаводская
+vacancies.created_at: 2021-07-18t12:20:21+0300
+
+
+#9
+vacancies.name: ассистент врача-стоматолога
+vacancies.alternate_url: https://hh.ru/vacancy/46326688
+vacancies.salary_from: 60000
+vacancies.salary_to: 80000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: проведение текущих и генеральных уборок кабинета. — контроль и учет расходных материалов. — знание норм стерилизации. — проведение рентген снимков. в клинике работают...
+vacancies.snippet_requirement: навыки работы с врачом в 4 руки. — знание подготовки кабинета к приему.
+vacancies.schedule_name: сменный график
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, новоостаповская улица, 14
+vacancies.created_at: 2021-07-19t09:45:06+0300
+
+
+#10
+vacancies.name: продавец-консультант в салон связи tele2
+vacancies.alternate_url: https://hh.ru/vacancy/46353576
+vacancies.salary_from: 45000
+vacancies.salary_to: 160000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: быть экспертом в решении различных запросов абонентов. быть ответственным за результаты продаж, смартфонов, аксессуаров и операторских услуг. быть внимательным при...
+vacancies.snippet_requirement: непреодолимое желание работать, богатеть и развиваться вместе с нами. уверенного владения «виндой» и мышкой. аккуратность, пунктуальность, внимательность и …. 
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: None
+vacancies.working_time_modes_name: None
+areas.name: москва
+vacancies.address_raw: москва, улица бутырский вал, 68/70с1
+vacancies.created_at: 2021-07-28t09:13:43+0300
+
+
+#11
+vacancies.name: оператор call-центра
+vacancies.alternate_url: https://hh.ru/vacancy/46552690
+vacancies.salary_from: 25000
+vacancies.salary_to: 25000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: прием и распределение входящих звонков. обработка входящих обращений, поступивших от клиентов, с сайта компании и e-mail.
+vacancies.snippet_requirement: знание компьютера на уровне пользователя (базовые офисные программы, нормальная скорость набора текста). хорошая дикция, грамотность.
+vacancies.schedule_name: сменный график
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, центральный административный округ, пресненский район, московский международный деловой центр москва-сити
+vacancies.created_at: 2021-08-02t11:17:48+0300
+
+
+#12
+vacancies.name: помощник руководителя
+vacancies.alternate_url: https://hh.ru/vacancy/46562111
+vacancies.salary_from: 50000
+vacancies.salary_to: 50000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: административная поддержка руководителя. планирование рабочего дня руководителя. организация встреч и командировок (бронирование гостиниц, визы, билеты). ведение деловой переписки, электронного документооборота. 
+vacancies.snippet_requirement: высшее образование (студенты последних курсов рассматриваются, в том числе). опыт работы приветствуется в аналогичной должности. знание ms office. 
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, замоскворецкая линия, метро автозаводская
+vacancies.created_at: 2021-07-27t14:14:01+0300
+
+
+#13
+vacancies.name: помощник менеджера
+vacancies.alternate_url: https://hh.ru/vacancy/46605483
+vacancies.salary_from: 46000
+vacancies.salary_to: 160000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: опыт работы в колл-центре. планирование рабочего дня руководителя. входящие, исходящие звонки (без продажи). выполнение текущих поручений руководителя. 
+vacancies.snippet_requirement: грамотность. ответственность. пунктуальность. умение работать в условиях многозадачности.
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, петровский переулок, 5с5
+vacancies.created_at: 2021-07-28t17:34:27+0300
+
+
+#14
+vacancies.name: бухгалтер на первичную документацию
+vacancies.alternate_url: https://hh.ru/vacancy/46620334
+vacancies.salary_from: 55000
+vacancies.salary_to: 65000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 0
+vacancies.snippet_responsibility: подготовка первичных документов по отгрузкам (торг-12, счет-фактура), ведение реестра выданных счетов-фактур. проверка правильности отражения данных в управленческом...
+vacancies.snippet_requirement: опыт работы на должности бухгалтера не менее двух лет. знание участков банк, касса, тмц, расчеты с контрагентами. высшее образование.
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, киевское шоссе
+vacancies.created_at: 2021-07-29t11:15:57+0300
+
+
+#15
+vacancies.name: сотрудник ресторана kfc (москва)
+vacancies.alternate_url: https://hh.ru/vacancy/46651756
+vacancies.salary_from: 38400
+vacancies.salary_to: 160000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 1
+vacancies.snippet_responsibility: приготовление блюд по стандартам компании. работа на кассе. прием и выдача заказа. поддержание чистоты на рабочем месте.
+vacancies.snippet_requirement: активность. ответственность. высокая скорость обучения. навык работы в команде. опыт работы не требуется – мы всему научим!
+vacancies.schedule_name: гибкий график
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, улица бутырский вал, 68/70с1
+vacancies.created_at: 2021-07-30t11:25:45+0300
+
+
+#16
+vacancies.name: сотрудник сити ривьера
+vacancies.alternate_url: https://hh.ru/vacancy/46750801
+vacancies.salary_from: 35000
+vacancies.salary_to: 160000
+vacancies.salary_currency: rur
+vacancies.salary_gross: 1
+vacancies.snippet_responsibility: работник зала/сборщик заказов/пекарь. 1. продавца (работника торгового зала) дневной смены. выкладка товара в торговом зале; проверка сроков годности...
+vacancies.snippet_requirement: активность. ответственность. высокая скорость обучения. навык работы в команде. опыт работы не требуется – мы всему научим!
+vacancies.schedule_name: полный день
+vacancies.working_time_intervals_name: можно работать сменами по 4–6 часов в день
+vacancies.working_time_modes_name: можно начинать работать после 16:00
+areas.name: москва
+vacancies.address_raw: москва, автозаводская улица, 18
+vacancies.created_at: 2021-08-03t15:34:03+0300
+
+
+FILTERS: {'vacancies.name': ['продаж']}
+

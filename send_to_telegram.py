@@ -1,13 +1,16 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 
 """
-Send got vacancies to Telegram.
+Get vacancies from db, filter them, format and send to Telegram.
 
 Telegram bot API:
 https://core.telegram.org/bots
 https://core.telegram.org/bots/api
 """
 
+import datetime
+import os
+from pathlib import Path
 import re
 import sqlite3
 
@@ -16,123 +19,263 @@ import requests
 from common_functions import DATABASE
 from get_areas import AREAS_TABLE
 from get_vacancies import VACANCIES_TABLE
-from secret import token
+import tests.input_tests as in_tests
+import tests.output_tests as out_tests
 
 INCOME_TAX = 0.13
+chat_id = 383837232
+token = os.environ["hh_bot_token"]
 
 send_columns = [
     f"{VACANCIES_TABLE}.name",
+    f"{VACANCIES_TABLE}.alternate_url",
     f"{VACANCIES_TABLE}.salary_from",
     f"{VACANCIES_TABLE}.salary_to",
     f"{VACANCIES_TABLE}.salary_currency",
     f"{VACANCIES_TABLE}.salary_gross",
-    f"{VACANCIES_TABLE}.address_raw",
-    f"{VACANCIES_TABLE}.snippet_requirement",
     f"{VACANCIES_TABLE}.snippet_responsibility",
+    f"{VACANCIES_TABLE}.snippet_requirement",
     f"{VACANCIES_TABLE}.schedule_name",
     f"{VACANCIES_TABLE}.working_time_intervals_name",
     f"{VACANCIES_TABLE}.working_time_modes_name",
-    f"{VACANCIES_TABLE}.alternate_url",
-    f"{AREAS_TABLE}.name"
+    f"{AREAS_TABLE}.name",
+    f"{VACANCIES_TABLE}.address_raw",
+    f"{VACANCIES_TABLE}.created_at"
 ]
 
+# Currently filters work only for ‘not like‘ requests, i.e.
+# they will work to get vacancies not containing some pattern but
+# they will NOT work for requests like ‘salary_from > n’.
+filters = {
+    f"{VACANCIES_TABLE}.name": ["продаж"]
+}
 
-filter_ = {f"{VACANCIES_TABLE}.name": "%продаж%"}
-
-
-
-def filter_vacancies_by_name(
-        database, vacancies_table, areas_table, send_columns, filter_):
+def format_filters_to_query(filters):
     """
-    Select vacancies which DOESN'T contain any pattern in `filter_`.
+    Format `filters` to sql query part.
+    Also create inverse filters query to check filtered vacancies.
+    """
+    in_tests.test_format_filters_to_query(filters)
+
+    filters_query_part = ""
+    inverse_filters_query_part = ""
+    for key, value in filters.items():
+        query_params = f"{'?, ' * len(value)}"[:-len(", ")]
+        filters_query_part += f"{key} NOT REGEXP ({query_params}) AND "
+        inverse_filters_query_part += f"{key} REGEXP ({query_params}) AND "
+    filters_query_part = filters_query_part[:-len(" AND ")]
+    inverse_filters_query_part = inverse_filters_query_part[:-len(" AND ")]
+    out_tests.test_format_filters_to_query(
+        filters_query_part, inverse_filters_query_part, filters)
+    return (filters_query_part, inverse_filters_query_part)
+
+def regexp(expr, item):
+    print (f"expr = {expr}")
+    if item is None:
+        return False
+    else:
+        reg = re.compile(expr)
+        return reg.search(item) is not None
+
+def filter_vacancies(
+        database, vacancies_table, areas_table, send_columns, filters, \
+        filters_query_part, inverse_filters_query_part):
+    """
+    Select vacancies which contain and don't contain patterns from `filters` and
+    return them as list of tuples.
     """
     print ("Filtering vacancies...")
-    # in_tests.test_filter_vacancies_by_name(database, table, names)
+    in_tests.test_filter_vacancies(
+        database, vacancies_table, areas_table, send_columns, filters, \
+        filters_query_part, inverse_filters_query_part)
 
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
-    columns = ", ".join(send_columns)
-    query_values = f"{'?, ' * len(filter_)}"[:-2]
-    print (f"columns = {columns}")
-    query = f"SELECT {columns} FROM {vacancies_table} LEFT JOIN {areas_table} on\
-    {vacancies_table}.area_id = {areas_table}.id\
-    WHERE {vacancies_table}.name NOT LIKE ({query_values});"
-    cursor.execute(query, list(filter_.values()))
-    filtered_vacancies = cursor.fetchall()
-    # out_tests.test_
-    return (filtered_vacancies)
+    connection.create_function("REGEXP", 2, regexp)
+    send_columns_query = ", ".join(send_columns)
+    filters_query = f"SELECT {send_columns_query} FROM \
+{vacancies_table} LEFT JOIN {areas_table} ON {vacancies_table}.area_id == \
+{areas_table}.id WHERE {filters_query_part};"
+    inverse_filters_query =  f"SELECT {send_columns_query} FROM \
+{vacancies_table} LEFT JOIN {areas_table} ON {vacancies_table}.area_id == \
+{areas_table}.id WHERE {inverse_filters_query_part};"
 
-filtered_vacancies = filter_vacancies_by_name(
-    DATABASE, VACANCIES_TABLE, AREAS_TABLE, send_columns, filter_)
+    clean_values = cursor.execute(
+        filters_query, list(filters.values())[0])
+    clean_vacancies = [dict(zip(send_columns, clean_value)) for
+                       clean_value in clean_values]
+    dirty_values = cursor.execute(
+        inverse_filters_query, list(filters.values())[0])
+    dirty_vacancies = [dict(zip(send_columns, dirty_value)) for
+                       dirty_value in dirty_values]
+    cursor.close()
+    connection.close()
+    out_tests.test_filter_vacancies(clean_vacancies, send_columns)
+    out_tests.test_filter_vacancies(dirty_vacancies, send_columns)
+    return (clean_vacancies, dirty_vacancies)
 
-def capitalize(data):
+def replace_specials_to_underscore(string):
     """
-    Capitalize first letter at 0 position and after point.
+    Replace all none alphanumeric characters to `_`.
     """
-    if isinstance(data, str):
-        m = re.findall(r".*?[\.\?!]\s*", data)
-        if m == []:
-            data = data.capitalize()
-            print (data)
-            return (data)
+    in_tests.test_replace_specials_to_underscore(string)
+
+    new_string = ""
+    for letter in string:
+        if letter.isalnum():
+            new_string += letter
         else:
-            data = ""
-            for n in m:
-                data += n.capitalize()
-            print (data)
-            input ("enter")
-            return (data)
+            new_string += "_"
+    out_tests.test_replace_specials_to_underscore(new_string)
+    return (new_string)
 
-msg = ""
-for filtered_vacancy in filtered_vacancies:
-    print (filtered_vacancy)
-    print ()
+def write_filtered_vacancies_to_file(filters, clean_vacancies, dirty_vacancies):
+    """
+    Format and write filtered vacancies to file.
+    File name == file creation timestamp.
+    This function is for debugging purpose only.
+    """
+    in_tests.test_write_filtered_vacancies_to_file(
+        filters, clean_vacancies, dirty_vacancies)
 
-    print (f"len(filtered_vacancies) = {len(filtered_vacancies)}")
-    print ()
-    title = capitalize(filtered_vacancy[0])
-    salary_from = capitalize(int(filtered_vacancy[1]))
-    salary_to = capitalize(int(filtered_vacancy[2]))
-    salary_currency = capitalize(filtered_vacancy[3].upper())
-    is_before_tax = capitalize(filtered_vacancy[4])
-    address = capitalize(filtered_vacancy[5])
-    requirement = capitalize(filtered_vacancy[6])
-    responsibility = capitalize(filtered_vacancy[7])
-    schedule_name = capitalize(filtered_vacancy[8])
-    working_time_intervals = capitalize(filtered_vacancy[9])
-    working_time_modes = capitalize(filtered_vacancy[10])
-    alternate_url = filtered_vacancy[11]
-    city = capitalize(filtered_vacancy[12])
+    Path("./data/clean_vacancies/").mkdir(parents=True, exist_ok=True)
+    Path("./data/dirty_vacancies/").mkdir(parents=True, exist_ok=True)
+    timestamp = str(datetime.datetime.now())
+    timestamp = replace_specials_to_underscore(timestamp)
+    clean_file_name = f"./data/clean_vacancies/{timestamp}.txt"
+    dirty_file_name = f"./data/dirty_vacancies/{timestamp}.txt"
 
-    if salary_currency == "Rur":
-        salary_currency = "&#x20bd;"
-    if is_before_tax:
-        salary_from -= salary_from * INCOME_TAX
-        salary_to -= salary_to * INCOME_TAX
-        salary_from = int(salary_from)
-        salary_to = int(salary_to)
+    vacancies_counter = 1
+    with open(clean_file_name, "w") as f:
+        f.write(f"FILTERS: {filters}\n\n")
+        for clean_vacancy in clean_vacancies:
+            f.write(f"#{vacancies_counter}\n")
+            for key, value in clean_vacancy.items():
+                f.write (f"{key}: {value}\n")
+            f.write(f"\n\n")
+            vacancies_counter += 1
+        f.write(f"FILTERS: {filters}\n\n")
 
-    msg = f"<a href='{alternate_url}'>{title}</a>\n\
+    vacancies_counter = 1
+    with open(dirty_file_name, "w") as f:
+        f.write(f"FILTERS: {filters}\n\n")
+        for dirty_vacancy in dirty_vacancies:
+            f.write(f"#{vacancies_counter}\n")
+            for key, value in dirty_vacancy.items():
+                f.write (f"{key}: {value}\n")
+            f.write(f"\n\n")
+            vacancies_counter += 1
+        f.write(f"FILTERS: {filters}\n\n")
+
+    out_tests.test_write_to_file(clean_file_name)
+    out_tests.test_write_to_file(dirty_file_name)
+    return ()
+
+def format_values(data):
+    """
+    1. Capitalize at 0 position and after [.?!] characters
+    2. Replace None with ""
+    type(data) == [str, int, float, None]
+    """
+    in_tests.test_format_values(data)
+
+    if isinstance(data, str):
+        sentences = re.findall(r".*?[\.\?!]\s*", data)
+        if sentences == []:
+            formated_data = data.capitalize()
+            out_tests.test_format_values(formated_data)
+            return (formated_data)
+        else:
+            formated_data = ""
+            for sentence in sentences:
+                formated_data += sentence.capitalize()
+    elif isinstance(data, type(None)):
+        formated_data = ""
+    else:
+        formated_data = data
+    out_tests.test_format_values(formated_data)
+    return (formated_data)
+
+def send_to_telegram(vacancies, chat_id, token):
+    """
+    Format filtered vacancies and send to Telegram.
+    """
+    in_tests.test_send_to_telegram(vacancies, chat_id, token)
+    print ("Sending to Telegram...")
+
+    for vacancy in vacancies:
+        title = \
+    format_values(vacancy[f"{VACANCIES_TABLE}.name"])
+        alternate_url = \
+    vacancy[f"{VACANCIES_TABLE}.alternate_url"]
+        salary_from = \
+    format_values(vacancy[f"{VACANCIES_TABLE}.salary_from"])
+        salary_to = \
+    format_values(vacancy[f"{VACANCIES_TABLE}.salary_to"])
+        salary_currency = \
+    format_values(vacancy[f"{VACANCIES_TABLE}.salary_currency"])
+        is_before_tax = \
+    vacancy[f"{VACANCIES_TABLE}.salary_gross"]
+        requirement = \
+    format_values(vacancy[f"{VACANCIES_TABLE}.snippet_requirement"])
+        responsibility = \
+    format_values(vacancy[f"{VACANCIES_TABLE}.snippet_responsibility"])
+        schedule = \
+    format_values(vacancy[f"{VACANCIES_TABLE}.schedule_name"])
+        working_time_intervals = \
+    format_values(vacancy[f"{VACANCIES_TABLE}.working_time_intervals_name"])
+        working_time_modes = \
+    format_values(vacancy[f"{VACANCIES_TABLE}.working_time_modes_name"])
+        city = \
+    format_values(vacancy[f"{AREAS_TABLE}.name"])
+        address = \
+    format_values(vacancy[f"{VACANCIES_TABLE}.address_raw"])
+        created = \
+    vacancy[f"{VACANCIES_TABLE}.created_at"]
+
+        if salary_from != "" and salary_to != "" and salary_from > salary_to:
+            salary_from, salary_to = salary_to, salary_from
+        if salary_currency == "Rur":
+            salary_currency = "&#x20bd;"
+        if is_before_tax and salary_from != "":
+            salary_from = int(salary_from - salary_from * INCOME_TAX)
+        if is_before_tax and salary_to != "":
+            salary_to = int(salary_to - salary_to * INCOME_TAX)
+
+        msg = f"<a href='{alternate_url}'>{title}</a>\n\
 <em>{salary_from}-{salary_to} {salary_currency}</em>\n\n\
 {responsibility}\n\n\
 {requirement}\n\n\
-{schedule_name}, {working_time_intervals}, {working_time_modes}\n\n\
-{address}"
+{schedule}, {working_time_intervals}, {working_time_modes}\n\n\
+{city}, {address}\n\n\
+<em>Добавлено: {created}</em>"
 
-    message_params = {
-        "chat_id": 383837232,
-        "text": msg,
-        "parse_mode": "HTML"
-    }
+        msg = msg.replace(", ,", ", ")
+        msg = msg.replace("  ", " ")
+        msg = msg.replace(",\n", "\n")
+        msg = msg.replace(", \n", "\n")
 
-    response = requests.get(
-    f"https://api.telegram.org/bot{t_value}/sendMessage", params=message_params)
-    print (f"response_text = {response.text}")
+        msg_params = {
+            "chat_id": chat_id,
+            "text": msg,
+            "parse_mode": "HTML"
+        }
+        response = requests.get(
+        f"https://api.telegram.org/bot{token}/sendMessage", params=msg_params)
+        out_tests.test_is_status_code_200(response)
+    return ()
+
+def main():
+    filters_query_part, inverse_filters_query_part = \
+        format_filters_to_query(filters)
+    clean_vacancies, dirty_vacancies = filter_vacancies(
+        DATABASE, VACANCIES_TABLE, AREAS_TABLE, send_columns, filters, \
+        filters_query_part, inverse_filters_query_part)
+    write_filtered_vacancies_to_file(filters, clean_vacancies, dirty_vacancies)
+    send_to_telegram(clean_vacancies, chat_id, token)
 
     print ()
-    print (f"len(filtered_vacancies) = {len(filtered_vacancies)}")
-    input ("enter")
+    print ("`send_to_telegram` done!")
 
-# response = requests.get(
-#     f"https://api.telegram.org/bot{t_value}/getUpdates")
-# response = requests.get(
+if __name__ == "__main__":
+    main()

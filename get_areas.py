@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 
 """
 Get and filter hh areas.
@@ -105,7 +105,7 @@ def write_areas_to_database(database, table, areas_generator):
 def select_areas_by_name(database, table, names):
     """
     Select geo areas by name to get their ids.
-    `names` = list of names for search.
+    `names` == list of names for search.
     """
     print ("Search geo areas...")
     in_tests.test_select_by_name(database, table, names)
@@ -156,11 +156,11 @@ def clean_area_children(found_names, found_ids):
 def main():
     areas = get_areas(HEADERS)
     write_to_file(AREAS_FILE, areas)
-    create_table(
-        DATABASE,
-        AREAS_TABLE,
-        ["id INTEGER NOT NULL PRIMARY KEY"]
-    )
+    create_table(DATABASE, AREAS_TABLE,\
+        ["id INT NOT NULL PRIMARY KEY",\
+         "parent_id INT",\
+         "name TEXT NOT NULL"
+        ])
     write_areas_to_database(DATABASE, AREAS_TABLE, create_areas_generator(areas))
     names = [
         "моск",
@@ -168,7 +168,7 @@ def main():
         "moscow",
         "nys"
     ]
-    not_found_names, found_names, found_ids =\
+    not_found_names, found_names, found_ids = \
         select_areas_by_name(DATABASE, AREAS_TABLE, names)
     print () #dd
     print (f"not_found_names = {not_found_names}") #dd
@@ -180,7 +180,7 @@ def main():
     print (f"cleaned_ids = {cleaned_ids}") #dd
 
     print ()
-    print ('get_areas done!')
+    print ("`get_areas` done!")
 
 if __name__ == "__main__":
     main()

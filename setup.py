@@ -21,9 +21,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3"
     ],
-    packages=["hh"],
-    include_package_data=True,
-    python_requires=">=3.0.0",
-    install_requires=[requests"]
+    python_requires=">=3.6.0",
+    install_requires=["cryptography", "keyring", "requests"]
     },
 )

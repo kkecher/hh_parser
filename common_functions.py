@@ -16,7 +16,7 @@ HEADERS  = {"user-agent": "kkecher (kkecher@gmail.com)"}
 def write_to_file(file_name, json_data):
     """
     Write json to file.
-    This function is for debugging only purpose.
+    This function is for debugging purpose only.
     """
     in_tests.test_write_to_file(file_name, json_data)
     print(f"Writing json to `{file_name}`...")
@@ -29,7 +29,7 @@ def write_to_file(file_name, json_data):
 def create_table(database, table, columns):
     """
     Create table at database.
-    `columns`: list of strings with columns params
+    `columns` == list of strings with columns params
     """
     in_tests.test_create_table_columns(database, table, columns)
     print (f"    Creating table `{table}` at `{database}`...")
@@ -87,7 +87,7 @@ def create_table_columns(database, table, columns):
 def write_to_database(database, table, data):
     """
     Insert or replace data in table at database.
-    `data` = dict of query {key: value}
+    `data` == dict of query {key: value}
     """
     in_tests.test_write_to_database_from_dict(database, table, data)
     print (f"    Insert or update data in `{database} > {table}`...")
@@ -97,7 +97,7 @@ def write_to_database(database, table, data):
     counter = 1
     query_columns = ", ".join(data.keys())
     query_values = f"{'?, ' * len(data)}"[:-2]
-    query =\
+    query = \
 f"INSERT OR REPLACE INTO {table} ({query_columns}) VALUES ({query_values});"
     cursor.execute(query, list(data.values()))
     connection.commit()

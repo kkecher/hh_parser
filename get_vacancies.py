@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 
 """
 Get and filter hh vacancies.
@@ -80,7 +80,7 @@ def check_if_area_id_is_in_areas_table(database, milestone_cache):
     area_id = milestone_cache["area_id"]
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
-    query = f"SELECT EXISTS (SELECT 1 FROM {areas_table} WHERE id = {area_id})"
+    query = f"SELECT EXISTS (SELECT 1 FROM {areas_table} WHERE id == {area_id})"
     is_area_in_areas_table = cursor.execute(query).fetchall()[0][0]
     if not is_area_in_areas_table:
         get_areas.main()
@@ -205,7 +205,25 @@ def write_vacancies_to_database(database, table, vacancies_generator):
     database_changes = 0
 
     # Dict for accumulation of milestone data
-    milestone_cache = {}
+    milestone_cache = {
+        "area_id": None,
+        "address_city": None,
+        "address_street": None,
+        "address_metro_stations_station_id": None,
+        "address_metro_stations_station_name": None,
+        "address_metro_stations_line_name": None,
+        "address_metro_stations_lat": None,
+        "address_metro_stations_lng": None,
+        "employer_id": None,
+        "employer_name": None,
+        "employer_url": None,
+        "employer_alternate_url": None,
+        "employer_logo_urls_original": None,
+        "employer_logo_urls_240": None,
+        "employer_logo_urls_90": None,
+        "employer_vacancies_url": None,
+        "employer_trusted": None
+        }
 
     # After each of these keys we run its connected function.
     milestone_keys = {
@@ -244,6 +262,7 @@ def write_vacancies_to_database(database, table, vacancies_generator):
 
     for item in vacancies_generator:
         key, value = item[0], item[1]
+        print(f"{key} = {value}")
 
         # Lowercase text to have case-insensitive search.
         # `COLLATE NOCASE` doesn't work for cyrillic.
@@ -252,7 +271,7 @@ def write_vacancies_to_database(database, table, vacancies_generator):
         except AttributeError:
             pass
 
-        if key not in columns_names and key not in skip_key and value != None:
+        if key not in columns_names and key not in skip_key:
             column = [(f"{key} TEXT")]
             create_table_columns(database, table, column)
             columns_names.append(key)
@@ -260,6 +279,7 @@ def write_vacancies_to_database(database, table, vacancies_generator):
         if key != "id" or vacancy == {}:
             milestone_cache[key] = value
             if key in milestone_keys:
+                print (milestone_cache)
                 key_function = milestone_keys[key]
                 key_function(database, milestone_cache)
             if key not in skip_key and value != None:
@@ -267,6 +287,26 @@ def write_vacancies_to_database(database, table, vacancies_generator):
         else:
             database_changes += write_to_database(database, table, vacancy)
             vacancy_counter += 1
+            vacancy = {}
+            milestone_cache = {
+                "area_id": None,
+                "address_city": None,
+                "address_street": None,
+                "address_metro_stations_station_id": None,
+                "address_metro_stations_station_name": None,
+                "address_metro_stations_line_name": None,
+                "address_metro_stations_lat": None,
+                "address_metro_stations_lng": None,
+                "employer_id": None,
+                "employer_name": None,
+                "employer_url": None,
+                "employer_alternate_url": None,
+                "employer_logo_urls_original": None,
+                "employer_logo_urls_240": None,
+                "employer_logo_urls_90": None,
+                "employer_vacancies_url": None,
+                "employer_trusted": None
+                }
             vacancy[key] = value
             milestone_cache[key] = value
     database_changes += write_to_database(database, table, vacancy)
@@ -280,49 +320,75 @@ def main():
     write_to_file(VAСANCIES_FILE, vacancies)
 
     create_table(DATABASE, "streets",\
-    ["area_id INTEGER NOT NULL", "city_name TEXT",\
-     "street_name TEXT",\
-     "PRIMARY KEY (area_id, city_name, street_name)",\
-     f"FOREIGN KEY (area_id) REFERENCES {AREAS_TABLE} (id)\
-     ON UPDATE CASCADE ON DELETE RESTRICT"])
+        ["area_id INTEGER NOT NULL",\
+         "city_name TEXT",\
+         "street_name TEXT",\
+         "PRIMARY KEY (area_id, city_name, street_name)",\
+         f"FOREIGN KEY (area_id) REFERENCES {AREAS_TABLE} (id)\
+         ON UPDATE CASCADE ON DELETE RESTRICT"
+         ])
 
     create_table(DATABASE, "metro_stations",\
-    ["station_id TEXT NOT NULL PRIMARY KEY",\
-     "station_name TEXT NOT NULL", "line_name TEXT NOT NULL",\
-     "station_lat TEXT", "station_lng TEXT"])
+        ["station_id TEXT NOT NULL PRIMARY KEY",\
+         "station_name TEXT NOT NULL",\
+         "line_name TEXT NOT NULL",\
+         "station_lat TEXT",\
+         "station_lng TEXT"
+         ])
 
     create_table(DATABASE, "employers",\
-    ["id INTEGER NOT NULL PRIMARY KEY", "name TEXT NOT NULL",\
-     "url TEXT NOT NULL", "alternate_url TEXT NOT NULL",\
-     "logo_url_original TEXT", "logo_url_240 TEXT",\
+    ["id INTEGER NOT NULL PRIMARY KEY",\
+     "name TEXT NOT NULL",\
+     "url TEXT NOT NULL",\
+     "alternate_url TEXT NOT NULL",\
+     "logo_url_original TEXT",\
+     "logo_url_240 TEXT",\
      "logo_url_90 TEXT",\
-     "vacancies_url TEXT NOT NULL", "is_trusted INTEGER"])
+     "vacancies_url TEXT NOT NULL",\
+     "is_trusted INTEGER"
+     ])
 
     create_table(DATABASE, "vacancies_metro_stations",\
-    ["vacancy_id INTEGER NOT NULL", "metro_station_id TEXT NOT NULL",\
+    ["vacancy_id INTEGER NOT NULL",\
+     "metro_station_id TEXT NOT NULL",\
     "PRIMARY KEY (vacancy_id, metro_station_id)",\
     f"FOREIGN KEY (vacancy_id) REFERENCES {VACANCIES_TABLE} (id)\
-    ON UPDATE CASCADE ON DELETE CASCADE",\
+    ON UPDATE CASCADE ON DELETE CASCADE", \
     f"FOREIGN KEY (metro_station_id) REFERENCES metro_stations (station_id)\
-    ON UPDATE CASCADE ON DELETE CASCADE"])
+    ON UPDATE CASCADE ON DELETE CASCADE"
+     ])
 
     create_table(DATABASE, VACANCIES_TABLE,\
-    ["id INTEGER NOT NULL PRIMARY KEY", "area_id INTEGER",\
-     "address_city  TEXT", "address_street TEXT",\
-     "employer_id TEXT",\
+    ["id INTEGER NOT NULL PRIMARY KEY",\
+     "name TEXT",\
+     "area_id INTEGER",\
+     "address_city  TEXT",\
+     "address_street TEXT",\
+     "employer_id INT",\
+     "alternate_url TEXT",\
+     "salary_from INT",\
+     "salary_to INT",\
+     "salary_currency TEXT",\
+     "salary_gross INT",\
+     "snippet_responsibility TEXT",\
+     "snippet_requirement TEXT",\
+     "schedule_name TEXT",\
+     "working_time_intervals_name TEXT",\
+     "working_time_modes_name TEXT",\
      f"FOREIGN KEY (area_id) REFERENCES {AREAS_TABLE} (id)\
-    ON UPDATE CASCADE ON DELETE RESTRICT",\
+     ON UPDATE CASCADE ON DELETE RESTRICT",\
      f"FOREIGN KEY (area_id, address_city, address_street)\
      REFERENCES streets (area_id, city_name, street_name)\
      ON UPDATE CASCADE ON DELETE RESTRICT",\
      f"FOREIGN KEY (employer_id) REFERENCES employers (id)\
-    ON UPDATE CASCADE ON DELETE RESTRICT"])
+     ON UPDATE CASCADE ON DELETE RESTRICT"
+     ])
 
     write_vacancies_to_database(
     DATABASE, VACANCIES_TABLE, create_vacancies_generator(vacancies["items"]))
 
     print ()
-    print ('get_vacancies done!')
+    print ("`get_vacancies` done!")
 
 if __name__ == "__main__":
     main()
