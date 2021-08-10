@@ -1,3 +1,0 @@
-FILTERS: {'vacancies.name': ['продаж']}
-
-#1
