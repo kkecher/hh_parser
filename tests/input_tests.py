@@ -137,18 +137,15 @@ def test_write_to_database_from_generator(database, table, generator):
         Got type(generator) == %s" % type(generator)
     return ()
 
-def test_select_by_name(database, table, names):
+def test_area_names(names):
     """
     Valid name must follow all these rules:
     - can contain numbers
     - can contain characters: - ́ ’ , ( ) . and whitespaces.
     - 1 <= length <= 100 characters
     """
-    test_database_name(database)
-    test_table_name(table)
     test_var_type(names, "names", list)
     test_var_len_more_than(names, "names", 0)
-
     regex = re.compile(r"[0-9a-zA-ZёЁа-яА-Я-́’,()\s\.]")
     for name in names:
         test_var_type(name, "name", str)
@@ -164,6 +161,15 @@ def test_select_by_name(database, table, names):
         Valid name must follow all these rules:\n\
         - can contain numbers\n\
         - can contain characters: - ́ ’ , ( ) . and whitespaces." % forbidden_characters
+    return ()
+
+def test_select_by_name(database, table, names):
+    """
+    Combined tests.
+    """
+    test_database_name(database)
+    test_table_name(table)
+    test_area_names(names)
     return ()
 
 def test_rename_json_to_database_key(key):
@@ -192,7 +198,7 @@ def test_clean_area_children(found_names, found_ids):
 
 
 # `get_vacancies` tests
-def test_get_vacancies(headers, filters):
+def test_load_vacancies(headers, filters):
     """
     Tests for `get_vacancies`.
     """
@@ -205,6 +211,24 @@ def test_get_vacancies(headers, filters):
     for value in values:
         test_var_type(value, "value", (str, list))
     return ()
+
+def test_write_vacancies_to_database(areas_id):
+    """
+    Tests for `write_to_database`.
+    """
+    test_var_type(areas_id, "areas_id", list)
+    test_var_len_more_than(areas_id, "areas_id", 0)
+    for area_id in areas_id:
+        test_var_type(area_id, "area_id", int)
+    return ()
+
+def test_create_core_vacancies_tables(database):
+    """
+    Tests for `create_core_vacancies_tables`.
+    """
+    test_database_name(database)
+    return ()
+
 
 # ‘send_to_telegram’ tests
 def test_filter_vacancies(
@@ -301,7 +325,7 @@ def test_send_to_telegram(vacancies, chat_id, token):
     """
     Tests for `send_to_telegram`.
     """
-    test_var_type(vacancies, "vacancies", list)    
+    test_var_type(vacancies, "vacancies", list)
     for vacancy in vacancies:
           test_var_type(vacancy, "vacancy", dict)
           test_var_len_more_than(vacancy, "vacancy", 0)

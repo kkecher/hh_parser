@@ -1,0 +1,10 @@
+headers: {"user-agent": "kkecher (kkecher@gmail.com)"}
+
+database: "./data/hh.db"
+areas_file: "./data/areas.json"
+areas_table: "areas"
+vacancies_file: "./data/vacancies.json"
+vacancies_table: "vacancies"
+
+income_tax: 0.13
+chat_id: 383837232

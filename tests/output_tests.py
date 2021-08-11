@@ -26,13 +26,13 @@ def test_is_status_code_200(response):
             Got status code == %s" % response.status_code
       return ()
 
-def test_write_to_file(file_name):
+def test_is_file_exists(file_name):
       """
       Test if data was written to file.
       """
       assert os.path.isfile(file_name), \
             "file `%s` was not created." % file_name
-      return ()
+      return (True)
 
 def test_create_table_columns(
             database, table, get_table_columns_names, user_columns):
@@ -101,7 +101,7 @@ def test_rename_json_to_database_key(key):
     return ()
 
 # `get_areas` tests
-def test_get_areas_root_length(areas):
+def test_load_areas_root_length(areas):
       """
       Today (2021-07-17) hh returns 9 areas at json root:
       1. Россия
@@ -117,7 +117,7 @@ def test_get_areas_root_length(areas):
       test_var_len_more_than(areas, "areas", 8)
       return ()
 
-def test_get_areas_root_keys(areas):
+def test_load_areas_root_keys(areas):
       """
       Check if root dicts has all keys:
       - id
@@ -130,13 +130,13 @@ def test_get_areas_root_keys(areas):
             Got top json keys: %s" % list(areas[0].keys())
       return ()
 
-def test_get_areas(response, areas):
+def test_load_areas(response, areas):
       """
       Combine all area tests.
       """
       test_is_status_code_200(response)
-      test_get_areas_root_length(areas)
-      test_get_areas_root_keys(areas)
+      test_load_areas_root_length(areas)
+      test_load_areas_root_keys(areas)
       return ()
 
 def test_clean_area_children(found_names, cleaned_names, duplicated_names):
@@ -155,7 +155,7 @@ def test_clean_area_children(found_names, cleaned_names, duplicated_names):
 
 
 # `get_vacancies` tests
-def test_get_vacancies_root_length(vacancies):
+def test_load_vacancies__root_length(vacancies):
       """
       Today (2021-07-22) hh returns 8 items at json root:
       1. "items"
@@ -170,7 +170,7 @@ def test_get_vacancies_root_length(vacancies):
       test_var_len_more_than(vacancies, "vacancies", 7)
       return ()
 
-def test_get_vacancies_root_keys(vacancies):
+def test_load_vacancies__root_keys(vacancies):
       """
       Check if root dicts has all keys:
       - items
@@ -187,7 +187,7 @@ def test_get_vacancies_root_keys(vacancies):
             Got top json keys: %s" % list(vacancies.keys())
       return ()
 
-def test_get_vacancies_is_respect_filters(filters, vacancies):
+def test_load_vacancies__is_respect_filters(filters, vacancies):
       """
       Test if recieved vacancies respect filters.
       """
@@ -207,14 +207,14 @@ def test_get_vacancies_is_respect_filters(filters, vacancies):
                   %s" % (str(value), hh_alternate_url)
       return ()
 
-def test_get_vacancies(response, vacancies, filters):
+def test_load_vacancies(response, vacancies, filters):
       """
       Combine all `get_vacancies` tests.
       """
       test_is_status_code_200(response)
-      test_get_vacancies_root_length(vacancies)
-      test_get_vacancies_root_keys(vacancies)
-      test_get_vacancies_is_respect_filters(filters, vacancies)
+      test_load_vacancies__root_length(vacancies)
+      test_load_vacancies__root_keys(vacancies)
+      test_load_vacancies__is_respect_filters(filters, vacancies)
       return ()
 
 

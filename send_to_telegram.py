@@ -16,40 +16,44 @@ import sqlite3
 
 import requests
 
-from common_functions import DATABASE
-from get_areas import AREAS_TABLE
-from get_vacancies import VACANCIES_TABLE
+from common_functions import (
+        read_config
+)
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
-INCOME_TAX = 0.13
-chat_id = 383837232
+config = read_config()
+database = config["database"]
+areas_table = config["areas_table"]
+vacancies_table = config["vacancies_table"]
+income_tax = config["income_tax"]
+chat_id = config["chat_id"]
 token = os.environ["hh_bot_token"]
 
 send_columns = [
-    f"{VACANCIES_TABLE}.name",
-    f"{VACANCIES_TABLE}.alternate_url",
-    f"{VACANCIES_TABLE}.salary_from",
-    f"{VACANCIES_TABLE}.salary_to",
-    f"{VACANCIES_TABLE}.salary_currency",
-    f"{VACANCIES_TABLE}.salary_gross",
-    f"{VACANCIES_TABLE}.snippet_responsibility",
-    f"{VACANCIES_TABLE}.snippet_requirement",
-    f"{VACANCIES_TABLE}.schedule_name",
-    f"{VACANCIES_TABLE}.working_time_intervals_name",
-    f"{VACANCIES_TABLE}.working_time_modes_name",
-    f"{AREAS_TABLE}.name",
-    f"{VACANCIES_TABLE}.address_raw",
-    f"{VACANCIES_TABLE}.created_at"
+    f"{vacancies_table}.name",
+    f"{vacancies_table}.alternate_url",
+    f"{vacancies_table}.salary_from",
+    f"{vacancies_table}.salary_to",
+    f"{vacancies_table}.salary_currency",
+    f"{vacancies_table}.salary_gross",
+    f"{vacancies_table}.snippet_responsibility",
+    f"{vacancies_table}.snippet_requirement",
+    f"{vacancies_table}.schedule_name",
+    f"{vacancies_table}.working_time_intervals_name",
+    f"{vacancies_table}.working_time_modes_name",
+    f"{areas_table}.name",
+    f"{vacancies_table}.address_raw",
+    f"{vacancies_table}.created_at"
 ]
 
 # Currently filters work only for ‘not like‘ requests, i.e.
 # they will work to get vacancies not containing some pattern but
 # they will NOT work for requests like ‘salary_from > n’.
 filters = {
-    f"{VACANCIES_TABLE}.name": "продаж|продавец",
-    f"{VACANCIES_TABLE}.snippet_responsibility": "продавец",
-    f"{VACANCIES_TABLE}.snippet_requirement": "продавец"
+    f"{vacancies_table}.name": "продаж|продавец",
+    f"{vacancies_table}.snippet_responsibility": "продавец",
+    f"{vacancies_table}.snippet_requirement": "продавец"
 }
 
 def format_filters_to_query(filters):
@@ -167,8 +171,8 @@ def write_filtered_vacancies_to_file(filters, clean_vacancies, dirty_vacancies):
             vacancies_counter += 1
         f.write(f"FILTERS: {filters}\n\n")
 
-    out_tests.test_write_to_file(clean_file_name)
-    out_tests.test_write_to_file(dirty_file_name)
+    out_tests.test_is_file_exists(clean_file_name)
+    out_tests.test_is_file_exists(dirty_file_name)
     return ()
 
 def format_values(data):
@@ -207,42 +211,42 @@ def send_to_telegram(vacancies, chat_id, token):
 
     for vacancy in vacancies:
         title = \
-    format_values(vacancy[f"{VACANCIES_TABLE}.name"])
+    format_values(vacancy[f"{vacancies_table}.name"])
         alternate_url = \
-    vacancy[f"{VACANCIES_TABLE}.alternate_url"]
+    vacancy[f"{vacancies_table}.alternate_url"]
         salary_from = \
-    format_values(vacancy[f"{VACANCIES_TABLE}.salary_from"])
+    format_values(vacancy[f"{vacancies_table}.salary_from"])
         salary_to = \
-    format_values(vacancy[f"{VACANCIES_TABLE}.salary_to"])
+    format_values(vacancy[f"{vacancies_table}.salary_to"])
         salary_currency = \
-    format_values(vacancy[f"{VACANCIES_TABLE}.salary_currency"])
+    format_values(vacancy[f"{vacancies_table}.salary_currency"])
         is_before_tax = \
-    vacancy[f"{VACANCIES_TABLE}.salary_gross"]
+    vacancy[f"{vacancies_table}.salary_gross"]
         requirement = \
-    format_values(vacancy[f"{VACANCIES_TABLE}.snippet_requirement"])
+    format_values(vacancy[f"{vacancies_table}.snippet_requirement"])
         responsibility = \
-    format_values(vacancy[f"{VACANCIES_TABLE}.snippet_responsibility"])
+    format_values(vacancy[f"{vacancies_table}.snippet_responsibility"])
         schedule = \
-    format_values(vacancy[f"{VACANCIES_TABLE}.schedule_name"])
+    format_values(vacancy[f"{vacancies_table}.schedule_name"])
         working_time_intervals = \
-    format_values(vacancy[f"{VACANCIES_TABLE}.working_time_intervals_name"])
+    format_values(vacancy[f"{vacancies_table}.working_time_intervals_name"])
         working_time_modes = \
-    format_values(vacancy[f"{VACANCIES_TABLE}.working_time_modes_name"])
+    format_values(vacancy[f"{vacancies_table}.working_time_modes_name"])
         city = \
-    format_values(vacancy[f"{AREAS_TABLE}.name"])
+    format_values(vacancy[f"{areas_table}.name"])
         address = \
-    format_values(vacancy[f"{VACANCIES_TABLE}.address_raw"])
+    format_values(vacancy[f"{vacancies_table}.address_raw"])
         created = \
-    vacancy[f"{VACANCIES_TABLE}.created_at"]
+    vacancy[f"{vacancies_table}.created_at"]
 
         if salary_from != "" and salary_to != "" and salary_from > salary_to:
             salary_from, salary_to = salary_to, salary_from
         if salary_currency == "Rur":
             salary_currency = "&#x20bd;"
         if is_before_tax and salary_from != "":
-            salary_from = int(salary_from - salary_from * INCOME_TAX)
+            salary_from = int(salary_from - salary_from * income_tax)
         if is_before_tax and salary_to != "":
-            salary_to = int(salary_to - salary_to * INCOME_TAX)
+            salary_to = int(salary_to - salary_to * income_tax)
 
         msg = f"<a href='{alternate_url}'>{title}</a>\n\
 <em>{salary_from}-{salary_to} {salary_currency}</em>\n\n\
@@ -271,7 +275,7 @@ def main():
     filters_query_part, inverse_filters_query_part = \
         format_filters_to_query(filters)
     clean_vacancies, dirty_vacancies = filter_vacancies(
-        DATABASE, VACANCIES_TABLE, AREAS_TABLE, send_columns, filters, \
+        database, vacancies_table, areas_table, send_columns, filters, \
         filters_query_part, inverse_filters_query_part)
     write_filtered_vacancies_to_file(filters, clean_vacancies, dirty_vacancies)
     send_to_telegram(clean_vacancies, chat_id, token)

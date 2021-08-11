@@ -14,21 +14,23 @@ import sqlite3
 import requests
 
 from common_functions import (
-    HEADERS,
-    DATABASE,
-    write_to_file,
     create_table,
-    get_table_columns_names,
     create_table_columns,
+    get_table_columns_names,
+    read_config,
     write_to_database,
+    write_to_file
 )
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
-AREAS_FILE = "./data/areas.json"
-AREAS_TABLE = "areas"
+config = read_config()
+headers = config["headers"]
+database = config["database"]
+areas_file = config["areas_file"]
+areas_table = config["areas_table"]
 
-def get_areas(headers):
+def load_areas(headers):
     """
     Get json with geo (countries, regions, cities) and their ids.
     We'll write this json to sqlite database to search by areas.
@@ -39,7 +41,7 @@ def get_areas(headers):
     url = "https://api.hh.ru/areas"
     response = requests.get(url, headers=headers)
     areas = response.json()
-    out_tests.test_get_areas(response, areas)
+    out_tests.test_load_areas(response, areas)
     return (areas)
 
 def create_areas_generator(areas):
@@ -71,6 +73,12 @@ def write_areas_to_database(database, table, areas_generator):
     print (f"Writing geo areas to `{database} > {table}`...")
     in_tests.test_write_to_database_from_generator(database, table, areas_generator)
 
+    create_table(database, table,\
+        ["id INT NOT NULL PRIMARY KEY",\
+         "parent_id INT",\
+         "name TEXT NOT NULL"
+        ])
+    
     columns_names = get_table_columns_names(database, table)
     area = {}
     areas_counter = 0
@@ -107,7 +115,7 @@ def select_areas_by_name(database, table, names):
     Select geo areas by name to get their ids.
     `names` == list of names for search.
     """
-    print ("Search geo areas...")
+    print ("Searching geo areas...")
     in_tests.test_select_by_name(database, table, names)
 
     connection = sqlite3.connect(database)
@@ -153,34 +161,86 @@ def clean_area_children(found_names, found_ids):
         found_names, cleaned_names, duplicated_names)
     return (cleaned_names, cleaned_ids)
 
-def main():
-    areas = get_areas(HEADERS)
-    write_to_file(AREAS_FILE, areas)
-    create_table(DATABASE, AREAS_TABLE,\
-        ["id INT NOT NULL PRIMARY KEY",\
-         "parent_id INT",\
-         "name TEXT NOT NULL"
-        ])
-    write_areas_to_database(DATABASE, AREAS_TABLE, create_areas_generator(areas))
-    names = [
-        "моск",
-        "владиво",
-        "moscow",
-        "nys"
-    ]
-    not_found_names, found_names, found_ids = \
-        select_areas_by_name(DATABASE, AREAS_TABLE, names)
-    print () #dd
-    print (f"not_found_names = {not_found_names}") #dd
-    print (f"found_names = {found_names}") #dd
-    print (f"found_ids = {found_ids}") #dd
-    print () #dd
-    cleaned_names, cleaned_ids = clean_area_children(found_names, found_ids)
-    print (f"cleaned_names = {cleaned_names}") #dd
-    print (f"cleaned_ids = {cleaned_ids}") #dd
-
+def get_user_inputs():
+    """
+    Ask user to input geo areas.
+    """
+    user_areas = []
+    user_area = True
     print ()
-    print ("`get_areas` done!")
+    print ("Hello! Enter geo regions where you'd like to search vacancies. \
+I can understand:\n\
+    1. Only Russian letters, numbers, characters - ́ ’ , ( ) . and spaces.\n\
+    2. Name length up to 100 characters.\n\
+    3. Incomplete names are fine too.\n\
+    4. I can search many regions. Just press `Enter` to type a new one.\n\
+    5. Double press `Enter` to finish.")
+    while True:
+        try:
+            print()
+            if user_areas:
+                print (f"    {user_areas}")
+            user_area = input (f"    Your region: ")
+            if not user_area:
+                break
+            in_tests.test_area_names([user_area])
+            user_areas.append(user_area)
+        except AssertionError:
+            print (f"    INVALID NAME: {user_area}. Try again...")
+            print ()
+    return (user_areas)
 
-if __name__ == "__main__":
-    main()
+def get_user_areas(database, areas_table):
+    """
+    Process user inputs and confirm results.
+    """
+    while True:
+        user_areas = get_user_inputs()
+        print ()
+        not_found_areas, found_areas, found_areas_ids = \
+            select_areas_by_name(database, areas_table, user_areas)
+        print ()
+        print (f"    {30*'-'}\n    NOT found areas:\n    {30*'-'}")
+        for not_found_area in not_found_areas:
+            print (f"    {not_found_area}")
+        print ()
+        print (f"    {30*'-'}\n    Found areas:\n    {30*'-'}")
+        for found_area in found_areas:
+            print (f"    {found_area[2]}")
+        print ()
+        user_confirm = "_"
+        while (user_confirm not in "yn"):
+            user_confirm = input ("    Looks good? (press `y` or `n`): ")
+        if user_confirm == "y":
+            print ()
+            break
+        elif user_confirm == "n":
+            print ()
+            print ("    Ok. Let's try again...")
+            print ()
+            continue
+        else:
+               print ()
+               print ("Unexpected user_confirm")
+               print ()
+               raise ValueError
+        print ()
+        print ()
+    return (found_areas, found_areas_ids)
+
+def get_hh_areas(
+        headers=headers, database=database, \
+        areas_table=areas_table, areas_file=areas_file):
+    """
+    Load areas from hh, save them to file (for debugging) and database.
+    """
+    print ()
+    print ("Getting areas from hh. It can take up to several minutes...")
+    print ()
+    time.sleep(4)
+    Path("./data/").mkdir(parents=True, exist_ok=True)
+    areas = load_areas(headers)
+    write_to_file(areas_file, areas)
+    write_areas_to_database(
+        database, areas_table, create_areas_generator(areas))
+    return ()

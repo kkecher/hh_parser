@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.6
 
 """
-Get and filter hh vacancies.
+Get hh vacancies.
 
 API resources:
 https://github.com/hhru/api/blob/master/docs_eng/README.md
@@ -10,37 +10,42 @@ https://github.com/hhru/api/blob/master/docs_eng/vacancies.md
 
 import json
 import sqlite3
+import time
 
 import requests
 
 from common_functions import (
-    HEADERS,
-    DATABASE,
-    write_to_file,
     create_table,
-    get_table_columns_names,
     create_table_columns,
-    write_to_database
+    get_table_columns_names,
+    read_config,
+    write_to_database,
+    write_to_file
 )
-import get_areas
-from get_areas import AREAS_TABLE
+from get_areas import get_hh_areas
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
-VAСANCIES_FILE = "./data/vacancies.json"
-VACANCIES_TABLE = "vacancies"
+config = read_config()
+headers = config["headers"]
+database = config["database"]
+vacancies_file = config["vacancies_file"]
+vacancies_table = config["vacancies_table"]
+areas_table = config["areas_table"]
 
-def get_vacancies(headers, filters):
+def load_vacancies(headers, filters):
     """
     Get vacancies under `filters`.
     """
     print ("Getting vacancies...")
-    in_tests.test_get_vacancies(headers, filters)
+    print (f"headers = {headers}")
+    print (f"filters = {filters}")
+    in_tests.test_load_vacancies(headers, filters)
 
     url = "https://api.hh.ru/vacancies"
     response = requests.get(url, headers=headers, params=filters)
     vacancies = response.json()
-    out_tests.test_get_vacancies(response, vacancies, filters)
+    out_tests.test_load_vacancies(response, vacancies, filters)
     return (vacancies)
 
 def create_vacancies_generator(vacancies, parent_key = ""):
@@ -65,14 +70,85 @@ def create_vacancies_generator(vacancies, parent_key = ""):
         print ()
         raise TypeError
 
-def check_if_area_id_is_in_areas_table(database, milestone_cache):
+def create_core_vacancies_tables(database):
     """
-    1. Check if area_id is in `AREAS_TABLE`.
-    2. If not -> update `AREAS_TABLE` by calling `get_areas.mail()`
-    3. Check if area_id is in `AREAS_TABLE`.
+    Create core vacancies' tables.
+    """
+    in_tests.test_create_core_vacancies_tables(database)
+    
+    create_table(database, "streets",\
+        ["area_id INTEGER NOT NULL",\
+         "city_name TEXT",\
+         "street_name TEXT",\
+         "PRIMARY KEY (area_id, city_name, street_name)",\
+         f"FOREIGN KEY (area_id) REFERENCES {areas_table} (id)\
+         ON UPDATE CASCADE ON DELETE RESTRICT"
+         ])
+
+    create_table(database, "metro_stations",\
+        ["station_id TEXT NOT NULL PRIMARY KEY",\
+         "station_name TEXT NOT NULL",\
+         "line_name TEXT NOT NULL",\
+         "station_lat TEXT",\
+         "station_lng TEXT"
+         ])
+
+    create_table(database, "employers",\
+    ["id INTEGER NOT NULL PRIMARY KEY",\
+     "name TEXT NOT NULL",\
+     "url TEXT NOT NULL",\
+     "alternate_url TEXT NOT NULL",\
+     "logo_url_original TEXT",\
+     "logo_url_240 TEXT",\
+     "logo_url_90 TEXT",\
+     "vacancies_url TEXT NOT NULL",\
+     "is_trusted INTEGER"
+     ])
+
+    create_table(database, "vacancies_metro_stations",\
+    ["vacancy_id INTEGER NOT NULL",\
+     "metro_station_id TEXT NOT NULL",\
+    "PRIMARY KEY (vacancy_id, metro_station_id)",\
+    f"FOREIGN KEY (vacancy_id) REFERENCES {vacancies_table} (id)\
+    ON UPDATE CASCADE ON DELETE CASCADE", \
+    f"FOREIGN KEY (metro_station_id) REFERENCES metro_stations (station_id)\
+    ON UPDATE CASCADE ON DELETE CASCADE"
+     ])
+
+    create_table(database, vacancies_table,\
+    ["id INTEGER NOT NULL PRIMARY KEY",\
+     "name TEXT",\
+     "area_id INTEGER",\
+     "address_city  TEXT",\
+     "address_street TEXT",\
+     "employer_id INT",\
+     "alternate_url TEXT",\
+     "salary_from INT",\
+     "salary_to INT",\
+     "salary_currency TEXT",\
+     "salary_gross INT",\
+     "snippet_responsibility TEXT",\
+     "snippet_requirement TEXT",\
+     "schedule_name TEXT",\
+     "working_time_intervals_name TEXT",\
+     "working_time_modes_name TEXT",\
+     f"FOREIGN KEY (area_id) REFERENCES {areas_table} (id)\
+     ON UPDATE CASCADE ON DELETE RESTRICT",\
+     f"FOREIGN KEY (area_id, address_city, address_street)\
+     REFERENCES streets (area_id, city_name, street_name)\
+     ON UPDATE CASCADE ON DELETE RESTRICT",\
+     f"FOREIGN KEY (employer_id) REFERENCES employers (id)\
+     ON UPDATE CASCADE ON DELETE RESTRICT"
+     ])
+    return ()
+    
+def check_if_area_id_is_in_areas_table(database, milestone_cache, areas_table=areas_table):
+    """
+    1. Check if area_id is in `areas_table`.
+    2. If not -> update `areas_table` by calling `get_hh_areas`
+    3. Check if area_id is in `areas_table`.
     4. If yes -> return key, else -> raise
     """
-    areas_table = AREAS_TABLE
     print (f"    Checking if area_id is in {database} > {areas_table}...")
     in_tests.test_write_to_database_from_dict(
         database, areas_table, milestone_cache)
@@ -83,7 +159,7 @@ def check_if_area_id_is_in_areas_table(database, milestone_cache):
     query = f"SELECT EXISTS (SELECT 1 FROM {areas_table} WHERE id == {area_id})"
     is_area_in_areas_table = cursor.execute(query).fetchall()[0][0]
     if not is_area_in_areas_table:
-        get_areas.main()
+        get_hh_areas()
         is_area_in_areas_table = cursor.execute(query).fetchall()[0][0]
     if not is_area_in_areas_table:
         cursor.close()
@@ -199,6 +275,8 @@ def write_vacancies_to_database(database, table, vacancies_generator):
     in_tests.test_write_to_database_from_generator(
         database, table, vacancies_generator)
 
+    create_core_vacancies_tables(database)
+    
     columns_names = get_table_columns_names(database, table)
     vacancy = {}
     vacancy_counter = 0
@@ -279,7 +357,7 @@ def write_vacancies_to_database(database, table, vacancies_generator):
             milestone_cache[key] = value
             if key in milestone_keys:
                 key_function = milestone_keys[key]
-                key_function(database, milestone_cache)
+                key_function(database=database, milestone_cache=milestone_cache)
             if key not in skip_key and value != None:
                 vacancy[key] = value
         else:
@@ -312,81 +390,14 @@ def write_vacancies_to_database(database, table, vacancies_generator):
     out_tests.test_write_to_database(database_changes, vacancy_counter)
     return ()
 
-def main():
-    filters = {"area": [1]}
-    vacancies = get_vacancies(HEADERS, filters)
-    write_to_file(VAСANCIES_FILE, vacancies)
-
-    create_table(DATABASE, "streets",\
-        ["area_id INTEGER NOT NULL",\
-         "city_name TEXT",\
-         "street_name TEXT",\
-         "PRIMARY KEY (area_id, city_name, street_name)",\
-         f"FOREIGN KEY (area_id) REFERENCES {AREAS_TABLE} (id)\
-         ON UPDATE CASCADE ON DELETE RESTRICT"
-         ])
-
-    create_table(DATABASE, "metro_stations",\
-        ["station_id TEXT NOT NULL PRIMARY KEY",\
-         "station_name TEXT NOT NULL",\
-         "line_name TEXT NOT NULL",\
-         "station_lat TEXT",\
-         "station_lng TEXT"
-         ])
-
-    create_table(DATABASE, "employers",\
-    ["id INTEGER NOT NULL PRIMARY KEY",\
-     "name TEXT NOT NULL",\
-     "url TEXT NOT NULL",\
-     "alternate_url TEXT NOT NULL",\
-     "logo_url_original TEXT",\
-     "logo_url_240 TEXT",\
-     "logo_url_90 TEXT",\
-     "vacancies_url TEXT NOT NULL",\
-     "is_trusted INTEGER"
-     ])
-
-    create_table(DATABASE, "vacancies_metro_stations",\
-    ["vacancy_id INTEGER NOT NULL",\
-     "metro_station_id TEXT NOT NULL",\
-    "PRIMARY KEY (vacancy_id, metro_station_id)",\
-    f"FOREIGN KEY (vacancy_id) REFERENCES {VACANCIES_TABLE} (id)\
-    ON UPDATE CASCADE ON DELETE CASCADE", \
-    f"FOREIGN KEY (metro_station_id) REFERENCES metro_stations (station_id)\
-    ON UPDATE CASCADE ON DELETE CASCADE"
-     ])
-
-    create_table(DATABASE, VACANCIES_TABLE,\
-    ["id INTEGER NOT NULL PRIMARY KEY",\
-     "name TEXT",\
-     "area_id INTEGER",\
-     "address_city  TEXT",\
-     "address_street TEXT",\
-     "employer_id INT",\
-     "alternate_url TEXT",\
-     "salary_from INT",\
-     "salary_to INT",\
-     "salary_currency TEXT",\
-     "salary_gross INT",\
-     "snippet_responsibility TEXT",\
-     "snippet_requirement TEXT",\
-     "schedule_name TEXT",\
-     "working_time_intervals_name TEXT",\
-     "working_time_modes_name TEXT",\
-     f"FOREIGN KEY (area_id) REFERENCES {AREAS_TABLE} (id)\
-     ON UPDATE CASCADE ON DELETE RESTRICT",\
-     f"FOREIGN KEY (area_id, address_city, address_street)\
-     REFERENCES streets (area_id, city_name, street_name)\
-     ON UPDATE CASCADE ON DELETE RESTRICT",\
-     f"FOREIGN KEY (employer_id) REFERENCES employers (id)\
-     ON UPDATE CASCADE ON DELETE RESTRICT"
-     ])
-
+def get_hh_vacancies(
+        headers, database, vacancies_table, vacancies_file, cleaned_ids):
+    """
+    Load vacancies from hh, save them to file (for debugging) and database.
+    """
+    filters = {"area": cleaned_ids}
+    vacancies = load_vacancies(headers, filters)
+    write_to_file(vacancies_file, vacancies)
     write_vacancies_to_database(
-    DATABASE, VACANCIES_TABLE, create_vacancies_generator(vacancies["items"]))
-
-    print ()
-    print ("`get_vacancies` done!")
-
-if __name__ == "__main__":
-    main()
+database, vacancies_table, create_vacancies_generator(vacancies["items"]))
+    return ()
