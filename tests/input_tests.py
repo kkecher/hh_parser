@@ -228,12 +228,8 @@ def test_filter_vacancies(
     for key, value in filters.items():
         test_var_type(key, "key", str)
         test_var_len_more_than(key, "key", 0)
-        test_var_type(value, "value", list)
+        test_var_type(value, "value", str)
         test_var_len_more_than(value, "value", 0)
-
-        for param in value:
-            test_var_type(param, "param", str)
-            test_var_len_more_than(param, "param", 0)
 
     test_var_type(filters_query_part, "filters_query_part", str)
     test_var_len_more_than(filters_query_part, "filters_query_part", 0)
@@ -251,12 +247,8 @@ def test_format_filters_to_query(filters):
     for key, value in filters.items():
         test_var_type(key, "key", str)
         test_var_len_more_than(key, "key", 0)
-        test_var_type(value, "value", list)
+        test_var_type(value, "value", str)
         test_var_len_more_than(value, "value", 0)
-
-        for param in value:
-            test_var_type(param, "param", str)
-            test_var_len_more_than(param, "param", 0)
     return ()
 
 def test_write_filtered_vacancies_to_file(filters, clean_vacancies, dirty_vacancies):
@@ -268,11 +260,8 @@ def test_write_filtered_vacancies_to_file(filters, clean_vacancies, dirty_vacanc
     for key, value in filters.items():
         test_var_type(key, "key", str)
         test_var_len_more_than(key, "key", 0)
-        test_var_type(value, "value", list)
+        test_var_type(value, "value", str)
         test_var_len_more_than(value, "value", 0)
-        for param in value:
-            test_var_type(param, "param", str)
-            test_var_len_more_than(param, "param", 0)
 
     test_var_type(clean_vacancies, "clean_vacancies", list)
     test_var_type(dirty_vacancies, "dirty_vacancies", list)

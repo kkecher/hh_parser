@@ -226,7 +226,7 @@ def test_format_filters_to_query(filters_query_part, inverse_filters_query_part,
       test_var_type(filters_query_part, "filters_query_part", str)
       test_var_len_more_than(filters_query_part, "filters_query_part", 15)
       test_var_type(inverse_filters_query_part, "inverse_filters_query_part", str)
-      test_var_len_more_than(inverse_filters_query_part, "inverse_filters_query_part", 12)
+      test_var_len_more_than(inverse_filters_query_part, "inverse_filters_query_part", 11)
 
       and_substring_count = filters_query_part.count(" AND ")
       assert (len(filters) - 1) == and_substring_count, \
@@ -237,10 +237,10 @@ def test_format_filters_to_query(filters_query_part, inverse_filters_query_part,
       "Expected `?)` at the end of `filters_query_part`\n\
       Got %s" % filters_query_part[-2:]
 
-      and_substring_count = inverse_filters_query_part.count(" AND ")
-      assert (len(filters) - 1) == and_substring_count, \
-      "Expected %d ` AND ` subsring in `inverse_filters_query_part`\n\
-      Got %d ` AND ` ones." % (len(filters)-1, and_substring_count)
+      or_substring_count = inverse_filters_query_part.count(" OR ")
+      assert (len(filters) - 1) == or_substring_count, \
+      "Expected %d ` OR ` subsring in `inverse_filters_query_part`\n\
+      Got %d ` OR ` ones." % (len(filters)-1, and_substring_count)
 
       assert inverse_filters_query_part[-2:] == "?)", \
       "Expected `?)` at the end of `inverse_filters_query_part`\n\

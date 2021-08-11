@@ -262,7 +262,6 @@ def write_vacancies_to_database(database, table, vacancies_generator):
 
     for item in vacancies_generator:
         key, value = item[0], item[1]
-        print(f"{key} = {value}")
 
         # Lowercase text to have case-insensitive search.
         # `COLLATE NOCASE` doesn't work for cyrillic.
@@ -279,7 +278,6 @@ def write_vacancies_to_database(database, table, vacancies_generator):
         if key != "id" or vacancy == {}:
             milestone_cache[key] = value
             if key in milestone_keys:
-                print (milestone_cache)
                 key_function = milestone_keys[key]
                 key_function(database, milestone_cache)
             if key not in skip_key and value != None:

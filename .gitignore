@@ -1,0 +1,10 @@
+*.[oa]
+*~
+*.pyc
+__pycache__
+\#*#
+*.db
+*.json
+*.txt
+temp
+temp.py

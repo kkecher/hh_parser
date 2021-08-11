@@ -47,7 +47,9 @@ send_columns = [
 # they will work to get vacancies not containing some pattern but
 # they will NOT work for requests like ‘salary_from > n’.
 filters = {
-    f"{VACANCIES_TABLE}.name": ["продаж"]
+    f"{VACANCIES_TABLE}.name": "продаж|продавец",
+    f"{VACANCIES_TABLE}.snippet_responsibility": "продавец",
+    f"{VACANCIES_TABLE}.snippet_requirement": "продавец"
 }
 
 def format_filters_to_query(filters):
@@ -60,17 +62,15 @@ def format_filters_to_query(filters):
     filters_query_part = ""
     inverse_filters_query_part = ""
     for key, value in filters.items():
-        query_params = f"{'?, ' * len(value)}"[:-len(", ")]
-        filters_query_part += f"{key} NOT REGEXP ({query_params}) AND "
-        inverse_filters_query_part += f"{key} REGEXP ({query_params}) AND "
+        filters_query_part += f"{key} NOT REGEXP (?) AND "
+        inverse_filters_query_part += f"{key} REGEXP (?) OR "
     filters_query_part = filters_query_part[:-len(" AND ")]
-    inverse_filters_query_part = inverse_filters_query_part[:-len(" AND ")]
+    inverse_filters_query_part = inverse_filters_query_part[:-len(" OR ")]
     out_tests.test_format_filters_to_query(
         filters_query_part, inverse_filters_query_part, filters)
     return (filters_query_part, inverse_filters_query_part)
 
 def regexp(expr, item):
-    print (f"expr = {expr}")
     if item is None:
         return False
     else:
@@ -101,11 +101,11 @@ def filter_vacancies(
 {areas_table}.id WHERE {inverse_filters_query_part};"
 
     clean_values = cursor.execute(
-        filters_query, list(filters.values())[0])
+        filters_query, list(filters.values()))
     clean_vacancies = [dict(zip(send_columns, clean_value)) for
                        clean_value in clean_values]
     dirty_values = cursor.execute(
-        inverse_filters_query, list(filters.values())[0])
+        inverse_filters_query, list(filters.values()))
     dirty_vacancies = [dict(zip(send_columns, dirty_value)) for
                        dirty_value in dirty_values]
     cursor.close()
@@ -180,7 +180,8 @@ def format_values(data):
     in_tests.test_format_values(data)
 
     if isinstance(data, str):
-        sentences = re.findall(r".*?[\.\?!]\s*", data)
+        print (data)
+        sentences = re.findall(r".*?(?:\.|\?|!|$)\s*", data)
         if sentences == []:
             formated_data = data.capitalize()
             out_tests.test_format_values(formated_data)
@@ -193,6 +194,7 @@ def format_values(data):
         formated_data = ""
     else:
         formated_data = data
+    print (formated_data)
     out_tests.test_format_values(formated_data)
     return (formated_data)
 
