@@ -6,7 +6,7 @@ Input tests for hh_parser.
 import re
 import types
 
-# Common tests
+# COMMON TESTS
 def test_var_type(var, var_name, var_type):
     """
     Test if type(`var`) == `var_type`.
@@ -125,16 +125,14 @@ def test_write_to_database_from_dict(database, table, data):
             test_var_len_more_than(value, "value", 0)
     return ()
 
-def test_write_to_database_from_generator(database, table, generator):
+def test_is_generator(generator):
     """
-    Tests for writing to database from generator.
+    Tests `generator` type.
     """
-    test_database_name(database)
-    test_table_name(table)
-
-    assert isinstance(generator, types.GeneratorType), \
-        "Expected type(generator) == generator,\n\
-        Got type(generator) == %s" % type(generator)
+    test_var_type(generator, "generator", types.GeneratorType)
+#     assert isinstance(generator, types.GeneratorType), \
+#         "Expected type(generator) == generator,\n\
+#         Got type(generator) == %s" % type(generator)
     return ()
 
 def test_area_names(names):
@@ -163,15 +161,6 @@ def test_area_names(names):
         - can contain characters: - ́ ’ , ( ) . and whitespaces." % forbidden_characters
     return ()
 
-def test_select_by_name(database, table, names):
-    """
-    Combined tests.
-    """
-    test_database_name(database)
-    test_table_name(table)
-    test_area_names(names)
-    return ()
-
 def test_rename_json_to_database_key(key):
     """
     Tests for `rename_json_to_database_key`.
@@ -181,23 +170,23 @@ def test_rename_json_to_database_key(key):
     test_table_name(key)
     return ()
 
-# `get_areas` tests
-def test_clean_area_children(found_names, found_ids):
+# AREAS TESTS
+def test_clean_area_children(found, found_ids):
     """
     Combine all tests for `clean_area_children`.
     """
-
+    test_var_type(found, "found", set)
     test_var_type(found_ids, "found_ids", set)
 
-    for area_name in found_names:
-        test_var_type(area_name, "area_name", tuple)
+    for area in found:
+        test_var_type(area, "area", tuple)
 
     for area_id in found_ids:
         test_var_type(area_id, "area_id", int)
     return ()
 
 
-# `get_vacancies` tests
+# VACANCIES TESTS
 def test_load_vacancies(headers, filters):
     """
     Tests for `get_vacancies`.
@@ -230,7 +219,7 @@ def test_create_core_vacancies_tables(database):
     return ()
 
 
-# ‘send_to_telegram’ tests
+# TELEGRAM TESTS
 def test_filter_vacancies(
         database, vacancies_table, areas_table, send_columns, filters, \
         filters_query_part, inverse_filters_query_part):

@@ -7,25 +7,25 @@ main function for hh_parser project.
 from pathlib import Path
 import yaml
 
-from common_functions import (
-    is_table_exists,
-    read_config
-)
-from get_areas import (
+from areas import (
     clean_area_children,
     create_areas_generator,
-    get_hh_areas,
-    get_user_areas,
+    get_areas,
+    search_user_areas,
     load_areas,
     select_areas_by_name,
     write_areas_to_database
 )
-from get_vacancies import (
+from shared import (
+    is_table_exists,
+    read_config
+)
+from vacancies import (
     get_hh_vacancies,
     load_vacancies,
     write_vacancies_to_database
 )
-import send_to_telegram
+import telegram
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
@@ -43,8 +43,8 @@ def main():
     try:
         is_table_exists(database, areas_table)
     except AssertionError:
-        get_hh_areas()
-    found_areas, found_areas_ids = get_user_areas(database, areas_table)
+        get_areas()
+    found_areas, found_areas_ids = search_user_areas(database, areas_table)
     cleaned_names, cleaned_ids = clean_area_children(
         found_areas, found_areas_ids)
     get_hh_vacancies(

@@ -16,7 +16,7 @@ from tests.input_tests import (
       test_table_name
 )
 
-# Common tests
+# COMMON TESTS
 def test_is_status_code_200(response):
       """
       Test if we got status code 200.
@@ -73,34 +73,15 @@ def test_write_to_database(database_changes_number, counter):
       Got %s database changes." % (counter, database_changes_number)
       return ()
 
-def test_select_by_name(not_found_names, found_names, found_ids):
-      """
-      Tests for select by name function.
-      """
-      test_var_type(not_found_names, "not_found_names", set)
-      test_var_type(found_names, "found_names", set)
-      test_var_type(found_ids, "found_ids", set)
+# def test_rename_json_to_database_key(key):
+#     """
+#     """
+#     test_var_type(key, "key", str)
+#     test_var_len_more_than(key, "key", 0)
+#     test_table_name(key)
+#     return ()
 
-      for name in not_found_names:
-            test_var_type(name, "name", str)
-
-      for name in found_names:
-            test_var_type(name, "name", tuple)
-
-      for id_ in found_ids:
-            test_var_type(id_, "id", int)
-      return ()
-
-def test_rename_json_to_database_key(key):
-    """
-    Tests for `rename_json_to_database_key`.
-    """
-    test_var_type(key, "key", str)
-    test_var_len_more_than(key, "key", 0)
-    test_table_name(key)
-    return ()
-
-# `get_areas` tests
+# AREAS TESTS
 def test_load_areas_root_length(areas):
       """
       Today (2021-07-17) hh returns 9 areas at json root:
@@ -130,31 +111,58 @@ def test_load_areas_root_keys(areas):
             Got top json keys: %s" % list(areas[0].keys())
       return ()
 
+def test_get_user_inputs(user_areas):
+      """
+      """
+      test_var_type(user_areas, "user_areas", list)
+
+      for user_area in user_areas:
+            test_var_type(user_area, "user_area", str)            
+            test_var_len_more_than(user_area, "user_area", 0)      
+      return ()
+
 def test_load_areas(response, areas):
       """
-      Combine all area tests.
+      Combine all load_areas tests.
       """
       test_is_status_code_200(response)
       test_load_areas_root_length(areas)
       test_load_areas_root_keys(areas)
       return ()
 
-def test_clean_area_children(found_names, cleaned_names, duplicated_names):
+def test_select_areas_by_name(not_found, found, found_ids):
       """
-      Test if `cleaned_names` is set and
-      len(cleaned_names) + len(duplicated_names) == len(found_names)
       """
-      test_var_type(cleaned_names, "cleaned_names", set)
+      test_var_type(not_found, "not_found", set)
+      test_var_type(found, "found", set)
+      test_var_type(found_ids, "found_ids", set)
 
-      assert len(cleaned_names) + len(duplicated_names) == len(found_names), \
-            "`len(cleaned_names) + len(duplicated_names)` \
-            must  be even to `len(found_names)`.\n\
-            len(cleaned_names) + len(duplicated_names) = %d, len(found_names) = \
-            %d" % (len(cleaned_names) + len(duplicated_names), len(found_names))
+      for name in not_found:
+            test_var_type(name, "name", str)
+
+      for name in found:
+            test_var_type(name, "name", tuple)
+
+      for id_ in found_ids:
+            test_var_type(id_, "id", int)
+      return ()
+
+def test_clean_area_children(found, cleaned, duplicated):
+      """
+      Test if `cleaned` is set and
+      len(cleaned) + len(duplicated) == len(found)
+      """
+      test_var_type(cleaned, "cleaned", set)
+
+      assert len(cleaned) + len(duplicated) == len(found), \
+            "`len(cleaned) + len(duplicated)` \
+            must  be even to `len(found)`.\n\
+            len(cleaned) + len(duplicated) == %d, len(found) = \
+            %d" % (len(cleaned) + len(duplicated_names), len(found))
       return ()
 
 
-# `get_vacancies` tests
+# VACANCIES TESTS
 def test_load_vacancies__root_length(vacancies):
       """
       Today (2021-07-22) hh returns 8 items at json root:
@@ -218,7 +226,7 @@ def test_load_vacancies(response, vacancies, filters):
       return ()
 
 
-# `send_to_telegram` tests
+# TELEGRAM TESTS
 def test_format_filters_to_query(filters_query_part, inverse_filters_query_part, filters):
       """
       Test if `filters_query_part` is correct sql query part.
