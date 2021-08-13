@@ -8,35 +8,47 @@ https://github.com/hhru/api/blob/master/docs_eng/README.md
 https://github.com/hhru/api/blob/master/docs_eng/vacancies.md
 """
 
-import sqlite3
+import types
 
 import requests
 
-from areas import get_areas
+from areas import (
+    check_if_area_id_is_in_areas_table
+)
 from shared import (
     create_table,
     create_table_columns,
     get_table_columns_names,
-    read_config,
     write_to_database,
     write_to_file
 )
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
-config = read_config()
-headers = config["headers"]
-database = config["database"]
-vacancies_file = config["vacancies_file"]
-vacancies_table = config["vacancies_table"]
-areas_table = config["areas_table"]
+def get_vacancies(config, areas_ids):
+    """
+    Load vacancies from hh, save them to file (for debugging) and database.
+    """
+    in_tests.test_get_vacancies(config, areas_ids)
+    print ("\n\nGetting vacancies from hh...")
 
-def load_vacancies(headers, filters):
+    vacancies_file = config["vacancies_file"]
+    filters = {"area": areas_ids}
+    filters = {key: value for key, value in filters.items() if len(value) != 0}
+
+    vacancies = load_vacancies(config, filters)
+    write_to_file(vacancies_file, vacancies)
+    write_vacancies_to_database(
+        config, create_vacancies_generator(vacancies["items"]))
+    return ()
+
+def load_vacancies(config, filters):
     """
     Get vacancies under `filters`.
     """
-    print ("Getting vacancies...")
+    headers = config["headers"]
     in_tests.test_load_vacancies(headers, filters)
+    print ("    Loading vacancies from hh...")
 
     url = "https://api.hh.ru/vacancies"
     response = requests.get(url, headers=headers, params=filters)
@@ -61,16 +73,29 @@ def create_vacancies_generator(vacancies, parent_key = ""):
         for item in vacancies:
             yield from create_vacancies_generator(item, parent_key)
     else:
-        print (f"\n\nUnhandled data type: {type(vacancies)}\n\n")
+        print (f"\n\n    Unhandled data type: {type(vacancies)}\n\n")
         raise TypeError
 
-def create_vacancies_tables(database):
+def create_vacancies_tables(config):
     """
     Create vacancies' tables.
     """
+    database = config["database"]
+    areas_table = config["areas_table"]
+    vacancies_table = config["vacancies_table"]
+    streets_table = config["streets_table"]
+    metro_stations_table = config["metro_stations_table"]
+    employers_table = config["employers_table"]
+    vacancies_metro_stations_table = config["vacancies_metro_stations_table"]
     in_tests.test_database_name(database)
-    
-    create_table(database, "streets",\
+    in_tests.test_table_name(areas_table)
+    in_tests.test_table_name(vacancies_table)
+    in_tests.test_table_name(streets_table)
+    in_tests.test_table_name(metro_stations_table)
+    in_tests.test_table_name(employers_table)
+    in_tests.test_table_name(vacancies_metro_stations_table)
+
+    create_table(database, streets_table,\
         ["area_id INTEGER NOT NULL",\
          "city_name TEXT",\
          "street_name TEXT",\
@@ -79,7 +104,7 @@ def create_vacancies_tables(database):
          ON UPDATE CASCADE ON DELETE RESTRICT"
          ])
 
-    create_table(database, "metro_stations",\
+    create_table(database, metro_stations_table,\
         ["station_id TEXT NOT NULL PRIMARY KEY",\
          "station_name TEXT NOT NULL",\
          "line_name TEXT NOT NULL",\
@@ -87,7 +112,7 @@ def create_vacancies_tables(database):
          "station_lng TEXT"
          ])
 
-    create_table(database, "employers",\
+    create_table(database, employers_table,\
     ["id INTEGER NOT NULL PRIMARY KEY",\
      "name TEXT NOT NULL",\
      "url TEXT NOT NULL",\
@@ -99,7 +124,7 @@ def create_vacancies_tables(database):
      "is_trusted INTEGER"
      ])
 
-    create_table(database, "vacancies_metro_stations",\
+    create_table(database, vacancies_metro_stations_table,\
     ["vacancy_id INTEGER NOT NULL",\
      "metro_station_id TEXT NOT NULL",\
     "PRIMARY KEY (vacancy_id, metro_station_id)",\
@@ -135,200 +160,124 @@ def create_vacancies_tables(database):
      ON UPDATE CASCADE ON DELETE RESTRICT"
      ])
     return ()
-    
-def check_if_area_id_is_in_areas_table(database, milestone_cache, areas_table=areas_table):
+
+def write_streets_to_streets_table(config, tables_cache):
     """
-    1. Check if area_id is in `areas_table`.
-    2. If not -> update `areas_table` by calling `get_areas`
-    3. Check if area_id is in `areas_table`.
-    4. If yes -> return True, else -> raise
     """
-    print (f"    Checking if area_id is in {database} > {areas_table}...")
+    database = config["database"]
+    streets_table = config["streets_table"]
     in_tests.test_write_to_database_from_dict(
-        database, areas_table, milestone_cache)
+        database, streets_table, tables_cache)
 
-    area_id = milestone_cache["area_id"]
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
-    query = f"SELECT EXISTS (SELECT 1 FROM {areas_table} WHERE id == {area_id})"
-    is_area_in_areas_table = cursor.execute(query).fetchall()[0][0]
-    if not is_area_in_areas_table:
-        get_areas()
-        is_area_in_areas_table = cursor.execute(query).fetchall()[0][0]
-    if not is_area_in_areas_table:
-        cursor.close()
-        connection.close()
-        print (f"\n\n    I've updated areas but can't find id == \
-{area_id} in {areas_table}.\n\n")
-        raise ValueError
-    else:
-        cursor.close()
-        connection.close()
-        return (True)
+    area_id = tables_cache["area_id"]
+    city_name = tables_cache["address_city"]
+    street_name = tables_cache["address_street"]
 
-def write_street_to_streets_table(database, milestone_cache):
-    """
-    Write or update `aread_id - city_name - street_name` row in `streets` table.
-    """
-    streets_table = "streets"
-    print (f"    Writing street to {database} > {streets_table}...")
-    in_tests.test_write_to_database_from_dict(
-        database, streets_table, milestone_cache)
-
-    counter = 1
-    database_changes = 0
-    row = {
-        "area_id": milestone_cache["area_id"],
-        "city_name": milestone_cache["address_city"],
-        "street_name": milestone_cache["address_street"]
-        }
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
-
-    database_changes += write_to_database(database, streets_table, row)
-    cursor.close()
-    connection.close()
-    out_tests.test_write_to_database(database_changes, counter)
+    if city_name or street_name:
+        write_to_database(database, streets_table, {
+            "area_id": area_id,
+            "city_name": city_name,
+            "street_name": street_name
+        })
     return ()
 
-def write_station_to_metro_stations_table(database, milestone_cache):
+def write_stations_to_metro_stations_table(config, tables_cache):
     """
-    Write or update `station_id - station_name - line_name -
-    station_lat - station_lng` row in `metro_stations` table.
     """
-    metro_stations_table = "metro_stations"
-    print (f"    Writing metro_station to {database} > \
-{metro_stations_table}...")
+    database = config["database"]
+    metro_stations_table = config["metro_stations_table"]
     in_tests.test_write_to_database_from_dict(
-        database, metro_stations_table, milestone_cache)
+        database, metro_stations_table, tables_cache)
 
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
-    counter = 2
-    database_changes = 0
-    station_row = {
-        "station_id": milestone_cache["address_metro_stations_station_id"],
-        "station_name": milestone_cache["address_metro_stations_station_name"],
-        "line_name": milestone_cache["address_metro_stations_line_name"],
-        "station_lat": milestone_cache["address_metro_stations_lat"],
-        "station_lng": milestone_cache["address_metro_stations_lng"]
-    }
-    database_changes += write_to_database(
-        database, metro_stations_table, station_row)
+    station_id = tables_cache["address_metro_stations_station_id"]
+    station_name = tables_cache["address_metro_stations_station_name"]
+    line_name = tables_cache["address_metro_stations_line_name"]
+    station_lat = tables_cache["address_metro_stations_lat"]
+    station_lng = tables_cache["address_metro_stations_lng"]
 
-    vacancy_station_join_table = "vacancies_metro_stations"
-    vacancy_station_join_row = {
-        "vacancy_id": milestone_cache["id"],
-        "metro_station_id": milestone_cache["address_metro_stations_station_id"]
-    }
-    database_changes += write_to_database(
-        database, vacancy_station_join_table, vacancy_station_join_row)
-    cursor.close()
-    connection.close()
-    out_tests.test_write_to_database(database_changes, counter)
+    if station_id:
+        write_to_database(database, metro_stations_table, {
+            "station_id": station_id,
+            "station_name": station_name,
+            "line_name": line_name,
+            "station_lat": station_lat,
+            "station_lng": station_lng
+        })
     return ()
 
-def write_employer_to_employeers_table(database, milestone_cache):
+def write_employers_to_employers_table(config, tables_cache):
     """
-    Write or update employer row in `employers` table.
     """
-    employers_table = "employers"
-    print (f"    Writing employer to {database} > {employers_table}...")
+    database = config["database"]
+    employers_table = config["employers_table"]
     in_tests.test_write_to_database_from_dict(
-        database, employers_table, milestone_cache)
+        database, employers_table, tables_cache)
 
-    counter = 1
-    database_changes = 0
-    row = {
-        "id": milestone_cache["employer_id"],
-        "name": milestone_cache["employer_name"],
-        "url": milestone_cache["employer_url"],
-        "alternate_url": milestone_cache["employer_alternate_url"],
-        "logo_url_original": milestone_cache["employer_logo_urls_original"],
-        "logo_url_240": milestone_cache["employer_logo_urls_240"],
-        "logo_url_90": milestone_cache["employer_logo_urls_90"],
-        "vacancies_url": milestone_cache["employer_vacancies_url"],
-        "is_trusted": milestone_cache["employer_trusted"]
-        }
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
+    id_ = tables_cache["employer_id"]
+    name = tables_cache["employer_name"]
+    url = tables_cache["employer_url"]
+    alternate_url = tables_cache["employer_alternate_url"]
+    logo_url_original = tables_cache["employer_logo_urls_original"]
+    logo_url_240 = tables_cache["employer_logo_urls_240"]
+    logo_url_90 = tables_cache["employer_logo_urls_90"]
+    vacancies_url = tables_cache["employer_vacancies_url"]
+    is_trusted = tables_cache["employer_trusted"]
 
-    database_changes += write_to_database(database, employers_table, row)
-    cursor.close()
-    connection.close()
-    out_tests.test_write_to_database(database_changes, counter)
+    if id_:
+        write_to_database(database, employers_table, {
+            "id": id_,
+            "name": name,
+            "url": url,
+            "alternate_url": alternate_url,
+            "logo_url_original": logo_url_original,
+            "logo_url_240": logo_url_240,
+            "logo_url_90": logo_url_90,
+            "vacancies_url": vacancies_url,
+            "is_trusted": is_trusted
+        })
     return ()
 
-def write_vacancies_to_database(database, table, vacancies_generator):
+def write_vacancies_to_database(config, vacancies_generator):
     """
     Iterate over vacancies generator and fill `vacancies` table.
     """
-    print (f"Writing vacancies to `{database} > {table}`...")
+    database = config["database"]
+    vacancies_table = config["vacancies_table"]
     in_tests.test_database_name(database)
-    in_tests.test_table_name(table)
-    in_tests.test_is_generator(vacancies_generator)
+    in_tests.test_table_name(vacancies_table)
+    in_tests.test_var_type(
+        vacancies_generator, "vacancies_generator", types.GeneratorType)
+    print (f"    Writing vacancies to `{database} > {vacancies_table}`...")
 
-    create_vacancies_tables(database)
-    
-    columns_names = get_table_columns_names(database, table)
+    create_vacancies_tables(config)
+
+    vacancies_columns_names = get_table_columns_names(database, vacancies_table)
     vacancy = {}
     vacancy_counter = 0
     database_changes = 0
 
-    # Dict for accumulation of milestone data
-    milestone_cache = {
-        "area_id": None,
-        "address_city": None,
-        "address_street": None,
-        "address_metro_stations_station_id": None,
-        "address_metro_stations_station_name": None,
-        "address_metro_stations_line_name": None,
-        "address_metro_stations_lat": None,
-        "address_metro_stations_lng": None,
-        "employer_id": None,
-        "employer_name": None,
-        "employer_url": None,
-        "employer_alternate_url": None,
-        "employer_logo_urls_original": None,
-        "employer_logo_urls_240": None,
-        "employer_logo_urls_90": None,
-        "employer_vacancies_url": None,
-        "employer_trusted": None
-        }
-
-    # After each of these keys we run its connected function.
-    milestone_keys = {
-    "area_id": check_if_area_id_is_in_areas_table,
-    "address_raw": write_street_to_streets_table,
-    "address_metro_stations_lng": write_station_to_metro_stations_table,
-    "employer_trusted": write_employer_to_employeers_table
-    }
+    # Accumulate non-vacances tables data.
+    # Its values reseted to None every vacancy.
+    tables_cache_keys = ["area_id", "address_city", "address_street", \
+"address_metro_stations_station_id", "address_metro_stations_station_name", \
+"address_metro_stations_line_name", "address_metro_stations_lat", \
+"address_metro_stations_lng", "employer_id", "employer_name", "employer_url", \
+"employer_alternate_url", "employer_logo_urls_original", \
+"employer_logo_urls_240", "employer_logo_urls_90", "employer_vacancies_url", \
+"employer_trusted"]
+    tables_cache = dict.fromkeys(tables_cache_keys)
 
     # We don’t write these keys to vacancies table
     # because they are in some other one.
-    skip_key = [
-        "area_name",
-        "area_url",
-        "address_metro_station_name",
-        "address_metro_line_name",
-        "address_metro_station_id",
-        "address_metro_line_id",
-        "address_metro_lat",
-        "address_metro_lng",
-        "address_metro_stations_station_name",
-        "address_metro_stations_line_name",
-        "address_metro_stations_station_id",
-        "address_metro_stations_line_id",
-        "address_metro_stations_lat",
-        "address_metro_stations_lng",
-        "employer_name",
-        "employer_url",
-        "employer_alternate_url",
-        "employer_logo_urls_original",
-        "employer_logo_urls_90",
-        "employer_logo_urls_240",
-        "employer_vacancies_url",
-        "employer_trusted",
+    skip_keys = ["area_name", "area_url", "address_metro_station_name", \
+"address_metro_line_name", "address_metro_station_id", \
+"address_metro_line_id", "address_metro_lat", "address_metro_lng", \
+"address_metro_stations_station_name", "address_metro_stations_line_name", \
+"address_metro_stations_station_id", "address_metro_stations_line_id", \
+"address_metro_stations_lat", "address_metro_stations_lng", "employer_name", \
+"employer_url", "employer_alternate_url", "employer_logo_urls_original", \
+"employer_logo_urls_90", "employer_logo_urls_240", "employer_vacancies_url", \
+"employer_trusted"
     ]
 
     for item in vacancies_generator:
@@ -341,56 +290,30 @@ def write_vacancies_to_database(database, table, vacancies_generator):
         except AttributeError:
             pass
 
-        if key not in columns_names and key not in skip_key:
+        if key not in vacancies_columns_names and key not in skip_keys:
             column = [(f"{key} TEXT")]
-            create_table_columns(database, table, column)
-            columns_names.append(key)
+            create_table_columns(database, vacancies_table, column)
+            vacancies_columns_names.append(key)
 
         if key != "id" or vacancy == {}:
-            milestone_cache[key] = value
-            if key in milestone_keys:
-                key_function = milestone_keys[key]
-                key_function(database=database, milestone_cache=milestone_cache)
-            if key not in skip_key and value != None:
+            tables_cache[key] = value
+            if key not in skip_keys and value != None:
                 vacancy[key] = value
         else:
-            database_changes += write_to_database(database, table, vacancy)
+            check_if_area_id_is_in_areas_table(
+                config, int(tables_cache["area_id"]))
+            write_streets_to_streets_table(config, tables_cache)
+            write_stations_to_metro_stations_table(config, tables_cache)
+            write_employers_to_employers_table(config, tables_cache)
+
+            database_changes += write_to_database(
+                database, vacancies_table, vacancy)
             vacancy_counter += 1
             vacancy = {}
-            milestone_cache = {
-                "area_id": None,
-                "address_city": None,
-                "address_street": None,
-                "address_metro_stations_station_id": None,
-                "address_metro_stations_station_name": None,
-                "address_metro_stations_line_name": None,
-                "address_metro_stations_lat": None,
-                "address_metro_stations_lng": None,
-                "employer_id": None,
-                "employer_name": None,
-                "employer_url": None,
-                "employer_alternate_url": None,
-                "employer_logo_urls_original": None,
-                "employer_logo_urls_240": None,
-                "employer_logo_urls_90": None,
-                "employer_vacancies_url": None,
-                "employer_trusted": None
-                }
+            tables_cache = dict.fromkeys(tables_cache_keys)
             vacancy[key] = value
-            milestone_cache[key] = value
-    database_changes += write_to_database(database, table, vacancy)
+            tables_cache[key] = value
+    database_changes += write_to_database(database, vacancies_table, vacancy)
     vacancy_counter += 1
     out_tests.test_write_to_database(database_changes, vacancy_counter)
-    return ()
-
-def get_hh_vacancies(
-        headers, database, vacancies_table, vacancies_file, cleaned_ids):
-    """
-    Load vacancies from hh, save them to file (for debugging) and database.
-    """
-    filters = {"area": cleaned_ids}
-    vacancies = load_vacancies(headers, filters)
-    write_to_file(vacancies_file, vacancies)
-    write_vacancies_to_database(
-database, vacancies_table, create_vacancies_generator(vacancies["items"]))
     return ()

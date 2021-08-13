@@ -4,9 +4,8 @@
 Input tests for hh_parser.
 """
 import re
-import types
 
-# COMMON TESTS
+# SHARED TESTS
 def test_var_type(var, var_name, var_type):
     """
     Test if type(`var`) == `var_type`.
@@ -81,8 +80,8 @@ def test_table_name(table):
     regex = re.compile(r"[0-9a-zA-Z_]")
     forbidden_characters = regex.sub("", table)
     assert forbidden_characters == "", \
-        "Only English letters, numbers and underscore are allowed in table name.\n\
-        Got `table` == %s" % table
+"Only English letters, numbers and underscore are allowed in table name.\n\
+Got `table` == %s" % table
     return ()
 
 def test_create_table_columns(database, table, columns):
@@ -125,15 +124,14 @@ def test_write_to_database_from_dict(database, table, data):
             test_var_len_more_than(value, "value", 0)
     return ()
 
-def test_is_generator(generator):
-    """
-    Tests `generator` type.
-    """
-    test_var_type(generator, "generator", types.GeneratorType)
+# def test_is_generator(generator):
+#     """
+#     Tests `generator` type.
+#     """
 #     assert isinstance(generator, types.GeneratorType), \
 #         "Expected type(generator) == generator,\n\
 #         Got type(generator) == %s" % type(generator)
-    return ()
+#     return ()
 
 def test_area_names(names):
     """
@@ -155,19 +153,40 @@ def test_area_names(names):
 
         forbidden_characters = regex.sub("", name)
         assert forbidden_characters == "", \
-        "Forbidden characters `%s` in `name`.\n\n\
-        Valid name must follow all these rules:\n\
-        - can contain numbers\n\
-        - can contain characters: - ́ ’ , ( ) . and whitespaces." % forbidden_characters
+"Forbidden characters `%s` in `name`.\n\n\
+Valid name must follow all these rules:\n\
+- can contain numbers\n\
+- can contain characters: - ́ ’ , ( ) . and whitespaces." % forbidden_characters
     return ()
 
-def test_rename_json_to_database_key(key):
+# def test_rename_json_to_database_key(key):
+#     """
+#     Tests for `rename_json_to_database_key`.
+#     """
+#     test_var_type(key, "key", str)
+#     test_var_len_more_than(key, "key", 0)
+#     test_table_name(key)
+#     return ()
+
+def test_config(config):
     """
-    Tests for `rename_json_to_database_key`.
     """
-    test_var_type(key, "key", str)
-    test_var_len_more_than(key, "key", 0)
-    test_table_name(key)
+    test_var_type(config, "config", dict)
+    test_var_len_more_than(config, "config", 0)
+
+    for key, value in config.items():
+        test_var_type(key, "key", str)
+        test_var_len_more_than(key, "key", 0)
+        test_var_type(value, "value", (str, int, float, list, dict))
+    return ()
+
+def test_read_config(config_path):
+    """
+    """
+    test_var_type(config_path, "config_path", str)
+    test_var_len_more_than(config_path, "config_path", 0)
+    assert config_path.endswith(".yaml"),\
+        "Expected `.yaml` format."
     return ()
 
 # AREAS TESTS
@@ -201,44 +220,33 @@ def test_load_vacancies(headers, filters):
         test_var_type(value, "value", (str, list))
     return ()
 
-def test_write_vacancies_to_database(areas_id):
+def test_get_vacancies(config, areas_ids):
     """
-    Tests for `write_to_database`.
     """
-    test_var_type(areas_id, "areas_id", list)
-    test_var_len_more_than(areas_id, "areas_id", 0)
-    for area_id in areas_id:
+    test_config(config)
+    test_var_type(areas_ids, "areas_ids", list)
+    for area_id in areas_ids:
         test_var_type(area_id, "area_id", int)
     return ()
 
-def test_create_core_vacancies_tables(database):
-    """
-    Tests for `create_core_vacancies_tables`.
-    """
-    test_database_name(database)
-    return ()
-
-
 # TELEGRAM TESTS
-def test_filter_vacancies(
-        database, vacancies_table, areas_table, send_columns, filters, \
-        filters_query_part, inverse_filters_query_part):
+def test_filter_vacancies(send_columns, filters):
     """
     Tests for `filter_vacancies`.
     """
-    test_database_name(database)
-    test_table_name(vacancies_table)
-    test_table_name(areas_table)
-
     test_var_type(send_columns, "send_columns", list)
     test_var_len_more_than(send_columns, "send_columns", 0)
     for column in send_columns:
         test_var_type(column, "column", str)
         test_var_len_more_than(column, "column", 0)
 
-    test_var_type(filters, "filters", dict)
-    test_var_len_more_than(filters, "filters", 0)
-    for key, value in filters.items():
+    test_var_type(filters, "filters", list)
+    test_var_len_more_than(filters, "filters", 2)
+
+    filters_not_regex = filters[0]
+    filters_query_part = filters[1]
+    inverse_filters_query_part = filters[2]
+    for key, value in filters_not_regex.items():
         test_var_type(key, "key", str)
         test_var_len_more_than(key, "key", 0)
         test_var_type(value, "value", str)
@@ -248,7 +256,8 @@ def test_filter_vacancies(
     test_var_len_more_than(filters_query_part, "filters_query_part", 0)
 
     test_var_type(inverse_filters_query_part, "inverse_filters_query_part", str)
-    test_var_len_more_than(inverse_filters_query_part, "inverse_filters_query_part", 0)
+    test_var_len_more_than(
+        inverse_filters_query_part, "inverse_filters_query_part", 0)
     return ()
 
 def test_format_filters_to_query(filters):
@@ -264,38 +273,6 @@ def test_format_filters_to_query(filters):
         test_var_len_more_than(value, "value", 0)
     return ()
 
-def test_write_filtered_vacancies_to_file(filters, clean_vacancies, dirty_vacancies):
-    """
-    Tests for `write_filteres_vacancies_to_file`.
-    """
-    test_var_type(filters, "filters", dict)
-    test_var_len_more_than(filters, "filters", 0)
-    for key, value in filters.items():
-        test_var_type(key, "key", str)
-        test_var_len_more_than(key, "key", 0)
-        test_var_type(value, "value", str)
-        test_var_len_more_than(value, "value", 0)
-
-    test_var_type(clean_vacancies, "clean_vacancies", list)
-    test_var_type(dirty_vacancies, "dirty_vacancies", list)
-
-    for clean_vacancy in clean_vacancies:
-          test_var_type(clean_vacancy, "clean_vacancy", dict)
-          test_var_len_more_than(clean_vacancy, "clean_vacancy", 0)
-          for key, value in clean_vacancy.items():
-                test_var_type(key, "key", str)
-                test_var_len_more_than(key, "key", 0)
-                test_var_type(value, "value", (int, str, type(None)))
-
-    for dirty_vacancy in dirty_vacancies:
-          test_var_type(dirty_vacancy, "dirty_vacancy", dict)
-          test_var_len_more_than(dirty_vacancy, "dirty_vacancy", 0)
-          for key, value in dirty_vacancy.items():
-                test_var_type(key, "key", str)
-                test_var_len_more_than(key, "key", 0)
-                test_var_type(value, "value", (int, str, type(None)))
-    return ()
-
 def test_replace_specials_to_underscore(string):
     """
     Tests for `replace_specials_to_underscore`.
@@ -308,22 +285,4 @@ def test_format_values(data):
     Tests for `format_values`.
     """
     test_var_type(data, "data", (str, int, float, type(None)))
-    return ()
-
-def test_send_to_telegram(vacancies, chat_id, token):
-    """
-    Tests for `send_to_telegram`.
-    """
-    test_var_type(vacancies, "vacancies", list)
-    for vacancy in vacancies:
-          test_var_type(vacancy, "vacancy", dict)
-          test_var_len_more_than(vacancy, "vacancy", 0)
-          for key, value in vacancy.items():
-                test_var_type(key, "key", str)
-                test_var_len_more_than(key, "key", 0)
-                test_var_type(value, "value", (int, str, type(None)))
-
-    test_var_type(chat_id, "chat_id", int)
-    test_var_type(token, "token", str)
-    test_var_len_more_than(token, "token", 0)
     return ()

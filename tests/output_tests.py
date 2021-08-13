@@ -13,7 +13,8 @@ import requests
 from tests.input_tests import (
       test_var_type,
       test_var_len_more_than,
-      test_table_name
+      test_table_name,
+      test_config
 )
 
 # COMMON TESTS
@@ -35,15 +36,13 @@ def test_is_file_exists(file_name):
       return (True)
 
 def test_create_table_columns(
-            database, table, get_table_columns_names, user_columns):
+            database_columns_names, user_columns):
       """
       Test if database table columns was created.
       """
       user_columns_names = [user_column.split()[0] \
-                            for user_column in user_columns \
-                            if user_column.split()[0] not in ["PRIMARY", "FOREIGN"]]
-      database_columns_names = get_table_columns_names(
-            database,  table)
+            for user_column in user_columns if user_column.split()[0] not in \
+                            ["PRIMARY", "FOREIGN"]]
       for user_column_name in user_columns_names:
             assert user_column_name in database_columns_names, \
             "Table or columns was not created in database.\n\
@@ -117,8 +116,8 @@ def test_get_user_inputs(user_areas):
       test_var_type(user_areas, "user_areas", list)
 
       for user_area in user_areas:
-            test_var_type(user_area, "user_area", str)            
-            test_var_len_more_than(user_area, "user_area", 0)      
+            test_var_type(user_area, "user_area", str)
+            test_var_len_more_than(user_area, "user_area", 0)
       return ()
 
 def test_load_areas(response, areas):
@@ -190,8 +189,10 @@ def test_load_vacancies__root_keys(vacancies):
       - arguments
       - alternate_url
       """
-      assert list(vacancies.keys()) == ["items", "found", "pages", "per_page", "page", "clusters", "arguments", "alternate_url"], \
-            "Expected top json keys: ['items', 'found', 'pages', 'per_page', 'page', 'clusters', 'arguments', 'alternate_url']\n\
+      assert list(vacancies.keys()) == ["items", "found", "pages", "per_page", \
+            "page", "clusters", "arguments", "alternate_url"], \
+            "Expected top json keys: ['items', 'found', 'pages', 'per_page', \
+            'page', 'clusters', 'arguments', 'alternate_url']\n\
             Got top json keys: %s" % list(vacancies.keys())
       return ()
 
@@ -227,14 +228,19 @@ def test_load_vacancies(response, vacancies, filters):
 
 
 # TELEGRAM TESTS
-def test_format_filters_to_query(filters_query_part, inverse_filters_query_part, filters):
+def test_format_filters_to_query(filters):
       """
       Test if `filters_query_part` is correct sql query part.
       """
+      filters_not_regex = filters[0]
+      filters_query_part = filters[1]
+      inverse_filters_query_part = filters[2]
       test_var_type(filters_query_part, "filters_query_part", str)
       test_var_len_more_than(filters_query_part, "filters_query_part", 15)
-      test_var_type(inverse_filters_query_part, "inverse_filters_query_part", str)
-      test_var_len_more_than(inverse_filters_query_part, "inverse_filters_query_part", 11)
+      test_var_type(
+            inverse_filters_query_part, "inverse_filters_query_part", str)
+      test_var_len_more_than(
+            inverse_filters_query_part, "inverse_filters_query_part", 11)
 
       and_substring_count = filters_query_part.count(" AND ")
       assert (len(filters) - 1) == and_substring_count, \
@@ -260,14 +266,19 @@ def test_filter_vacancies(filtered_vacancies, send_columns):
       Tests for `filtered_vacancies`.
       """
       test_var_type(filtered_vacancies, "filtered_vacancies", list)
+      test_var_len_more_than(filtered_vacancies, "filtered_vacancy", 1)
+      test_var_type(filtered_vacancies[0], "clean_vacancies", list)
+      test_var_type(filtered_vacancies[1], "dirty_vacancies", list)
 
-      for filtered_vacancy in filtered_vacancies:
-            test_var_type(filtered_vacancy, "filtered_vacancy", dict)
-            test_var_len_more_than(filtered_vacancy, "filtered_vacancy", len(send_columns)-1)
-            for key, value in filtered_vacancy.items():
-                  test_var_type(key, "key", str)
-                  test_var_len_more_than(key, "key", 0)
-                  test_var_type(value, "value", (int, str, type(None)))
+      for clean_dirty_vacancies in filtered_vacancies:
+            for filtered_vacancy in clean_dirty_vacancies:
+                  test_var_type(filtered_vacancy, "filtered_vacancy", dict)
+                  test_var_len_more_than(filtered_vacancy, "filtered_vacancy", \
+                                         len(send_columns)-1)
+                  for key, value in filtered_vacancy.items():
+                        test_var_type(key, "key", str)
+                        test_var_len_more_than(key, "key", 0)
+                        test_var_type(value, "value", (int, str, type(None)))
       return ()
 
 def test_replace_specials_to_underscore(string):
