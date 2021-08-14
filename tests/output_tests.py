@@ -232,7 +232,7 @@ def test_format_filters_to_query(filters):
       """
       Test if `filters_query_part` is correct sql query part.
       """
-      filters_not_regex = filters[0]
+      filters_regex = filters[0]
       filters_query_part = filters[1]
       inverse_filters_query_part = filters[2]
       test_var_type(filters_query_part, "filters_query_part", str)
@@ -243,7 +243,7 @@ def test_format_filters_to_query(filters):
             inverse_filters_query_part, "inverse_filters_query_part", 11)
 
       and_substring_count = filters_query_part.count(" AND ")
-      assert (len(filters) - 1) == and_substring_count, \
+      assert (len(filters_regex) - 1) == and_substring_count, \
       "Expected %d ` AND ` subsring in `filters_query_part`\n\
       Got %d ` AND ` ones." % (len(filters)-1, and_substring_count)
 
@@ -252,9 +252,9 @@ def test_format_filters_to_query(filters):
       Got %s" % filters_query_part[-2:]
 
       or_substring_count = inverse_filters_query_part.count(" OR ")
-      assert (len(filters) - 1) == or_substring_count, \
+      assert (len(filters_regex) - 2) == or_substring_count, \
       "Expected %d ` OR ` subsring in `inverse_filters_query_part`\n\
-      Got %d ` OR ` ones." % (len(filters)-1, and_substring_count)
+      Got %d ` OR ` ones." % (len(filters)-2, and_substring_count)
 
       assert inverse_filters_query_part[-2:] == "?)", \
       "Expected `?)` at the end of `inverse_filters_query_part`\n\

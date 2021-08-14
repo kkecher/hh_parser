@@ -151,6 +151,7 @@ def create_vacancies_tables(config):
      "schedule_name TEXT",\
      "working_time_intervals_name TEXT",\
      "working_time_modes_name TEXT",\
+     "is_sent INT NOT NULL",\
      f"FOREIGN KEY (area_id) REFERENCES {areas_table} (id)\
      ON UPDATE CASCADE ON DELETE RESTRICT",\
      f"FOREIGN KEY (area_id, address_city, address_street)\
@@ -257,7 +258,7 @@ def write_vacancies_to_database(config, vacancies_generator):
     database_changes = 0
 
     # Accumulate non-vacances tables data.
-    # Its values reseted to None every vacancy.
+    # Its values are reseted to None every vacancy.
     tables_cache_keys = ["area_id", "address_city", "address_street", \
 "address_metro_stations_station_id", "address_metro_stations_station_name", \
 "address_metro_stations_line_name", "address_metro_stations_lat", \
@@ -300,6 +301,7 @@ def write_vacancies_to_database(config, vacancies_generator):
             if key not in skip_keys and value != None:
                 vacancy[key] = value
         else:
+            vacancy["is_sent"] = 0
             check_if_area_id_is_in_areas_table(
                 config, int(tables_cache["area_id"]))
             write_streets_to_streets_table(config, tables_cache)
@@ -313,6 +315,13 @@ def write_vacancies_to_database(config, vacancies_generator):
             tables_cache = dict.fromkeys(tables_cache_keys)
             vacancy[key] = value
             tables_cache[key] = value
+
+    vacancy["is_sent"] = 0
+    check_if_area_id_is_in_areas_table(
+        config, int(tables_cache["area_id"]))
+    write_streets_to_streets_table(config, tables_cache)
+    write_stations_to_metro_stations_table(config, tables_cache)
+    write_employers_to_employers_table(config, tables_cache)
     database_changes += write_to_database(database, vacancies_table, vacancy)
     vacancy_counter += 1
     out_tests.test_write_to_database(database_changes, vacancy_counter)

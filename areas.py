@@ -65,8 +65,9 @@ def get_areas(config):
     """
     in_tests.test_config(config)
     areas_file = config["areas_file"]
-    print ("\n\nGetting areas from hh. It can take up to several minutes...\n")
-    time.sleep(4)
+    print ("\n\nGetting areas from hh. \
+It is one time operation and can take up to several minutes...\n")
+    time.sleep(5)
 
     areas = load_areas(config)
     write_to_file(areas_file, areas)
@@ -126,13 +127,13 @@ def get_user_inputs():
     """
     Ask user to input geo areas.
     """
-    print ("\nHello! Enter geo regions where you'd like to search vacancies. \
+    print ("\n[Hello! Enter geo regions where you'd like to search vacancies. \
 I can understand:\n\
     1. Only Russian letters, numbers, characters - ́ ’ , ( ) . and spaces.\n\
     2. Name length up to 100 characters.\n\
     3. Incomplete names are fine too.\n\
     4. I can search many regions. Just press `Enter` to type a new one.\n\
-    5. Double press `Enter` to finish.\n\n")
+    5. Double press `Enter` to finish.]\n\n")
     user_areas = []
     user_area = True
     while True:

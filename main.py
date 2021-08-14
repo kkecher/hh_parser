@@ -30,7 +30,7 @@ def main():
         get_areas(config)
     found_areas_ids = search_user_areas(database, areas_table)
     get_vacancies(config, found_areas_ids)
-    send_to_telegram(config)
+    send_to_telegram(config, found_areas_ids)
 
     print ("\n\nAll tasks done!")
 

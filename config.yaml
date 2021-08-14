@@ -12,11 +12,11 @@ vacancies_metro_stations_table: "vacancies_metro_stations"
 areas_file: "./data/areas.json"
 vacancies_file: "./data/vacancies.json"
 
-# clean vacancies: vacancies NOT containing undesirable pattern
-# dirty vacancies (for debugging): vacancies do containing undesirable pattern
-# patterns are in ‘telegram’ module
-telegram_clean_vacancies_file_path: "./data/clean_vacancies/"
-telegram_dirty_vacancies_file_path: "./data/dirty_vacancies/"
+# clean vacancies: vacancies (not) containing some pattern
+# dirty vacancies (for debugging): inverse clean vacancies (except geo areas patterns)
+# patterns are in ‘telegram > send_to_telegram > filters_regex’ variable
+clean_vacancies_file_path: "./data/clean_vacancies/"
+dirty_vacancies_file_path: "./data/dirty_vacancies/"
 income_tax: 0.13
 chat_id: 383837232
-# token: put it in "hh_bot_token" environment variable
+# token: put your token in "hh_bot_token" environment variable

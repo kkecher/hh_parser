@@ -9,6 +9,7 @@ https://core.telegram.org/bots/api
 """
 
 from pathlib import Path
+import copy
 import datetime
 import os
 import re
@@ -17,25 +18,29 @@ import time
 
 import requests
 
+from shared import set_is_sent_1
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
-def format_filters_to_query(filters_not_regex):
+def format_filters_to_query(filters_regex, areas_table):
     """
     Format filters to sql query part.
     Also create inverse filters query to check filtered vacancies.
     """
-    in_tests.test_format_filters_to_query(filters_not_regex)
+    # in_tests.test_format_filters_to_query(filters_regex)
 
     filters_query_part = ""
     inverse_filters_query_part = ""
-    for key, value in filters_not_regex.items():
-        filters_query_part += f"{key} NOT REGEXP (?) AND "
-        inverse_filters_query_part += f"{key} REGEXP (?) OR "
+    for key, value in filters_regex.items():
+        filters_query_part += f"{key} REGEXP (?) AND "
+        # Inverse filters are for debugging. We don’t need areas there.
+        if key != f"{areas_table}.id":
+            inverse_filters_query_part += \
+                f"{key} NOT REGEXP (?) OR ".replace(" NOT NOT", "")
     filters_query_part = filters_query_part[:-len(" AND ")]
     inverse_filters_query_part = inverse_filters_query_part[:-len(" OR ")]
     filters = [
-        filters_not_regex, filters_query_part, inverse_filters_query_part]
+        filters_regex, filters_query_part, inverse_filters_query_part]
     out_tests.test_format_filters_to_query(filters)
     return (filters)
 
@@ -44,9 +49,9 @@ def regexp(expr, item):
         return False
     else:
         reg = re.compile(expr)
-        return reg.search(item) is not None
+        return reg.search(str(item)) is not None
 
-def filter_vacancies(config, send_columns, filters):
+def filter_vacancies(config, columns, filters):
     """
     Select vacancies which contain and don't contain patterns from `filters` and
     return them as list of dicts.
@@ -54,36 +59,39 @@ def filter_vacancies(config, send_columns, filters):
     database = config["database"]
     vacancies_table = config["vacancies_table"]
     areas_table = config["areas_table"]
-    filters_not_regex = filters[0]
+    filters_regex = copy.deepcopy(filters[0])
+    inverse_filters_regex = copy.deepcopy(filters[0])
+    # Inverse filters are for debugging. We don’t need areas there.
+    inverse_filters_regex.pop(f"{areas_table}.id", None)
     filters_query_part = filters[1]
     inverse_filters_query_part = filters[2]
     in_tests.test_database_name(database)
-    in_tests.test_filter_vacancies(send_columns, filters)
+    # in_tests.test_filter_vacancies(columns, filters)
     print ("\n\nFiltering vacancies...")
 
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
     connection.create_function("REGEXP", 2, regexp)
-    send_columns_query = ", ".join(send_columns)
-    filters_query = f"SELECT {send_columns_query} FROM \
+    columns_query = ", ".join(columns)
+    filters_query = f"SELECT {columns_query} FROM \
 {vacancies_table} LEFT JOIN {areas_table} ON {vacancies_table}.area_id == \
 {areas_table}.id WHERE {filters_query_part};"
-    inverse_filters_query =  f"SELECT {send_columns_query} FROM \
+    inverse_filters_query =  f"SELECT {columns_query} FROM \
 {vacancies_table} LEFT JOIN {areas_table} ON {vacancies_table}.area_id == \
 {areas_table}.id WHERE {inverse_filters_query_part};"
 
     clean_values = cursor.execute(
-        filters_query, list(filters_not_regex.values()))
-    clean_vacancies = [dict(zip(send_columns, clean_value)) for
+        filters_query, list(filters_regex.values()))
+    clean_vacancies = [dict(zip(columns, clean_value)) for
                        clean_value in clean_values]
     dirty_values = cursor.execute(
-        inverse_filters_query, list(filters_not_regex.values()))
-    dirty_vacancies = [dict(zip(send_columns, dirty_value)) for
+        inverse_filters_query, list(inverse_filters_regex.values()))
+    dirty_vacancies = [dict(zip(columns, dirty_value)) for
                        dirty_value in dirty_values]
     filtered_vacancies = [clean_vacancies, dirty_vacancies]
     cursor.close()
     connection.close()
-    out_tests.test_filter_vacancies(filtered_vacancies, send_columns)
+    out_tests.test_filter_vacancies(filtered_vacancies, columns)
     return (filtered_vacancies)
 
 def replace_specials_to_underscore(string):
@@ -102,7 +110,7 @@ def replace_specials_to_underscore(string):
     return (new_string)
 
 def write_filtered_vacancies_to_file(
-        vacancies, filtered_path, filters_not_regex):
+        vacancies, filtered_path, filters_regex):
     """
     Format and write filtered vacancies to file.
     File name == file creation timestamp.
@@ -116,18 +124,18 @@ def write_filtered_vacancies_to_file(
         Path(file_name).parent.mkdir(parents=True, exist_ok=True)
     except PermissionError:
         print (f"I don't have permission to create {file_name}.\n\
-Try to change {file_name} var in `config.yaml` file or just solve this.")
+Try to change {file_name} var value in `config.yaml` file or just solve this.")
 
     vacancies_counter = 1
     with open(file_name, "w") as f:
-        f.write(f"FILTERS: {filters_not_regex}\n\n")
+        f.write(f"FILTERS: {filters_regex}\n\n")
         for vacancy in vacancies:
             f.write(f"#{vacancies_counter}\n")
             for key, value in vacancy.items():
                 f.write (f"{key}: {value}\n")
             f.write(f"\n\n")
             vacancies_counter += 1
-        f.write(f"FILTERS: {filters_not_regex}\n\n")
+        f.write(f"FILTERS: {filters_regex}\n\n")
 
     out_tests.test_is_file_exists(file_name)
     return ()
@@ -195,14 +203,16 @@ format_values(vacancy[f"{vacancies_table}.address_raw"])
     created = \
 vacancy[f"{vacancies_table}.created_at"]
 
-    if salary_from != "" and salary_to != "" and salary_from > salary_to:
+    if salary_from  and salary_to  and salary_from > salary_to:
         salary_from, salary_to = salary_to, salary_from
-    if salary_currency == "Rur":
-        salary_currency = "&#x20bd;"
-    if is_before_tax and salary_from != "":
+    if salary_currency:
+        salary_currency = salary_currency.upper()
+    if is_before_tax and salary_from:
         salary_from = int(salary_from - salary_from * income_tax)
-    if is_before_tax and salary_to != "":
+    if is_before_tax and salary_to:
         salary_to = int(salary_to - salary_to * income_tax)
+    if address:
+        city = ""
 
     msg = f"<a href='{alternate_url}'>{title}</a>\n\
 <em>{salary_from} - {salary_to} {salary_currency}</em>\n\n\
@@ -214,19 +224,24 @@ vacancy[f"{vacancies_table}.created_at"]
 
     msg = msg.replace(", ,", ", ")
     msg = msg.replace("  ", " ")
+    msg = msg.replace(" \n", "\n")
     msg = msg.replace(",\n", "\n")
-    msg = msg.replace(", \n", "\n")
+    msg = msg.replace("\n,", "\n")
+    msg = msg.replace("\n ", "\n")
+
     out_tests.test_var_type(msg, "message", str)
     out_tests.test_var_len_more_than(msg, "message", 149)
     return (msg)
 
-def send_to_telegram(config):
+def send_to_telegram(config, areas_ids):
+    database = config["database"]
     areas_table = config["areas_table"]
     vacancies_table = config["vacancies_table"]
     chat_id = config["chat_id"]
-    clean_path = config["telegram_clean_vacancies_file_path"]
-    dirty_path = config["telegram_dirty_vacancies_file_path"]
+    clean_path = config["clean_vacancies_file_path"]
+    dirty_path = config["dirty_vacancies_file_path"]
     token = os.environ["hh_bot_token"]
+    in_tests.test_database_name(database)
     in_tests.test_table_name(areas_table)
     in_tests.test_table_name(vacancies_table)
     in_tests.test_var_type(chat_id, "chat_id", int)
@@ -235,7 +250,8 @@ def send_to_telegram(config):
     in_tests.test_var_type(token, "token", str)
     in_tests.test_var_len_more_than(token, "token", 0)
 
-    send_columns = [
+    columns = [
+        f"{vacancies_table}.id",
         f"{vacancies_table}.name",
         f"{vacancies_table}.alternate_url",
         f"{vacancies_table}.salary_from",
@@ -252,13 +268,16 @@ def send_to_telegram(config):
         f"{vacancies_table}.created_at"
     ]
 
-    # Currently filters work only for ‘not like‘ requests, i.e.
-    # they will work to get vacancies not containing some pattern but
+    # Currently filters work only for ‘like‘ requests, i.e.
+    # they will work to get vacancies (not) containing some pattern but
     # they will NOT work for requests like ‘salary_from > n’.
-    filters_not_regex = {
-        f"{vacancies_table}.name": "продаж|продавец",
-        f"{vacancies_table}.snippet_responsibility": "продавец",
-        f"{vacancies_table}.snippet_requirement": "продавец"
+    filters_regex = {
+        f"{areas_table}.id": "|".join("\\b"+str(area_id)+"\\b" \
+                                                   for area_id in areas_ids),
+        f"{vacancies_table}.name NOT": "продаж|продавец",
+        f"{vacancies_table}.name NOT": "продаж|продавец",
+        f"{vacancies_table}.snippet_responsibility NOT": "продавец",
+        f"{vacancies_table}.snippet_requirement NOT": "продавец"
     }
 
     msg_params = {
@@ -266,18 +285,19 @@ def send_to_telegram(config):
         "parse_mode": "HTML"
         }
 
-    filters_query = format_filters_to_query(filters_not_regex)
+    filters_query = format_filters_to_query(filters_regex, areas_table)
     clean_vacancies, dirty_vacancies = filter_vacancies(
-        config, send_columns, filters_query)
+        config, columns, filters_query)
 
     for vacancies, filtered_path in zip(
             [clean_vacancies, dirty_vacancies], [clean_path, dirty_path]):
         write_filtered_vacancies_to_file(
-            vacancies, filtered_path, filters_not_regex)
+            vacancies, filtered_path, filters_regex)
 
-    print ("\n\nSending to Telegram...")
+    print ("\n\nSending to Telegram... \n\
+[You will receive only vacancies which haven't been sent earlier.]\n")
     for clean_vacancy in clean_vacancies:
-        print ("#", end='', flush=True)
+        vacancy_id = clean_vacancy[f"{vacancies_table}.id"]
         msg = build_msg(clean_vacancy, config)
         msg_params["text"] = msg
         while True:
@@ -286,6 +306,7 @@ def send_to_telegram(config):
                     f"https://api.telegram.org/bot{token}/sendMessage", \
                     params=msg_params)
                 out_tests.test_is_status_code_200(response)
+                set_is_sent_1(database, vacancies_table, vacancy_id)
                 break
             except AssertionError:
                 sleep_time = 120
