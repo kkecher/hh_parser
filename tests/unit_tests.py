@@ -13,8 +13,8 @@ import unittest
 # `get_areas` tests
 class TestSelectAreasByName(unittest.TestCase):
     def test_select_areas_by_name(self):
-        database = ga.DATABASE
-        areas_table = ga.AREAS_TABLE
+        database = areas.DATABASE
+        areas_table = areas.AREAS_TABLE
         names = [
         "а",
         "Я",
@@ -37,22 +37,22 @@ class TestSelectAreasByName(unittest.TestCase):
         "w-e"
         ]
         not_found_names, found_names, found_ids = \
-            ga.select_areas_by_name(database, areas_table, names)
+            areas.select_areas_by_name(database, areas_table, names)
         self.assertEqual(
             (len(not_found_names), len(found_names), len(found_ids)), \
             (6, 3816, 3816)
         )
 
     def test_is_invalid_name(self):
-        database = ga.DATABASE
-        areas_table = ga.AREAS_TABLE
+        database = areas.DATABASE
+        areas_table = areas.AREAS_TABLE
         invalid_names = [
             "",
             25*"пиза" + "п"
             "моск;ква"
       ]
         for invalid_name in invalid_names:
-            self.assertRaises(AssertionError, ga.select_areas_by_name, \
+            self.assertRaises(AssertionError, areas.select_areas_by_name, \
                               database, areas_table, [invalid_name])
 
 if __name__ == "__main__":
@@ -71,7 +71,7 @@ class TestFormatFiltersToQuery(unittest.TestCase):
             f"{VACANCIES_TABLE}.name": ["прода"]
         }
         filters_query_part, inverse_filters_query_part = \
-            st.format_filters_to_query(filters)
+            telegram.format_filters_to_query(filters)
         self.assertEqual(
         filters_query_part, "vacancies.name NOT REGEXP (?)")
         self.assertEqual(
@@ -81,7 +81,7 @@ class TestFormatFiltersToQuery(unittest.TestCase):
             f"{VACANCIES_TABLE}.name": ["гара", "нед"]
         }
         filters_query_part, inverse_filters_query_part = \
-            st.format_filters_to_query(filters)
+            telegram.format_filters_to_query(filters)
         self.assertEqual(
         filters_query_part, "vacancies.name NOT REGEXP (?, ?)")
         self.assertEqual(
@@ -92,7 +92,7 @@ class TestFormatFiltersToQuery(unittest.TestCase):
             f"{VACANCIES_TABLE}.snippet_responsibility": ["дед", "вд40"]
         }
         filters_query_part, inverse_filters_query_part = \
-            st.format_filters_to_query(filters)
+            telegram.format_filters_to_query(filters)
         self.assertEqual(
         filters_query_part, "vacancies.name NOT REGEXP (?) AND \
 vacancies.snippet_responsibility NOT REGEXP (?, ?)")
@@ -104,26 +104,26 @@ class TestCapitalizeFirstLetter(unittest.TestCase):
     def test_capitalize_first_letter(self):
         in_sentence = "реализация намеченых плановых заданий требует \
         от нас анализа новых предложений."
-        out_sentence = st.capitalize_first_letter(in_sentence)
+        out_sentence = telegram.capitalize_first_letter(in_sentence)
         self.assertEqual(
             out_sentence, "Реализация намеченых плановых заданий требует \
             от нас анализа новых предложений."
             )
 
         in_sentence = 42
-        out_sentence = st.capitalize_first_letter(in_sentence)
+        out_sentence = telegram.capitalize_first_letter(in_sentence)
         self.assertEqual(
             out_sentence, 42
             )
 
         in_sentence = 3.14
-        out_sentence = st.capitalize_first_letter(in_sentence)
+        out_sentence = telegram.capitalize_first_letter(in_sentence)
         self.assertEqual(
             out_sentence, 3.14
             )
 
         in_sentence = None
-        out_sentence = st.capitalize_first_letter(in_sentence)
+        out_sentence = telegram.capitalize_first_letter(in_sentence)
         self.assertEqual(
             out_sentence, None
             )
@@ -134,7 +134,7 @@ class TestCapitalizeFirstLetter(unittest.TestCase):
         количественный рост,сфера нашей активности?обеспечивают широкому \
         кругу (специалистов!) участие в формировании ?дальнейших направлений \
         развития. 9,81! 2.17? именно так."
-        out_sentence = st.capitalize_first_letter(in_sentence)
+        out_sentence = telegram.capitalize_first_letter(in_sentence)
         self.assertEqual(
             out_sentence, "Товарищи!Рамки и место обучения кадоров позволяет \
             выполнить важные задания по разработке.Существенных \

@@ -14,16 +14,6 @@ from tests.output_tests import test_is_file_exists as is_file_exists
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
-def read_config(config_path="config.yaml"):
-    """
-    """
-    in_tests.test_read_config(config_path)
-
-    with open(config_path, "r") as f:
-        config = yaml.safe_load(f)
-    out_tests.test_config(config)
-    return (config)
-
 def write_to_file(file_name, json_data):
     """
     Write json to file.
@@ -164,7 +154,7 @@ def set_is_sent_1(database, vacancies_table, vacancy_id):
     cursor = connection.cursor()
     counter = 1
     query = \
-f"UPDATE {vacancies_table} SET is_sent = 1 WHERE id = {vacancy_id};"
+f"UPDATE {vacancies_table} SET is_sent = 1 WHERE id = {vacancy_id}"
     cursor.execute(query)
     connection.commit()
     database_changes = connection.total_changes

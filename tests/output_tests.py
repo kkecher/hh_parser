@@ -7,6 +7,7 @@ Output tests for hh_parser.
 import json
 import os.path
 import sqlite3
+import yaml
 
 import requests
 
@@ -17,13 +18,13 @@ from tests.input_tests import (
       test_config
 )
 
-# COMMON TESTS
+# SHARED TESTS
 def test_is_status_code_200(response):
       """
       Test if we got status code 200.
       """
       assert response.status_code == 200, \
-            "Expected status code == 200.\n\
+            "\n\nExpected status code == 200.\n\
             Got status code == %s" % response.status_code
       return ()
 
@@ -32,7 +33,7 @@ def test_is_file_exists(file_name):
       Test if data was written to file.
       """
       assert os.path.isfile(file_name), \
-            "file `%s` was not created." % file_name
+            "\n\nfile `%s` was not created." % file_name
       return (True)
 
 def test_create_table_columns(
@@ -45,7 +46,7 @@ def test_create_table_columns(
                             ["PRIMARY", "FOREIGN"]]
       for user_column_name in user_columns_names:
             assert user_column_name in database_columns_names, \
-            "Table or columns was not created in database.\n\
+            "\n\nTable or columns was not created in database.\n\
             user_columns_names = %s\n\
             database_columns_names = %s" \
             % (user_columns_names, database_columns_names)
@@ -68,17 +69,20 @@ def test_write_to_database(database_changes_number, counter):
       Check if all data were written to database.
       """
       assert database_changes_number == counter, \
-      "Expected %s database changes.\n\
+      "\n\nExpected %s database changes.\n\
       Got %s database changes." % (counter, database_changes_number)
       return ()
 
-# def test_rename_json_to_database_key(key):
-#     """
-#     """
-#     test_var_type(key, "key", str)
-#     test_var_len_more_than(key, "key", 0)
-#     test_table_name(key)
-#     return ()
+def test_write_to_config(mod_config, config_path="config.yaml"):
+      """
+      Compare new config file with the the old modified one.
+      """
+      with open(config_path, "r") as f:
+            config = yaml.safe_load(f)
+      assert config == mod_config, \
+      "\n\nExpected config:\n %s\
+      \n\nGot config:\n %s" % (mod_config, config)
+      return ()
 
 # AREAS TESTS
 def test_load_areas_root_length(areas):
@@ -106,8 +110,8 @@ def test_load_areas_root_keys(areas):
       - areas
       """
       assert list(areas[0].keys()) == ["id", "parent_id", "name", "areas"], \
-            "Expected top json keys: ['id', 'parrent_id', 'name', 'areas']\n\
-            Got top json keys: %s" % list(areas[0].keys())
+      "\n\nExpected top json keys: ['id', 'parrent_id', 'name', 'areas']\n\
+      Got top json keys: %s" % list(areas[0].keys())
       return ()
 
 def test_get_user_inputs(user_areas):
@@ -154,7 +158,7 @@ def test_clean_area_children(found, cleaned, duplicated):
       test_var_type(cleaned, "cleaned", set)
 
       assert len(cleaned) + len(duplicated) == len(found), \
-            "`len(cleaned) + len(duplicated)` \
+            "\n\n`len(cleaned) + len(duplicated)` \
             must  be even to `len(found)`.\n\
             len(cleaned) + len(duplicated) == %d, len(found) = \
             %d" % (len(cleaned) + len(duplicated_names), len(found))
@@ -190,7 +194,7 @@ def test_load_vacancies__root_keys(vacancies):
       - alternate_url
       """
       assert list(vacancies.keys()) == ["items", "found", "pages", "per_page", \
-            "page", "clusters", "arguments", "alternate_url"], \
+            "\n\npage", "clusters", "arguments", "alternate_url"], \
             "Expected top json keys: ['items', 'found', 'pages', 'per_page', \
             'page', 'clusters', 'arguments', 'alternate_url']\n\
             Got top json keys: %s" % list(vacancies.keys())
@@ -203,16 +207,16 @@ def test_load_vacancies__is_respect_filters(filters, vacancies):
       hh_alternate_url = vacancies["alternate_url"]
       for key, value in filters.items():
             assert key in hh_alternate_url, \
-                  "`%s` param NOT in hh_alternate_url:\n\
+                  "\n\n`%s` param NOT in hh_alternate_url:\n\
                   %s" % (key, hh_alternate_url)
             if isinstance(value, list):
                   for param in value:
                           assert str(param) in hh_alternate_url, \
-                          "`%s` param NOT in hh_alternate_url:\n\
+                          "\n\n`%s` param NOT in hh_alternate_url:\n\
                           %s" % (str(param), hh_alternate_url)
             else:
                   assert str(value) in hh_alternate_url, \
-                  "`%s` param NOT in hh_alternate_url:\n\
+                  "\n\n`%s` param NOT in hh_alternate_url:\n\
                   %s" % (str(value), hh_alternate_url)
       return ()
 
@@ -232,7 +236,7 @@ def test_format_filters_to_query(filters):
       """
       Test if `filters_query_part` is correct sql query part.
       """
-      filters_regex = filters[0]
+      user_filters = filters[0]
       filters_query_part = filters[1]
       inverse_filters_query_part = filters[2]
       test_var_type(filters_query_part, "filters_query_part", str)
@@ -243,22 +247,23 @@ def test_format_filters_to_query(filters):
             inverse_filters_query_part, "inverse_filters_query_part", 11)
 
       and_substring_count = filters_query_part.count(" AND ")
-      assert (len(filters_regex) - 1) == and_substring_count, \
-      "Expected %d ` AND ` subsring in `filters_query_part`\n\
-      Got %d ` AND ` ones." % (len(filters)-1, and_substring_count)
+      assert (len(user_filters) - 1) == and_substring_count, \
+      "\n\nExpected %d ` AND ` subsring in `filters_query_part`\n\
+      Got %d ` AND ` ones." % (len(user_filters)-1, and_substring_count)
 
-      assert filters_query_part[-2:] == "?)", \
+      assert filters_query_part.endswith("?)"), \
       "Expected `?)` at the end of `filters_query_part`\n\
       Got %s" % filters_query_part[-2:]
 
       or_substring_count = inverse_filters_query_part.count(" OR ")
-      assert (len(filters_regex) - 2) == or_substring_count, \
+      assert max(0, (len(user_filters) - 3)) == or_substring_count, \
       "Expected %d ` OR ` subsring in `inverse_filters_query_part`\n\
-      Got %d ` OR ` ones." % (len(filters)-2, and_substring_count)
+      Got %d ` OR ` ones." % \
+      (max(0, (len(user_filters) - 3)), or_substring_count)
 
-      assert inverse_filters_query_part[-2:] == "?)", \
-      "Expected `?)` at the end of `inverse_filters_query_part`\n\
-      Got %s" % inverse_filters_query_part[-2:]
+      assert inverse_filters_query_part.endswith(")"), \
+      "Expected `)` at the end of `inverse_filters_query_part`\n\
+      Got %s" % inverse_filters_query_part[-1:]
       return ()
 
 def test_filter_vacancies(filtered_vacancies, send_columns):

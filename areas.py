@@ -79,7 +79,7 @@ def write_areas_to_database(config, areas_generator):
     Iterate over areas generator and fill the table.
     """
     database = config["database"]
-    table = config["areas_table"]
+    table = config["tables"]["areas_table"]
     in_tests.test_database_name(database)
     in_tests.test_table_name(table)
     in_tests.test_var_type(
@@ -253,7 +253,7 @@ def check_if_area_id_is_in_areas_table(config, area_id):
     4. If yes -> return True, else -> raise
     """
     database = config["database"]
-    areas_table = config["areas_table"]
+    areas_table = config["tables"]["areas_table"]
     in_tests.test_database_name(database)
     in_tests.test_table_name(areas_table)
     in_tests.test_var_type(area_id, "area_id", int)

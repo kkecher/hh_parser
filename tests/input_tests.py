@@ -11,7 +11,7 @@ def test_var_type(var, var_name, var_type):
     Test if type(`var`) == `var_type`.
     """
     assert isinstance(var, var_type), \
-        "Expected type(%s) == %s.\n\
+        "\n\nExpected type(%s) == %s.\n\
         Got type(%s) == %s" % (var_name, var_type, var_name, type(var))
     return ()
 
@@ -20,7 +20,7 @@ def test_var_len_more_than(var, var_name, var_len):
     Test if len(`var`) > var_len
     """
     assert len(var) > var_len, \
-        "Expected len(%s) > %d.\n\
+        "\n\nExpected len(%s) > %d.\n\
         Got len(%s) == %d" % (var_name, var_len, var_name, len(var))
     return ()
 
@@ -80,7 +80,7 @@ def test_table_name(table):
     regex = re.compile(r"[0-9a-zA-Z_]")
     forbidden_characters = regex.sub("", table)
     assert forbidden_characters == "", \
-"Only English letters, numbers and underscore are allowed in table name.\n\
+"\n\nOnly English letters, numbers and underscore are allowed in table name.\n\
 Got `table` == %s" % table
     return ()
 
@@ -148,12 +148,12 @@ def test_area_names(names):
         test_var_len_more_than(name, "name", 0)
 
         assert len(name) <= 100, \
-        "Expected len(name) <= 100\n\
+        "\n\nExpected len(name) <= 100\n\
         Got len(name) == %d" % len(name)
 
         forbidden_characters = regex.sub("", name)
         assert forbidden_characters == "", \
-"Forbidden characters `%s` in `name`.\n\n\
+"\n\nForbidden characters `%s` in `name`.\n\n\
 Valid name must follow all these rules:\n\
 - can contain numbers\n\
 - can contain characters: - ́ ’ , ( ) . and whitespaces." % forbidden_characters
@@ -186,7 +186,7 @@ def test_read_config(config_path):
     test_var_type(config_path, "config_path", str)
     test_var_len_more_than(config_path, "config_path", 0)
     assert config_path.endswith(".yaml"),\
-        "Expected `.yaml` format."
+        "\n\nExpected `.yaml` format."
     return ()
 
 # AREAS TESTS
@@ -249,8 +249,7 @@ def test_filter_vacancies(send_columns, filters):
     for key, value in filters_not_regex.items():
         test_var_type(key, "key", str)
         test_var_len_more_than(key, "key", 0)
-        test_var_type(value, "value", str)
-        test_var_len_more_than(value, "value", 0)
+        test_var_type(value, "value", (str, int, list, tuple))
 
     test_var_type(filters_query_part, "filters_query_part", str)
     test_var_len_more_than(filters_query_part, "filters_query_part", 0)
@@ -260,17 +259,16 @@ def test_filter_vacancies(send_columns, filters):
         inverse_filters_query_part, "inverse_filters_query_part", 0)
     return ()
 
-def test_format_filters_to_query(filters):
+def test_format_filters_to_query(user_filters):
     """
     Tests for `format_filters_to_query`.
     """
-    test_var_type(filters, "filters", dict)
-    test_var_len_more_than(filters, "filters", 0)
-    for key, value in filters.items():
+    test_var_type(user_filters, "user_filters", dict)
+    test_var_len_more_than(user_filters, "user_filters", 0)
+    for key, value in user_filters.items():
         test_var_type(key, "key", str)
         test_var_len_more_than(key, "key", 0)
-        test_var_type(value, "value", str)
-        test_var_len_more_than(value, "value", 0)
+        test_var_type(value, "value", (list))
     return ()
 
 def test_replace_specials_to_underscore(string):

@@ -22,6 +22,6 @@ setup(
         "Programming Language :: Python :: 3"
     ],
     python_requires=">=3.6.0",
-    install_requires=["cryptography", "keyring", "requests"]
+    install_requires=["requests", "ruamel.yaml"]
     },
 )

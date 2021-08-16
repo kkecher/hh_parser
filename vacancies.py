@@ -12,9 +12,8 @@ import types
 
 import requests
 
-from areas import (
-    check_if_area_id_is_in_areas_table
-)
+from areas import check_if_area_id_is_in_areas_table
+from config import update_filters_columns
 from shared import (
     create_table,
     create_table_columns,
@@ -81,12 +80,12 @@ def create_vacancies_tables(config):
     Create vacancies' tables.
     """
     database = config["database"]
-    areas_table = config["areas_table"]
-    vacancies_table = config["vacancies_table"]
-    streets_table = config["streets_table"]
-    metro_stations_table = config["metro_stations_table"]
-    employers_table = config["employers_table"]
-    vacancies_metro_stations_table = config["vacancies_metro_stations_table"]
+    areas_table = config["tables"]["areas_table"]
+    vacancies_table = config["tables"]["vacancies_table"]
+    streets_table = config["tables"]["streets_table"]
+    metro_stations_table = config["tables"]["metro_stations_table"]
+    employers_table = config["tables"]["employers_table"]
+    vacancies_metro_stations_table = config["tables"]["vacancies_metro_stations_table"]
     in_tests.test_database_name(database)
     in_tests.test_table_name(areas_table)
     in_tests.test_table_name(vacancies_table)
@@ -164,9 +163,10 @@ def create_vacancies_tables(config):
 
 def write_streets_to_streets_table(config, tables_cache):
     """
+    Write `area_id > city > stree` row to `streets` table.
     """
     database = config["database"]
-    streets_table = config["streets_table"]
+    streets_table = config["tables"]["streets_table"]
     in_tests.test_write_to_database_from_dict(
         database, streets_table, tables_cache)
 
@@ -184,9 +184,11 @@ def write_streets_to_streets_table(config, tables_cache):
 
 def write_stations_to_metro_stations_table(config, tables_cache):
     """
+    Write `station_id > station_name > line_name > station_lat > station_lng`
+    row to `metro_stations` table.
     """
     database = config["database"]
-    metro_stations_table = config["metro_stations_table"]
+    metro_stations_table = config["tables"]["metro_stations_table"]
     in_tests.test_write_to_database_from_dict(
         database, metro_stations_table, tables_cache)
 
@@ -208,9 +210,12 @@ def write_stations_to_metro_stations_table(config, tables_cache):
 
 def write_employers_to_employers_table(config, tables_cache):
     """
+    Write `id > name > url > alternate_url > logo_urls_original >
+    logo_urls_240 > logo_urls_90 > vacancies_url > trusted` row
+    to `employers` table.
     """
     database = config["database"]
-    employers_table = config["employers_table"]
+    employers_table = config["tables"]["employers_table"]
     in_tests.test_write_to_database_from_dict(
         database, employers_table, tables_cache)
 
@@ -243,7 +248,7 @@ def write_vacancies_to_database(config, vacancies_generator):
     Iterate over vacancies generator and fill `vacancies` table.
     """
     database = config["database"]
-    vacancies_table = config["vacancies_table"]
+    vacancies_table = config["tables"]["vacancies_table"]
     in_tests.test_database_name(database)
     in_tests.test_table_name(vacancies_table)
     in_tests.test_var_type(
@@ -325,4 +330,5 @@ def write_vacancies_to_database(config, vacancies_generator):
     database_changes += write_to_database(database, vacancies_table, vacancy)
     vacancy_counter += 1
     out_tests.test_write_to_database(database_changes, vacancy_counter)
+    update_filters_columns(config)
     return ()
