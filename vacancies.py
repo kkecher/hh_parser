@@ -24,10 +24,11 @@ from shared import (
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
 
-def get_vacancies(config, areas_ids):
+def get_vacancies(config):
     """
     Load vacancies from hh, save them to file (for debugging) and database.
     """
+    areas_ids = config["url_filters"]["area"]
     in_tests.test_get_vacancies(config, areas_ids)
     print ("\n\nGetting vacancies from hh...")
 
@@ -58,7 +59,7 @@ def load_vacancies(config, filters):
 def create_vacancies_generator(vacancies, parent_key = ""):
     """
     Create vacancies iterator to flatten multilevel json
-    into one-level database table.
+    into single-level database table.
     """
     in_tests.test_json_data_type(vacancies)
 

@@ -13,6 +13,7 @@ import requests
 
 from tests.input_tests import (
       test_var_type,
+      test_var_len_equal,
       test_var_len_more_than,
       test_table_name,
       test_config
@@ -73,7 +74,7 @@ def test_write_to_database(database_changes_number, counter):
       Got %s database changes." % (counter, database_changes_number)
       return ()
 
-def test_write_to_config(mod_config, config_path="config.yaml"):
+def test_write_config(mod_config, config_path="config.yaml"):
       """
       Compare new config file with the the old modified one.
       """
@@ -159,14 +160,14 @@ def test_clean_area_children(found, cleaned, duplicated):
 
       assert len(cleaned) + len(duplicated) == len(found), \
             "\n\n`len(cleaned) + len(duplicated)` \
-            must  be even to `len(found)`.\n\
+            must  be equal to `len(found)`.\n\
             len(cleaned) + len(duplicated) == %d, len(found) = \
             %d" % (len(cleaned) + len(duplicated_names), len(found))
       return ()
 
 
 # VACANCIES TESTS
-def test_load_vacancies__root_length(vacancies):
+def test_load_vacancies_root_length(vacancies):
       """
       Today (2021-07-22) hh returns 8 items at json root:
       1. "items"
@@ -181,7 +182,7 @@ def test_load_vacancies__root_length(vacancies):
       test_var_len_more_than(vacancies, "vacancies", 7)
       return ()
 
-def test_load_vacancies__root_keys(vacancies):
+def test_load_vacancies_root_keys(vacancies):
       """
       Check if root dicts has all keys:
       - items
@@ -194,13 +195,13 @@ def test_load_vacancies__root_keys(vacancies):
       - alternate_url
       """
       assert list(vacancies.keys()) == ["items", "found", "pages", "per_page", \
-            "\n\npage", "clusters", "arguments", "alternate_url"], \
+            "page", "clusters", "arguments", "alternate_url"], \
             "Expected top json keys: ['items', 'found', 'pages', 'per_page', \
-            'page', 'clusters', 'arguments', 'alternate_url']\n\
+            'page', 'clusters', 'arpguments', 'alternate_url']\n\
             Got top json keys: %s" % list(vacancies.keys())
       return ()
 
-def test_load_vacancies__is_respect_filters(filters, vacancies):
+def test_load_vacancies_is_respect_filters(filters, vacancies):
       """
       Test if recieved vacancies respect filters.
       """
@@ -225,42 +226,57 @@ def test_load_vacancies(response, vacancies, filters):
       Combine all `get_vacancies` tests.
       """
       test_is_status_code_200(response)
-      test_load_vacancies__root_length(vacancies)
-      test_load_vacancies__root_keys(vacancies)
-      test_load_vacancies__is_respect_filters(filters, vacancies)
+      test_load_vacancies_root_length(vacancies)
+      test_load_vacancies_root_keys(vacancies)
+      test_load_vacancies_is_respect_filters(filters, vacancies)
       return ()
 
 
 # TELEGRAM TESTS
-def test_format_filters_to_query(filters):
+def test_format_filters_to_query(database_filters, query_filters):
       """
-      Test if `filters_query_part` is correct sql query part.
+      Test if filters sql parts are syntax correct.
       """
-      user_filters = filters[0]
-      filters_query_part = filters[1]
-      inverse_filters_query_part = filters[2]
+      test_var_type(query_filters, "query_filters", list)
+      test_var_len_equal(query_filters, "query_filters", 3)
+
+      patterns = query_filters[0]
+      filters_query_part = query_filters[1]
+      inverse_filters_query_part = query_filters[2]
+
+      test_var_type(patterns, "patterns", list)
+      test_var_len_more_than(patterns, "patterns", len(database_filters)-1)
+      for pattern in patterns:
+            test_var_type(pattern, "pattern", str)
+
       test_var_type(filters_query_part, "filters_query_part", str)
       test_var_len_more_than(filters_query_part, "filters_query_part", 15)
+      and_substring_count = filters_query_part.count(" AND ")
+      assert (len(database_filters) - 1) == and_substring_count, \
+      "\n\nExpected %d ` AND ` subsring in `filters_query_part`\n\
+      Got %d ` AND ` ones." % (len(database_filters)-1, and_substring_count)
+      assert filters_query_part.endswith("?)"), \
+      "Expected `?)` at the end of `filters_query_part`\n\
+      Got %s" % filters_query_part[-2:]
+      assert "LIKE (?," not in filters_query_part,\
+'\n\nLIKE operator excepts only one pattern:\n\
+    valid: "{{table_name}}.{column}": [LIKE, pattern]\n\
+    NOT valid: "{{table_name}}.{column}": [LIKE, "pattern_1, pattern_2"]\n\
+    NOT valid: "{{table_name}}.{column}": [LIKE, [pattern_1, pattern_2]]\n\
+Use REGEXP if you need muptiple patterns:\n\
+    valid: "{{table_name}}.{column}": \
+[REGEXP, "pattern_1|pattern_2|pattern_3"]\n\
+Try to edit `config.yaml > database_filters`'
+
       test_var_type(
             inverse_filters_query_part, "inverse_filters_query_part", str)
       test_var_len_more_than(
             inverse_filters_query_part, "inverse_filters_query_part", 11)
-
-      and_substring_count = filters_query_part.count(" AND ")
-      assert (len(user_filters) - 1) == and_substring_count, \
-      "\n\nExpected %d ` AND ` subsring in `filters_query_part`\n\
-      Got %d ` AND ` ones." % (len(user_filters)-1, and_substring_count)
-
-      assert filters_query_part.endswith("?)"), \
-      "Expected `?)` at the end of `filters_query_part`\n\
-      Got %s" % filters_query_part[-2:]
-
       or_substring_count = inverse_filters_query_part.count(" OR ")
-      assert max(0, (len(user_filters) - 3)) == or_substring_count, \
+      assert max(0, (len(database_filters) - 3)) == or_substring_count, \
       "Expected %d ` OR ` subsring in `inverse_filters_query_part`\n\
       Got %d ` OR ` ones." % \
-      (max(0, (len(user_filters) - 3)), or_substring_count)
-
+      (max(0, (len(database_filters) - 3)), or_substring_count)
       assert inverse_filters_query_part.endswith(")"), \
       "Expected `)` at the end of `inverse_filters_query_part`\n\
       Got %s" % inverse_filters_query_part[-1:]
@@ -293,9 +309,9 @@ def test_replace_specials_to_underscore(string):
     test_var_type(string, "string", str)
     return ()
 
-def test_format_values(data):
+def test_format_msg_values(data):
     """
-    Tests for `format_values`.
+    Tests for `format_msg_values`.
     """
     test_var_type(data, "data", (str, int, float))
     return ()

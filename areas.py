@@ -42,7 +42,7 @@ def load_areas(config):
 def create_areas_generator(areas):
     """
     Create areas iterator to flatten multilevel json
-    (countries > regions > cities) into one-level database table.
+    (countries > regions > cities) into single-level database table.
     """
     in_tests.test_json_data_type(areas)
 
@@ -63,8 +63,7 @@ def get_areas(config):
     """
     Load areas from hh, save them to file (for debugging) and database.
     """
-    in_tests.test_config(config)
-    areas_file = config["areas_file"]
+    areas_file = config["tables"]["areas_file"]
     print ("\n\nGetting areas from hh. \
 It is one time operation and can take up to several minutes...\n")
     time.sleep(5)

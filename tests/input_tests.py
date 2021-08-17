@@ -24,6 +24,15 @@ def test_var_len_more_than(var, var_name, var_len):
         Got len(%s) == %d" % (var_name, var_len, var_name, len(var))
     return ()
 
+def test_var_len_equal(var, var_name, var_len):
+    """
+    Test if len(`var`) == var_len
+    """
+    assert len(var) == var_len, \
+        "\n\nExpected len(%s) == %d.\n\
+        Got len(%s) == %d" % (var_name, var_len, var_name, len(var))
+    return ()
+
 def test_request_headers(headers):
     """
     Test for input request headers.
@@ -230,42 +239,24 @@ def test_get_vacancies(config, areas_ids):
     return ()
 
 # TELEGRAM TESTS
-def test_filter_vacancies(send_columns, filters):
+def test_filter_vacancies(msg_columns):
     """
     Tests for `filter_vacancies`.
     """
-    test_var_type(send_columns, "send_columns", list)
-    test_var_len_more_than(send_columns, "send_columns", 0)
-    for column in send_columns:
+    test_var_type(msg_columns, "msg_columns", list)
+    test_var_len_more_than(msg_columns, "msg_columns", 0)
+    for column in msg_columns:
         test_var_type(column, "column", str)
         test_var_len_more_than(column, "column", 0)
-
-    test_var_type(filters, "filters", list)
-    test_var_len_more_than(filters, "filters", 2)
-
-    filters_not_regex = filters[0]
-    filters_query_part = filters[1]
-    inverse_filters_query_part = filters[2]
-    for key, value in filters_not_regex.items():
-        test_var_type(key, "key", str)
-        test_var_len_more_than(key, "key", 0)
-        test_var_type(value, "value", (str, int, list, tuple))
-
-    test_var_type(filters_query_part, "filters_query_part", str)
-    test_var_len_more_than(filters_query_part, "filters_query_part", 0)
-
-    test_var_type(inverse_filters_query_part, "inverse_filters_query_part", str)
-    test_var_len_more_than(
-        inverse_filters_query_part, "inverse_filters_query_part", 0)
     return ()
 
-def test_format_filters_to_query(user_filters):
+def test_format_filters_to_query(database_filters):
     """
     Tests for `format_filters_to_query`.
     """
-    test_var_type(user_filters, "user_filters", dict)
-    test_var_len_more_than(user_filters, "user_filters", 0)
-    for key, value in user_filters.items():
+    test_var_type(database_filters, "database_filters", dict)
+    test_var_len_more_than(database_filters, "database_filters", 0)
+    for key, value in database_filters.items():
         test_var_type(key, "key", str)
         test_var_len_more_than(key, "key", 0)
         test_var_type(value, "value", (list))
@@ -278,9 +269,9 @@ def test_replace_specials_to_underscore(string):
     test_var_type(string, "string", str)
     return ()
 
-def test_format_values(data):
+def test_format_msg_values(data):
     """
-    Tests for `format_values`.
+    Tests for `format_msg_values`.
     """
     test_var_type(data, "data", (str, int, float, type(None)))
     return ()

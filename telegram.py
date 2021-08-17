@@ -50,7 +50,6 @@ def format_inverse_query(query):
     query = query.replace ("REGEXP NOT", "NOT REGEXP")
     query = query.replace (" NOT NOT", "")
     query = query.replace ("OR (", "OR ")
-    query += ")"
     return (query)
 
 def sanitize_filters_first_keys(user_first_keys):
@@ -64,29 +63,28 @@ def sanitize_filters_first_keys(user_first_keys):
     assert user_first_key in valid_first_keys and \
         user_second_key in valid_first_keys,\
         "\n\n'{areas_table}.id' and '{vacancies_table}.is_sent' must be \
-at `filters` beginning.\n\
+at `database_filters` beginning.\n\
 Got: %s and %s" % (user_first_key, user_second_key)
     return ()
 
-def sanitize_filters_columns(key, config):
+def sanitize_filters_columns(key, config_tables, filters_tables):
     """
     Check if key table is in `config.yaml > tables`.
     """
-    tables = config["tables"]
-    config_tables = update_filters_columns(config)
-    user_table_column = key.format(**tables)
-    print (user_table_column)
+    user_table_column = key.format(**config_tables)
     user_table = user_table_column.split(".")[0]
     user_column = user_table_column.split(".")[1]
 
-    assert user_table in config_tables,\
-        "\n\nTable must be in `config.yaml > tables\n\
-Got: %s table" % (user_table)
+    assert user_table in filters_tables,\
+        "\n\nTable must be in `config.yaml > filters_tables\n\
+Got table: %s" % (user_table)
 
-    config_columns = config_tables[user_table]
-    assert user_column in config_columns,\
+    filters_columns = filters_tables[user_table]
+    assert user_column in filters_columns,\
         "\n\nColumn must be in `config.yaml > filtes_columns > %s\n\
-Got: %s column" % (user_table, user_column)
+Got column: %s" % (user_table, user_column)
+    out_tests.test_table_name(user_table)
+    out_tests.test_table_name(user_column)
     return (user_table_column)
 
 def sanitize_filters_operator(operator):
@@ -101,71 +99,84 @@ def sanitize_filters_operator(operator):
     in_tests.test_var_len_more_than(operator, "operator", 0)
     naked_operator = operator.replace("NOT", "").strip()
     assert naked_operator in white_operators, \
-        "\n\nSorry, operator `%s` is not supported. Try to edit filters in \
-`config.yaml.`" % (operator)
-    return ()
+        "\n\nSorry, operator `%s` is not supported. Try to edit `config.yaml > \
+database_filters`" % (operator)
+    return (operator)
 
 def sanitize_filters_pattern(pattern):
     """
     Transfrom pattern to string.
     """
-    if isinstance(pattern, (list, tuple, set)):
-        string_pattern = ""
-        print (pattern)
-        print ()
-        for p in pattern:
-            assert isinstance(p, (int, float, str)), \
-                "\n\nPattern must be single-level.\n\
-Got pattern == %s" % (str(pattern))
-            string_pattern += str(p) + ", "
-        if string_pattern:
-            pattern = string_pattern[:-len(", ")]
-    elif isinstance(pattern, (int, float, str)):
-        pattern = str(pattern)
-    else:
-        print (
-f"\n\ntype(pattern) must be in [str, int, float, list, tuple, set]\n\
-Try to edit filter `{key}: {value}` in `config.yaml`\n\n")
-        raise TypeError
-    out_tests.test_var_type(pattern, "pattern", str)
-    return (pattern)
+    def create_pattern_generator(pattern):
+        """
+        Create pattern iterator to flatten multilevel one
+        into single-level pattern list.
+        """
+        if isinstance(pattern, (list)):
+            for p in pattern:
+                yield from create_pattern_generator(p)
+            if pattern == []: yield ""
+        elif isinstance(pattern, str) and "," in pattern:
+            yield from create_pattern_generator(pattern.split(","))
+        elif isinstance(pattern, str):
+            yield (pattern.strip())
+        elif isinstance(pattern, (int, float)):
+            yield (str(pattern))
+        else:
+            print (
+f"\n\ntype(pattern) must be in [str, int, float, list]\n\
+Try to edit pattern `{pattern}`\n\n")
+            raise TypeError
 
-def format_filters_to_query(user_filters, config):
+    splitted_pattern = []
+    for gen_pattern in create_pattern_generator(pattern):
+        splitted_pattern.append(gen_pattern)
+    out_tests.test_var_type(splitted_pattern, "splitted_pattern", list)
+    return (splitted_pattern)
+
+def format_filters_to_query(database_filters, config):
     """
-    Format filters to sql query part.
-    Also create inverse filters query to check filtered vacancies.
+    1. Format filters to sql query part.
+    2. Create inverse filters query part to check filtered vacancies.
+    3. Get user patterns.
     """
     areas_table = config["tables"]["areas_table"]
     vacancies_table = config["tables"]["vacancies_table"]
-    in_tests.test_format_filters_to_query(user_filters)
+    config_tables = config["tables"]
+    filters_tables = update_filters_columns(config)
+    in_tests.test_format_filters_to_query(database_filters)
     filters_query_part = ""
     inverse_filters_query_part = ""
+    patterns = []
     user_first_keys = []
-    for key, value in user_filters.items():
+    for key, value in database_filters.items():
         if len(user_first_keys) < 2:
             user_first_keys.append(key)
         if len(user_first_keys) == 2:
             sanitize_filters_first_keys(user_first_keys)
-        column = sanitize_filters_columns(key, config)
+        column = sanitize_filters_columns(key, config_tables, filters_tables)
         operator = sanitize_filters_operator(value[0])
         pattern = sanitize_filters_pattern(value[1])
+        patterns += pattern
         filters_query_part += \
-    f"{column} {operator} ({', '.join('?' * (pattern.count(',') + 1))}) AND "
+f"{column} {operator} ({', '.join('?' * len(pattern))}) AND "
         # We want to keep direct ‘areas_id’ and ‘is_sent’  in inverse_filters
         if column in [f"{areas_table}.id", f"{vacancies_table}.is_sent"]:
             inverse_filters_query_part += \
-    f"{column} {operator} ({', '.join('?' * (pattern.count(',') + 1))}) AND "
+f"{column} {operator} ({', '.join('?' * len(pattern))}) AND "
         else:
             inverse_filters_query_part += \
-    f"({column} {operator} NOT ({', '.join('?' * (value.count(',') + 1))}) OR "
+f"({column} {operator} NOT ({', '.join('?' * len(pattern))}) OR "
     filters_query_part = filters_query_part[:-len(" AND ")]
-    inverse_filters_query_part = \
-        format_inverse_query(inverse_filters_query_part[:-len(" OR ")])
+    if inverse_filters_query_part.endswith(" OR "):
+        inverse_filters_query_part = \
+format_inverse_query(inverse_filters_query_part[:-len(" OR ")] + ")")
     if inverse_filters_query_part.endswith(" AND "):
-        format_inverse_query(inverse_filters_query_part[:-len(" AND ")])
-    filters = [user_filters, filters_query_part, inverse_filters_query_part]
-    out_tests.test_format_filters_to_query(filters)
-    return (filters)
+        inverse_filters_query_part = \
+format_inverse_query(inverse_filters_query_part[:-len(" AND ")])
+    query_filters = [patterns, filters_query_part, inverse_filters_query_part]
+    out_tests.test_format_filters_to_query(database_filters, query_filters)
+    return (query_filters)
 
 def regexp(expr, item):
     if item is None:
@@ -174,19 +185,18 @@ def regexp(expr, item):
         reg = re.compile(expr)
         return reg.search(str(item)) is not None
 
-def filter_vacancies(config, msg_columns, filters):
+def filter_vacancies(config, msg_columns, query_filters):
     """
     Select vacancies which contain and don't contain patterns from `filters` and
     return them as list of dicts.
     """
     database = config["database"]
-    vacancies_table = config["tables"]["vacancies_table"]
     areas_table = config["tables"]["areas_table"]
-    user_filters = filters[0]
-    filters_query_part = filters[1]
-    inverse_filters_query_part = filters[2]
-    in_tests.test_database_name(database)
-    in_tests.test_filter_vacancies(msg_columns, filters)
+    vacancies_table = config["tables"]["vacancies_table"]
+    patterns = query_filters[0]
+    filters_query_part = query_filters[1]
+    inverse_filters_query_part = query_filters[2]
+    in_tests.test_filter_vacancies(msg_columns)
     print ("\n\nFiltering vacancies...")
 
     connection = sqlite3.connect(database)
@@ -195,29 +205,31 @@ def filter_vacancies(config, msg_columns, filters):
     msg_columns_query = ", ".join(msg_columns)
     filters_query = f"SELECT {msg_columns_query} FROM \
 {vacancies_table} LEFT JOIN {areas_table} ON {vacancies_table}.area_id == \
-{areas_table}.id WHERE {filters_query_part};"
+{areas_table}.id WHERE {filters_query_part}"
     inverse_filters_query =  f"SELECT {msg_columns_query} FROM \
 {vacancies_table} LEFT JOIN {areas_table} ON {vacancies_table}.area_id == \
-{areas_table}.id WHERE {inverse_filters_query_part};"
-
+{areas_table}.id WHERE {inverse_filters_query_part}"
     print ()
-    print (f"filters_query = {filters_query}")
-    input ("enter")
-    params = []
-    for value in user_filters.values():
-        params += value.split(",")
+    print (patterns)
     print ()
-    print (f"params = {params}")
-    input ("enter")
-    clean_values = cursor.execute(filters_query, params)
+    print (filters_query)
+    print ()
+    print (inverse_filters_query)
+    print ()
+    clean_values = cursor.execute(filters_query, patterns)
     clean_vacancies = [dict(zip(msg_columns, clean_value)) for
                        clean_value in clean_values]
-    dirty_values = cursor.execute(inverse_filters_query, params)
+    dirty_values = cursor.execute(inverse_filters_query, patterns)
     dirty_vacancies = [dict(zip(msg_columns, dirty_value)) for
                        dirty_value in dirty_values]
     filtered_vacancies = [clean_vacancies, dirty_vacancies]
     cursor.close()
     connection.close()
+
+    print (f"clean_vacancies = {clean_vacancies}")
+    print ()
+    print (f"dirty_vacancies = {dirty_vacancies}")
+    input ("enter")
     out_tests.test_filter_vacancies(filtered_vacancies, msg_columns)
     return (filtered_vacancies)
 
@@ -237,7 +249,7 @@ def replace_specials_to_underscore(string):
     return (new_string)
 
 def write_filtered_vacancies_to_file(
-        vacancies, filtered_path, user_filters):
+        vacancies, filtered_path, database_filters):
     """
     Format and write filtered vacancies to file.
     File name == file creation timestamp.
@@ -255,31 +267,31 @@ Try to change {file_name} var value in `config.yaml` file or just solve this.")
 
     vacancies_counter = 1
     with open(file_name, "w") as f:
-        f.write(f"FILTERS: {user_filters}\n\n")
+        f.write(f"FILTERS: {database_filters}\n\n")
         for vacancy in vacancies:
             f.write(f"#{vacancies_counter}\n")
             for key, value in vacancy.items():
                 f.write (f"{key}: {value}\n")
             f.write(f"\n\n")
             vacancies_counter += 1
-        f.write(f"FILTERS: {user_filters}\n\n")
+        f.write(f"FILTERS: {database_filters}\n\n")
 
     out_tests.test_is_file_exists(file_name)
     return ()
 
-def format_values(data):
+def format_msg_values(data):
     """
     1. Capitalize at 0 position and after [.?!] characters
     2. Replace None with ""
     type(data) in [str, int, float, None]
     """
-    in_tests.test_format_values(data)
+    in_tests.test_format_msg_values(data)
 
     if isinstance(data, str):
         sentences = re.findall(r".*?(?:\.|\?|!|$)\s*", data)
         if sentences == []:
             formated_data = data.capitalize()
-            out_tests.test_format_values(formated_data)
+            out_tests.test_format_msg_values(formated_data)
             return (formated_data)
         else:
             formated_data = ""
@@ -289,7 +301,7 @@ def format_values(data):
         formated_data = ""
     else:
         formated_data = data
-    out_tests.test_format_values(formated_data)
+    out_tests.test_format_msg_values(formated_data)
     return (formated_data)
 
 def build_msg(vacancy, config):
@@ -302,31 +314,31 @@ def build_msg(vacancy, config):
     in_tests.test_var_type(income_tax, "income_tax", (int, float))
 
     title = \
-format_values(vacancy[f"{vacancies_table}.name"])
+format_msg_values(vacancy[f"{vacancies_table}.name"])
     alternate_url = \
 vacancy[f"{vacancies_table}.alternate_url"]
     salary_from = \
-format_values(vacancy[f"{vacancies_table}.salary_from"])
+format_msg_values(vacancy[f"{vacancies_table}.salary_from"])
     salary_to = \
-format_values(vacancy[f"{vacancies_table}.salary_to"])
+format_msg_values(vacancy[f"{vacancies_table}.salary_to"])
     salary_currency = \
-format_values(vacancy[f"{vacancies_table}.salary_currency"])
+format_msg_values(vacancy[f"{vacancies_table}.salary_currency"])
     is_before_tax = \
 vacancy[f"{vacancies_table}.salary_gross"]
     requirement = \
-format_values(vacancy[f"{vacancies_table}.snippet_requirement"])
+format_msg_values(vacancy[f"{vacancies_table}.snippet_requirement"])
     responsibility = \
-format_values(vacancy[f"{vacancies_table}.snippet_responsibility"])
+format_msg_values(vacancy[f"{vacancies_table}.snippet_responsibility"])
     schedule = \
-format_values(vacancy[f"{vacancies_table}.schedule_name"])
+format_msg_values(vacancy[f"{vacancies_table}.schedule_name"])
     working_time_intervals = \
-format_values(vacancy[f"{vacancies_table}.working_time_intervals_name"])
+format_msg_values(vacancy[f"{vacancies_table}.working_time_intervals_name"])
     working_time_modes = \
-format_values(vacancy[f"{vacancies_table}.working_time_modes_name"])
+format_msg_values(vacancy[f"{vacancies_table}.working_time_modes_name"])
     city = \
-format_values(vacancy[f"{areas_table}.name"])
+format_msg_values(vacancy[f"{areas_table}.name"])
     address = \
-format_values(vacancy[f"{vacancies_table}.address_raw"])
+format_msg_values(vacancy[f"{vacancies_table}.address_raw"])
     created = \
 vacancy[f"{vacancies_table}.created_at"]
 
@@ -360,10 +372,10 @@ vacancy[f"{vacancies_table}.created_at"]
     out_tests.test_var_len_more_than(msg, "message", 149)
     return (msg)
 
-def format_user_filters(user_filters):
+def format_database_filters(database_filters):
     """
     """
-    # in_test.test_format_user_filters
+    # in_test.test_format_database_filters
     # out_tests.test_format_user_fitlers
     return ()
 
@@ -375,7 +387,7 @@ def send_to_telegram(config, areas_ids):
     clean_path = config["clean_vacancies_file_path"]
     dirty_path = config["dirty_vacancies_file_path"]
     token = os.environ["hh_bot_token"]
-    user_filters = config["user_filters"]
+    database_filters = config["database_filters"]
     in_tests.test_database_name(database)
     in_tests.test_table_name(areas_table)
     in_tests.test_table_name(vacancies_table)
@@ -409,17 +421,14 @@ def send_to_telegram(config, areas_ids):
         "parse_mode": "HTML"
         }
 
-    filters_query = format_filters_to_query(
-        user_filters, config)
+    query_filters = format_filters_to_query(
+        database_filters, config)
     clean_vacancies, dirty_vacancies = filter_vacancies(
-        config, msg_columns, filters_query)
-    print ()
-    print (clean_vacancies)
-    input ("enter")
+        config, msg_columns, query_filters)
     for vacancies, filtered_path in zip(
             [clean_vacancies, dirty_vacancies], [clean_path, dirty_path]):
         write_filtered_vacancies_to_file(
-            vacancies, filtered_path, user_filters)
+            vacancies, filtered_path, database_filters)
 
     print ("\n\nSending to Telegram... \n\
 [You will receive only vacancies which haven't been sent earlier.]\n")

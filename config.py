@@ -23,7 +23,7 @@ def read_config(config_path="config.yaml"):
     out_tests.test_config(config)
     return (config)
 
-def write_to_config(mod_config, config_path="config.yaml"):
+def write_config(mod_config, config_path="config.yaml"):
     """
     Well... write to config file, default path == `./config.yaml`.
     """
@@ -31,14 +31,13 @@ def write_to_config(mod_config, config_path="config.yaml"):
         yaml = YAML()
         yaml.default_flow_style = False
         yaml.dump(mod_config, f)
-    out_tests.test_write_to_config(mod_config)
+    out_tests.test_write_config(mod_config)
     return ()
 
 def update_filters_columns(config, config_path="config.yaml"):
     """
     Get all  tables columns and write them to config as available to filters.
     """
-
     database = config["database"]
     in_tests.test_database_name(database)
     print (f"Updating {config_path} > filters_columns")
@@ -46,5 +45,5 @@ def update_filters_columns(config, config_path="config.yaml"):
     for table in config["tables"].values():
         columns[table] = get_table_columns_names(database, table)
     config["filters_columns"] = columns
-    write_to_config(config)
+    write_config(config)
     return (columns)
