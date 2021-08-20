@@ -8,7 +8,7 @@ https://core.telegram.org/bots
 https://core.telegram.org/bots/api
 """
 
-from collections import OrderedDict
+from copy import deepcopy
 from pathlib import Path
 import datetime
 import os
@@ -18,7 +18,7 @@ import time
 
 import requests
 
-from config import update_filters_columns
+from config import import_database_columns
 from shared import set_is_sent_1
 import tests.input_tests as in_tests
 import tests.output_tests as out_tests
@@ -63,7 +63,7 @@ def sanitize_filters_first_keys(user_first_keys):
     assert user_first_key in valid_first_keys and \
         user_second_key in valid_first_keys,\
         "\n\n'{areas_table}.id' and '{vacancies_table}.is_sent' must be \
-at `database_filters` beginning.\n\
+at `filters` beginning.\n\
 Got: %s and %s" % (user_first_key, user_second_key)
     return ()
 
@@ -100,7 +100,7 @@ def sanitize_filters_operator(operator):
     naked_operator = operator.replace("NOT", "").strip()
     assert naked_operator in white_operators, \
         "\n\nSorry, operator `%s` is not supported. Try to edit `config.yaml > \
-database_filters`" % (operator)
+filters`" % (operator)
     return (operator)
 
 def sanitize_filters_pattern(pattern):
@@ -134,22 +134,22 @@ Try to edit pattern `{pattern}`\n\n")
     out_tests.test_var_type(splitted_pattern, "splitted_pattern", list)
     return (splitted_pattern)
 
-def format_filters_to_query(database_filters, config):
+def format_filters_to_query(filters, config):
     """
     1. Format filters to sql query part.
     2. Create inverse filters query part to check filtered vacancies.
     3. Get user patterns.
     """
-    areas_table = config["tables"]["areas_table"]
-    vacancies_table = config["tables"]["vacancies_table"]
-    config_tables = config["tables"]
-    filters_tables = update_filters_columns(config)
-    in_tests.test_format_filters_to_query(database_filters)
+    areas_table = deepcopy(config["tables"]["areas_table"])
+    vacancies_table = deepcopy(config["tables"]["vacancies_table"])
+    config_tables = deepcopy(config["tables"])
+    filters_tables = import_database_columns(config)
+    in_tests.test_format_filters_to_query(filters)
     filters_query_part = ""
     inverse_filters_query_part = ""
     patterns = []
     user_first_keys = []
-    for key, value in database_filters.items():
+    for key, value in filters.items():
         if len(user_first_keys) < 2:
             user_first_keys.append(key)
         if len(user_first_keys) == 2:
@@ -175,7 +175,7 @@ format_inverse_query(inverse_filters_query_part[:-len(" OR ")] + ")")
         inverse_filters_query_part = \
 format_inverse_query(inverse_filters_query_part[:-len(" AND ")])
     query_filters = [patterns, filters_query_part, inverse_filters_query_part]
-    out_tests.test_format_filters_to_query(database_filters, query_filters)
+    out_tests.test_format_filters_to_query(filters, query_filters)
     return (query_filters)
 
 def regexp(expr, item):
@@ -190,9 +190,9 @@ def filter_vacancies(config, msg_columns, query_filters):
     Select vacancies which contain and don't contain patterns from `filters` and
     return them as list of dicts.
     """
-    database = config["database"]
-    areas_table = config["tables"]["areas_table"]
-    vacancies_table = config["tables"]["vacancies_table"]
+    database = deepcopy(config["database"])
+    areas_table = deepcopy(config["tables"]["areas_table"])
+    vacancies_table = deepcopy(config["tables"]["vacancies_table"])
     patterns = query_filters[0]
     filters_query_part = query_filters[1]
     inverse_filters_query_part = query_filters[2]
@@ -209,13 +209,6 @@ def filter_vacancies(config, msg_columns, query_filters):
     inverse_filters_query =  f"SELECT {msg_columns_query} FROM \
 {vacancies_table} LEFT JOIN {areas_table} ON {vacancies_table}.area_id == \
 {areas_table}.id WHERE {inverse_filters_query_part}"
-    print ()
-    print (patterns)
-    print ()
-    print (filters_query)
-    print ()
-    print (inverse_filters_query)
-    print ()
     clean_values = cursor.execute(filters_query, patterns)
     clean_vacancies = [dict(zip(msg_columns, clean_value)) for
                        clean_value in clean_values]
@@ -225,11 +218,6 @@ def filter_vacancies(config, msg_columns, query_filters):
     filtered_vacancies = [clean_vacancies, dirty_vacancies]
     cursor.close()
     connection.close()
-
-    print (f"clean_vacancies = {clean_vacancies}")
-    print ()
-    print (f"dirty_vacancies = {dirty_vacancies}")
-    input ("enter")
     out_tests.test_filter_vacancies(filtered_vacancies, msg_columns)
     return (filtered_vacancies)
 
@@ -249,7 +237,7 @@ def replace_specials_to_underscore(string):
     return (new_string)
 
 def write_filtered_vacancies_to_file(
-        vacancies, filtered_path, database_filters):
+        vacancies, filtered_path, filters):
     """
     Format and write filtered vacancies to file.
     File name == file creation timestamp.
@@ -266,15 +254,15 @@ def write_filtered_vacancies_to_file(
 Try to change {file_name} var value in `config.yaml` file or just solve this.")
 
     vacancies_counter = 1
-    with open(file_name, "w") as f:
-        f.write(f"FILTERS: {database_filters}\n\n")
+    with open(file_name, "w", encoding="utf8") as f:
+        f.write(f"FILTERS: {filters}\n\n")
         for vacancy in vacancies:
             f.write(f"#{vacancies_counter}\n")
             for key, value in vacancy.items():
                 f.write (f"{key}: {value}\n")
             f.write(f"\n\n")
             vacancies_counter += 1
-        f.write(f"FILTERS: {database_filters}\n\n")
+        f.write(f"FILTERS: {filters}\n\n")
 
     out_tests.test_is_file_exists(file_name)
     return ()
@@ -308,9 +296,9 @@ def build_msg(vacancy, config):
     """
     Build html of one vacancy.
     """
-    areas_table = config["tables"]["areas_table"]
-    vacancies_table = config["tables"]["vacancies_table"]
-    income_tax = config["income_tax"]
+    areas_table = deepcopy(config["tables"]["areas_table"])
+    vacancies_table = deepcopy(config["tables"]["vacancies_table"])
+    income_tax = deepcopy(config["income_tax"])
     in_tests.test_var_type(income_tax, "income_tax", (int, float))
 
     title = \
@@ -372,22 +360,16 @@ vacancy[f"{vacancies_table}.created_at"]
     out_tests.test_var_len_more_than(msg, "message", 149)
     return (msg)
 
-def format_database_filters(database_filters):
-    """
-    """
-    # in_test.test_format_database_filters
-    # out_tests.test_format_user_fitlers
-    return ()
-
-def send_to_telegram(config, areas_ids):
-    database = config["database"]
-    areas_table = config["tables"]["areas_table"]
-    vacancies_table = config["tables"]["vacancies_table"]
-    chat_id = config["chat_id"]
-    clean_path = config["clean_vacancies_file_path"]
-    dirty_path = config["dirty_vacancies_file_path"]
+def send_to_telegram(config):
+    database = deepcopy(config["database"])
+    areas_table = deepcopy(config["tables"]["areas_table"])
+    vacancies_table = deepcopy(config["tables"]["vacancies_table"])
+    chat_id = deepcopy(config["chat_id"])
+    clean_path = deepcopy(config["clean_vacancies_file_path"])
+    dirty_path = deepcopy(config["dirty_vacancies_file_path"])
     token = os.environ["hh_bot_token"]
-    database_filters = config["database_filters"]
+    filters = deepcopy(config["filters"])
+    kill_program_after = deepcopy(config["kill_program_after"])
     in_tests.test_database_name(database)
     in_tests.test_table_name(areas_table)
     in_tests.test_table_name(vacancies_table)
@@ -396,6 +378,7 @@ def send_to_telegram(config, areas_ids):
     in_tests.test_write_to_file_file_name(dirty_path)
     in_tests.test_var_type(token, "token", str)
     in_tests.test_var_len_more_than(token, "token", 0)
+    in_tests.test_var_type(kill_program_after, "token", int)
 
     msg_columns = [
         f"{vacancies_table}.id",
@@ -422,33 +405,49 @@ def send_to_telegram(config, areas_ids):
         }
 
     query_filters = format_filters_to_query(
-        database_filters, config)
+        filters, config)
     clean_vacancies, dirty_vacancies = filter_vacancies(
         config, msg_columns, query_filters)
     for vacancies, filtered_path in zip(
             [clean_vacancies, dirty_vacancies], [clean_path, dirty_path]):
         write_filtered_vacancies_to_file(
-            vacancies, filtered_path, database_filters)
+            vacancies, filtered_path, filters)
 
     print ("\n\nSending to Telegram... \n\
-[You will receive only vacancies which haven't been sent earlier.]\n")
+[You may  recieve more vacancies than were got in current session\n\
+if sending had failed during previous sessions.]\n")
+    print (f"\nTotal messages to send: {len(clean_vacancies)}")
+    print (f"Program will auto-terminate in {kill_program_after} seconds to \
+avoid overlapping with scheduled starts.\n\
+It is highly recommended to set schedule interval to be larger than \
+`config.yaml > kill_program_after` one.\n")
+    sent_counter = 0
+    stop_time = datetime.datetime.now() + datetime.timedelta(
+        seconds=kill_program_after)
     for clean_vacancy in clean_vacancies:
+        if datetime.datetime.now() > stop_time:
+            break
         vacancy_id = clean_vacancy[f"{vacancies_table}.id"]
         msg = build_msg(clean_vacancy, config)
         msg_params["text"] = msg
         while True:
             try:
+                if datetime.datetime.now() > stop_time:
+                    break
                 response = requests.get(
                     f"https://api.telegram.org/bot{token}/sendMessage", \
                     params=msg_params)
                 out_tests.test_is_status_code_200(response)
                 set_is_sent_1(database, vacancies_table, vacancy_id)
+                sent_counter += 1
                 break
             except AssertionError:
-                sleep_time = 120
+                sleep_time = 30
                 print (
         f"\n\nPhew, I was toooo fast. Need a rest for {sleep_time} seconds...")
                 time.sleep(sleep_time)
                 continue
-    print (f"\n\nSent {len(clean_vacancies)} vacancies.")
+    print (f"\n\nSent {sent_counter} vacancies.")
+    print (f"{len(clean_vacancies)-sent_counter} unsent vacancies \
+will be processed in next sessions.")
     return ()

@@ -1,8 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 
 """
 Input tests for hh_parser.
 """
+import os.path
 import re
 
 # SHARED TESTS
@@ -33,20 +34,36 @@ def test_var_len_equal(var, var_name, var_len):
         Got len(%s) == %d" % (var_name, var_len, var_name, len(var))
     return ()
 
-def test_request_headers(headers):
+def test_dict_data_type(dict_data):
     """
-    Test for input request headers.
+    Test dict data input.
     """
-    test_var_type(headers, "headers", dict)
+    test_var_type(dict_data, "dict_data", dict)
+    test_var_len_more_than(dict_data, "dict_data", 0)
 
-    keys = headers.keys()
-    values = headers.values()
-    for key in keys:
+    for key, value in dict_data.items():
         test_var_type(key, "key", str)
-
-    for value in values:
-        test_var_type(value, "value", str)
+        test_var_len_more_than(key, "key", 0)
+        test_var_type(value, "value", (str, int, float, list, dict))
     return ()
+
+def test_list_data_type(list_data):
+    """
+    Test list data input.
+    """
+    test_var_type(list_data, "list_data", list)
+
+    for item in list_data:
+        test_var_type(item, "item", (str, int, float))
+    return ()
+
+def test_is_file_exists(file_name):
+      """
+      Test if data was written to file.
+      """
+      assert os.path.isfile(file_name), \
+            "\n\nfile `%s` was not created or doesn't exists." % file_name
+      return (True)
 
 def test_write_to_file_file_name(file_name):
     """
@@ -58,7 +75,7 @@ def test_write_to_file_file_name(file_name):
 
 def test_json_data_type(json_data):
     """
-    Test `json_data` input.
+    Test json data input.
     """
     test_var_type(json_data, "json_data", (dict, list))
     return ()
@@ -133,15 +150,6 @@ def test_write_to_database_from_dict(database, table, data):
             test_var_len_more_than(value, "value", 0)
     return ()
 
-# def test_is_generator(generator):
-#     """
-#     Tests `generator` type.
-#     """
-#     assert isinstance(generator, types.GeneratorType), \
-#         "Expected type(generator) == generator,\n\
-#         Got type(generator) == %s" % type(generator)
-#     return ()
-
 def test_area_names(names):
     """
     Valid name must follow all these rules:
@@ -168,32 +176,14 @@ Valid name must follow all these rules:\n\
 - can contain characters: - ́ ’ , ( ) . and whitespaces." % forbidden_characters
     return ()
 
-# def test_rename_json_to_database_key(key):
-#     """
-#     Tests for `rename_json_to_database_key`.
-#     """
-#     test_var_type(key, "key", str)
-#     test_var_len_more_than(key, "key", 0)
-#     test_table_name(key)
-#     return ()
-
-def test_config(config):
-    """
-    """
-    test_var_type(config, "config", dict)
-    test_var_len_more_than(config, "config", 0)
-
-    for key, value in config.items():
-        test_var_type(key, "key", str)
-        test_var_len_more_than(key, "key", 0)
-        test_var_type(value, "value", (str, int, float, list, dict))
-    return ()
-
+# CONFIG TESTS
 def test_read_config(config_path):
     """
+    Test config path.
     """
     test_var_type(config_path, "config_path", str)
     test_var_len_more_than(config_path, "config_path", 0)
+    test_is_file_exists(config_path)
     assert config_path.endswith(".yaml"),\
         "\n\nExpected `.yaml` format."
     return ()
@@ -213,7 +203,6 @@ def test_clean_area_children(found, found_ids):
         test_var_type(area_id, "area_id", int)
     return ()
 
-
 # VACANCIES TESTS
 def test_load_vacancies(headers, filters):
     """
@@ -229,13 +218,26 @@ def test_load_vacancies(headers, filters):
         test_var_type(value, "value", (str, list))
     return ()
 
-def test_get_vacancies(config, areas_ids):
+def test_url_per_page(per_page):
     """
+    Test API `per_page` param.
+    It must be > 0 and <= 100.
     """
-    test_config(config)
-    test_var_type(areas_ids, "areas_ids", list)
-    for area_id in areas_ids:
-        test_var_type(area_id, "area_id", int)
+    test_var_type(per_page, "per_page", int)
+    assert 0 < per_page <= 100,\
+        "Must be 0 < `config.yaml > url_params > per_page` <= 100\n\
+Got per_page: %d" % (per_page)
+    return ()
+
+def test_url_period(period):
+    """
+    Test API `period` param.
+    It must be > 0 and <= 31
+    """
+    test_var_type(period, "period", int)
+    assert 0 < period <= 31,\
+        "Must be 0 < `config.yaml > url_params > period` <= 31\n\
+Got period: %d" % (period)
     return ()
 
 # TELEGRAM TESTS
@@ -250,13 +252,13 @@ def test_filter_vacancies(msg_columns):
         test_var_len_more_than(column, "column", 0)
     return ()
 
-def test_format_filters_to_query(database_filters):
+def test_format_filters_to_query(filters):
     """
     Tests for `format_filters_to_query`.
     """
-    test_var_type(database_filters, "database_filters", dict)
-    test_var_len_more_than(database_filters, "database_filters", 0)
-    for key, value in database_filters.items():
+    test_var_type(filters, "filters", dict)
+    test_var_len_more_than(filters, "filters", 0)
+    for key, value in filters.items():
         test_var_type(key, "key", str)
         test_var_len_more_than(key, "key", 0)
         test_var_type(value, "value", (list))

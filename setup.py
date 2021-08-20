@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.6
 
-import pathlib
 from setuptools import setup
+import pathlib
 
 HERE = pathlib.Path(__file__).parent
 
@@ -22,6 +22,5 @@ setup(
         "Programming Language :: Python :: 3"
     ],
     python_requires=">=3.6.0",
-    install_requires=["requests", "ruamel.yaml"]
-    },
+    install_requires=["inputimeout", "requests", "ruamel.yaml"]
 )

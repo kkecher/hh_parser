@@ -8,12 +8,15 @@ https://github.com/hhru/api/blob/master/docs_eng/README.md
 https://github.com/hhru/api/blob/master/docs_eng/vacancies.md
 """
 
+from copy import deepcopy
+import datetime
+import math
 import types
 
 import requests
 
 from areas import check_if_area_id_is_in_areas_table
-from config import update_filters_columns
+from config import import_database_columns
 from shared import (
     create_table,
     create_table_columns,
@@ -28,26 +31,63 @@ def get_vacancies(config):
     """
     Load vacancies from hh, save them to file (for debugging) and database.
     """
-    areas_ids = config["url_filters"]["area"]
-    in_tests.test_get_vacancies(config, areas_ids)
+    vacancies_file = deepcopy(config["vacancies_file"])
+    headers = deepcopy(config["headers"])
+    filters = deepcopy(config["url_params"])
+    filters["area"] = filters["area"][-1].split("|")
+    if filters["area"] == [""]:
+        del filters["area"]
+    if "date_from" in filters:
+        del filters["period"]
+    filters["page"] = 0
+    in_tests.test_dict_data_type(headers)
+    in_tests.test_dict_data_type(filters)
     print ("\n\nGetting vacancies from hh...")
 
-    vacancies_file = config["vacancies_file"]
-    filters = {"area": areas_ids}
-    filters = {key: value for key, value in filters.items() if len(value) != 0}
-
-    vacancies = load_vacancies(config, filters)
-    write_to_file(vacancies_file, vacancies)
-    write_vacancies_to_database(
-        config, create_vacancies_generator(vacancies["items"]))
+    date_current = datetime.datetime.now().replace(microsecond=0).isoformat()
+    while True:
+        vacancies = load_vacancies(headers, filters)
+        found_vacancies = vacancies["found"]
+        if found_vacancies:
+            write_vacancies_to_database(
+                config, create_vacancies_generator(vacancies["items"]))
+        write_to_file(vacancies_file, vacancies)
+        filters["page"] += 1
+        if vacancies["pages"] <= filters["page"]:
+            break
+    config["url_params"]["date_from"] = date_current
+    import_database_columns(config)
+    got_vacancies = min(found_vacancies, filters["per_page"]*filters["page"])
+    if "period" in filters:
+        print(f"\n\nFound: {found_vacancies} vacancies \
+for period of {filters['period']} days.")
+    elif "date_from" in filters:
+        print(f"\n\nFound: {found_vacancies} vacancies \
+from {format(filters['date_from'])}.")
+    else:
+        print(
+            "\n\nNo `period` or `date_from` in `config.yaml > url_params`\n\n")
+        raise AttributeError
+    if found_vacancies:
+        print(f"Got: {got_vacancies} vacancies \
+({round(got_vacancies/found_vacancies*100, 2)}%)")
+    else:
+        print(f"Got: {got_vacancies} vacancies (0%)")
+    if found_vacancies > got_vacancies:
+        print(f"\nYou can get more vacancies by:\n\
+    1. Scheduling parse more often.\n\
+    2. Adding more filter params to `config.yaml > url_params`.\n\
+    3. Changing region\n\
+    4. Changing `config.yaml > url_params > period` \
+(legal values in [1, 31]).\n\
+        Works only if no param `date_from`: \
+")
     return ()
 
-def load_vacancies(config, filters):
+def load_vacancies(headers, filters):
     """
     Get vacancies under `filters`.
     """
-    headers = config["headers"]
-    in_tests.test_load_vacancies(headers, filters)
     print ("    Loading vacancies from hh...")
 
     url = "https://api.hh.ru/vacancies"
@@ -80,13 +120,14 @@ def create_vacancies_tables(config):
     """
     Create vacancies' tables.
     """
-    database = config["database"]
-    areas_table = config["tables"]["areas_table"]
-    vacancies_table = config["tables"]["vacancies_table"]
-    streets_table = config["tables"]["streets_table"]
-    metro_stations_table = config["tables"]["metro_stations_table"]
-    employers_table = config["tables"]["employers_table"]
-    vacancies_metro_stations_table = config["tables"]["vacancies_metro_stations_table"]
+    database = deepcopy(config["database"])
+    areas_table = deepcopy(config["tables"]["areas_table"])
+    vacancies_table = deepcopy(config["tables"]["vacancies_table"])
+    streets_table = deepcopy(config["tables"]["streets_table"])
+    metro_stations_table = deepcopy(config["tables"]["metro_stations_table"])
+    employers_table = deepcopy(config["tables"]["employers_table"])
+    vacancies_metro_stations_table = \
+        deepcopy(config["tables"]["vacancies_metro_stations_table"])
     in_tests.test_database_name(database)
     in_tests.test_table_name(areas_table)
     in_tests.test_table_name(vacancies_table)
@@ -115,8 +156,8 @@ def create_vacancies_tables(config):
     create_table(database, employers_table,\
     ["id INTEGER NOT NULL PRIMARY KEY",\
      "name TEXT NOT NULL",\
-     "url TEXT NOT NULL",\
-     "alternate_url TEXT NOT NULL",\
+     "url TEXT",\
+     "alternate_url TEXT",\
      "logo_url_original TEXT",\
      "logo_url_240 TEXT",\
      "logo_url_90 TEXT",\
@@ -166,8 +207,8 @@ def write_streets_to_streets_table(config, tables_cache):
     """
     Write `area_id > city > stree` row to `streets` table.
     """
-    database = config["database"]
-    streets_table = config["tables"]["streets_table"]
+    database = deepcopy(config["database"])
+    streets_table = deepcopy(config["tables"]["streets_table"])
     in_tests.test_write_to_database_from_dict(
         database, streets_table, tables_cache)
 
@@ -187,9 +228,10 @@ def write_stations_to_metro_stations_table(config, tables_cache):
     """
     Write `station_id > station_name > line_name > station_lat > station_lng`
     row to `metro_stations` table.
+    Vacancy can have several metro stations. Only the last one will be written.
     """
-    database = config["database"]
-    metro_stations_table = config["tables"]["metro_stations_table"]
+    database = deepcopy(config["database"])
+    metro_stations_table = deepcopy(config["tables"]["metro_stations_table"])
     in_tests.test_write_to_database_from_dict(
         database, metro_stations_table, tables_cache)
 
@@ -209,14 +251,35 @@ def write_stations_to_metro_stations_table(config, tables_cache):
         })
     return ()
 
+def write_to_vacancies_metro_stations_table(config, tables_cache):
+    """
+    Write `vacancy_id > metro_station_id` to `vacancies_metro_stations`.
+    Vacancy can have several metro stations. Only the last one will be written.
+    """
+    database = deepcopy(config["database"])
+    vacancies_metro_stations_table = \
+        deepcopy(config["tables"]["vacancies_metro_stations_table"])
+    in_tests.test_write_to_database_from_dict(
+        database, vacancies_metro_stations_table, tables_cache)
+
+    vacancy_id = tables_cache["id"]
+    station_id = tables_cache["address_metro_stations_station_id"]
+
+    if station_id:
+        write_to_database(database, vacancies_metro_stations_table, {
+            "vacancy_id": vacancy_id,
+            "metro_station_id": station_id
+        })
+    return ()
+
 def write_employers_to_employers_table(config, tables_cache):
     """
     Write `id > name > url > alternate_url > logo_urls_original >
     logo_urls_240 > logo_urls_90 > vacancies_url > trusted` row
     to `employers` table.
     """
-    database = config["database"]
-    employers_table = config["tables"]["employers_table"]
+    database = deepcopy(config["database"])
+    employers_table = deepcopy(config["tables"]["employers_table"])
     in_tests.test_write_to_database_from_dict(
         database, employers_table, tables_cache)
 
@@ -248,8 +311,8 @@ def write_vacancies_to_database(config, vacancies_generator):
     """
     Iterate over vacancies generator and fill `vacancies` table.
     """
-    database = config["database"]
-    vacancies_table = config["tables"]["vacancies_table"]
+    database = deepcopy(config["database"])
+    vacancies_table = deepcopy(config["tables"]["vacancies_table"])
     in_tests.test_database_name(database)
     in_tests.test_table_name(vacancies_table)
     in_tests.test_var_type(
@@ -265,7 +328,7 @@ def write_vacancies_to_database(config, vacancies_generator):
 
     # Accumulate non-vacances tables data.
     # Its values are reseted to None every vacancy.
-    tables_cache_keys = ["area_id", "address_city", "address_street", \
+    tables_cache_keys = ["id", "area_id", "address_city", "address_street", \
 "address_metro_stations_station_id", "address_metro_stations_station_name", \
 "address_metro_stations_line_name", "address_metro_stations_lat", \
 "address_metro_stations_lng", "employer_id", "employer_name", "employer_url", \
@@ -313,6 +376,7 @@ def write_vacancies_to_database(config, vacancies_generator):
             write_streets_to_streets_table(config, tables_cache)
             write_stations_to_metro_stations_table(config, tables_cache)
             write_employers_to_employers_table(config, tables_cache)
+            write_to_vacancies_metro_stations_table(config, tables_cache)
 
             database_changes += write_to_database(
                 database, vacancies_table, vacancy)
@@ -328,8 +392,8 @@ def write_vacancies_to_database(config, vacancies_generator):
     write_streets_to_streets_table(config, tables_cache)
     write_stations_to_metro_stations_table(config, tables_cache)
     write_employers_to_employers_table(config, tables_cache)
+    write_to_vacancies_metro_stations_table(config, tables_cache)
     database_changes += write_to_database(database, vacancies_table, vacancy)
     vacancy_counter += 1
     out_tests.test_write_to_database(database_changes, vacancy_counter)
-    update_filters_columns(config)
     return ()

@@ -4,10 +4,12 @@
 Output tests for hh_parser.
 """
 
+from copy import deepcopy
+import datetime
 import json
 import os.path
 import sqlite3
-import yaml
+from ruamel.yaml import YAML
 
 import requests
 
@@ -16,7 +18,8 @@ from tests.input_tests import (
       test_var_len_equal,
       test_var_len_more_than,
       test_table_name,
-      test_config
+      test_dict_data_type,
+      test_is_file_exists
 )
 
 # SHARED TESTS
@@ -28,14 +31,6 @@ def test_is_status_code_200(response):
             "\n\nExpected status code == 200.\n\
             Got status code == %s" % response.status_code
       return ()
-
-def test_is_file_exists(file_name):
-      """
-      Test if data was written to file.
-      """
-      assert os.path.isfile(file_name), \
-            "\n\nfile `%s` was not created." % file_name
-      return (True)
 
 def test_create_table_columns(
             database_columns_names, user_columns):
@@ -74,15 +69,16 @@ def test_write_to_database(database_changes_number, counter):
       Got %s database changes." % (counter, database_changes_number)
       return ()
 
-def test_write_config(mod_config, config_path="config.yaml"):
+def test_write_config(edited_config, config_path="config.yaml"):
       """
       Compare new config file with the the old modified one.
       """
-      with open(config_path, "r") as f:
-            config = yaml.safe_load(f)
-      assert config == mod_config, \
+      with open(config_path, "r", encoding="utf8") as f:
+            yaml = YAML()
+            new_config = yaml.load(f)
+      assert new_config == edited_config, \
       "\n\nExpected config:\n %s\
-      \n\nGot config:\n %s" % (mod_config, config)
+x      \n\nGot config:\n %s" % (edited_config, new_config)
       return ()
 
 # AREAS TESTS
@@ -144,11 +140,21 @@ def test_select_areas_by_name(not_found, found, found_ids):
       for name in not_found:
             test_var_type(name, "name", str)
 
-      for name in found:
-            test_var_type(name, "name", tuple)
+      for area in found:
+            test_var_type(area, "area", tuple)
 
-      for id_ in found_ids:
-            test_var_type(id_, "id", int)
+      for area_id in found_ids:
+            test_var_type(area_id, "area_id", int)
+      return ()
+
+def test_select_areas_by_ids(not_found, found):
+      """
+      """
+      test_var_type(not_found, "not_found", set)
+      test_var_type(found, "found", set)
+
+      for area in found:
+            test_var_type(area, "area", tuple)
       return ()
 
 def test_clean_area_children(found, cleaned, duplicated):
@@ -205,16 +211,33 @@ def test_load_vacancies_is_respect_filters(filters, vacancies):
       """
       Test if recieved vacancies respect filters.
       """
+      match_keys = {
+            "per_page": "items_on_page",
+            "period": "search_period"
+      }
+
       hh_alternate_url = vacancies["alternate_url"]
+      filters = deepcopy(filters)
+      try:
+            filters["date_from"] = datetime.datetime.fromisoformat(
+                  filters["date_from"])
+            filters["date_from"] = filters["date_from"].strftime(
+                  "%d.%m.%Y+%H%%3A%M%%3A%S")
+      except KeyError:
+            pass
       for key, value in filters.items():
+            try:
+                  key = match_keys[key]
+            except KeyError:
+                  pass
             assert key in hh_alternate_url, \
                   "\n\n`%s` param NOT in hh_alternate_url:\n\
                   %s" % (key, hh_alternate_url)
             if isinstance(value, list):
                   for param in value:
-                          assert str(param) in hh_alternate_url, \
-                          "\n\n`%s` param NOT in hh_alternate_url:\n\
-                          %s" % (str(param), hh_alternate_url)
+                        assert str(param) in hh_alternate_url, \
+                              "\n\n`%s` param NOT in hh_alternate_url:\n\
+                              %s" % (str(param), hh_alternate_url)
             else:
                   assert str(value) in hh_alternate_url, \
                   "\n\n`%s` param NOT in hh_alternate_url:\n\
@@ -233,7 +256,7 @@ def test_load_vacancies(response, vacancies, filters):
 
 
 # TELEGRAM TESTS
-def test_format_filters_to_query(database_filters, query_filters):
+def test_format_filters_to_query(filters, query_filters):
       """
       Test if filters sql parts are syntax correct.
       """
@@ -245,16 +268,16 @@ def test_format_filters_to_query(database_filters, query_filters):
       inverse_filters_query_part = query_filters[2]
 
       test_var_type(patterns, "patterns", list)
-      test_var_len_more_than(patterns, "patterns", len(database_filters)-1)
+      test_var_len_more_than(patterns, "patterns", len(filters)-1)
       for pattern in patterns:
             test_var_type(pattern, "pattern", str)
 
       test_var_type(filters_query_part, "filters_query_part", str)
       test_var_len_more_than(filters_query_part, "filters_query_part", 15)
       and_substring_count = filters_query_part.count(" AND ")
-      assert (len(database_filters) - 1) == and_substring_count, \
+      assert (len(filters) - 1) == and_substring_count, \
       "\n\nExpected %d ` AND ` subsring in `filters_query_part`\n\
-      Got %d ` AND ` ones." % (len(database_filters)-1, and_substring_count)
+      Got %d ` AND ` ones." % (len(filters)-1, and_substring_count)
       assert filters_query_part.endswith("?)"), \
       "Expected `?)` at the end of `filters_query_part`\n\
       Got %s" % filters_query_part[-2:]
@@ -266,17 +289,17 @@ def test_format_filters_to_query(database_filters, query_filters):
 Use REGEXP if you need muptiple patterns:\n\
     valid: "{{table_name}}.{column}": \
 [REGEXP, "pattern_1|pattern_2|pattern_3"]\n\
-Try to edit `config.yaml > database_filters`'
+Try to edit `config.yaml > filters`'
 
       test_var_type(
             inverse_filters_query_part, "inverse_filters_query_part", str)
       test_var_len_more_than(
             inverse_filters_query_part, "inverse_filters_query_part", 11)
       or_substring_count = inverse_filters_query_part.count(" OR ")
-      assert max(0, (len(database_filters) - 3)) == or_substring_count, \
+      assert max(0, (len(filters) - 3)) == or_substring_count, \
       "Expected %d ` OR ` subsring in `inverse_filters_query_part`\n\
       Got %d ` OR ` ones." % \
-      (max(0, (len(database_filters) - 3)), or_substring_count)
+      (max(0, (len(filters) - 3)), or_substring_count)
       assert inverse_filters_query_part.endswith(")"), \
       "Expected `)` at the end of `inverse_filters_query_part`\n\
       Got %s" % inverse_filters_query_part[-1:]

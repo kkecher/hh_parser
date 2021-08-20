@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 
 """
 Shared functions for hh_parser.
@@ -8,7 +8,6 @@ from pathlib import Path
 import json
 import sqlite3
 import datetime
-import yaml
 
 from tests.output_tests import test_is_file_exists as is_file_exists
 import tests.input_tests as in_tests
@@ -27,7 +26,7 @@ def write_to_file(file_name, json_data):
     except PermissionError:
         print (f"I don't have permission to create {file_name}.\n\
 Try to change {file_name} var value in `config.yaml` file or just solve this.")
-    with open (file_name, "w") as f:
+    with open (file_name, "w", encoding="utf8") as f:
         f.write(json.dumps(json_data, indent=4, ensure_ascii=False))
     out_tests.test_is_file_exists(file_name)
     return ()

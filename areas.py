@@ -8,10 +8,12 @@ https://github.com/hhru/api/blob/master/docs_eng/README.md
 https://github.com/hhru/api/blob/master/docs_eng/vacancies.md
 """
 
+from copy import deepcopy
 import sqlite3
 import time
 import types
 
+from inputimeout import inputimeout, TimeoutOccurred
 import requests
 
 from shared import (
@@ -29,8 +31,8 @@ def load_areas(config):
     Get json with geo (countries, regions, cities) and their ids.
     We'll write this json to sqlite database to search by areas.
     """
-    headers = config["headers"]
-    in_tests.test_request_headers(headers)
+    headers = deepcopy(config["headers"])
+    in_tests.test_dict_data_type(headers)
     print ("\n\n    Loading areas from hh...")
 
     url = "https://api.hh.ru/areas"
@@ -63,7 +65,7 @@ def get_areas(config):
     """
     Load areas from hh, save them to file (for debugging) and database.
     """
-    areas_file = config["tables"]["areas_file"]
+    areas_file = deepcopy(config["areas_file"])
     print ("\n\nGetting areas from hh. \
 It is one time operation and can take up to several minutes...\n")
     time.sleep(5)
@@ -77,8 +79,8 @@ def write_areas_to_database(config, areas_generator):
     """
     Iterate over areas generator and fill the table.
     """
-    database = config["database"]
-    table = config["tables"]["areas_table"]
+    database = deepcopy(config["database"])
+    table = deepcopy(config["tables"]["areas_table"])
     in_tests.test_database_name(database)
     in_tests.test_table_name(table)
     in_tests.test_var_type(
@@ -149,47 +151,77 @@ I can understand:\n\
     out_tests.test_get_user_inputs(user_areas)
     return (user_areas)
 
-def search_user_areas(database, areas_table):
+def search_user_areas(config):
     """
     Search names and ids for user areas and confirm results.
     """
+    database = deepcopy(config["database"])
+    areas_table = deepcopy(config["tables"]["areas_table"])
+    saved_areas = deepcopy(config["url_params"]["area"][-1]).split("|")
     in_tests.test_database_name(database)
     in_tests.test_table_name(areas_table)
+    in_tests.test_var_type(saved_areas, "saved_areas", (list, type(None)))
 
     while True:
-        user_areas = get_user_inputs()
-        if len(user_areas) == 0:
-            not_found = set()
-            found = set()
-            found_ids = set()
+        if saved_areas != None:
+            not_found, found = \
+                select_areas_by_ids(database, areas_table, saved_areas)
+            if saved_areas == [""]:
+                found_ids = set()
+            else:
+                found_ids = set(int(saved_area) for saved_area in saved_areas)
         else:
-            not_found, found, found_ids = \
-                select_areas_by_name(database, areas_table, user_areas)
+            user_areas = get_user_inputs()
+            if len(user_areas) == 0:
+                not_found = set()
+                found = set()
+                found_ids = set()
+            else:
+                not_found, found, found_ids = \
+                    select_areas_by_name(database, areas_table, user_areas)
         print (f"\n\n  {30*'-'}\n    NOT found regions:\n  {30*'-'}")
         for area in not_found:
             print (f"    {area}")
         print (f"\n\n  {30*'-'}\n    Found regions:\n  {30*'-'}")
         if len(found) == 0:
             print (
-"    No found regions so I'll get vacancies from all regions.")
+"    All regions")
         else:
             for area in found:
                 print (f"    {area[2]}")
-        user_confirm = ""
         print ()
-        while (user_confirm not in "yn" or not user_confirm):
-            user_confirm = input ("  Looks good? (press `y` or `n`): ")
+        while True:
+            if saved_areas != None:
+                timeout = 10
+                print (f"\n  I have found saved regions. \
+Auto-apply in {timeout} sec...")
+                try:
+                    user_confirm = inputimeout (
+                        "  Looks good? (press `y` or `n`): ", timeout)
+                except:
+                    user_confirm = "y"
+            else:
+                user_confirm = input ("  Looks good? (press `y` or `n`): ")
+            if user_confirm in "yn" and user_confirm:
+                break
         if user_confirm == "y":
             break
         elif user_confirm == "n":
-            print ("\n\n    Ok. Let's try again...\n")
+            config["url_params"].pop("date_from", None)
+            saved_areas = None
+            print ("\n\n  Ok. Let's try again...\n")
             continue
         else:
-               print ("\n\n    Unhandled user_confirm: {user_confirm}\n\n")
+               print (f"\n\n    Unhandled user_confirm: {user_confirm}\n\n")
                raise ValueError
     cleaned, cleaned_ids = clean_area_children(
         found, found_ids)
-    return (list(cleaned_ids))
+
+    config["filters"]["{areas_table}.id"] = ["REGEXP", "|".join(
+        str(clean_id) for clean_id in cleaned_ids)]
+    config["url_params"]["area"] = \
+        config["filters"]["{areas_table}.id"]
+    return (config)
 
 def select_areas_by_name(database, table, names):
     """
@@ -221,6 +253,32 @@ def select_areas_by_name(database, table, names):
     out_tests.test_select_areas_by_name(not_found, found, found_ids)
     return (not_found, found, found_ids)
 
+def select_areas_by_ids(database, table, areas_ids):
+    """
+    Select geo areas by id to get their names.
+    `areas_ids` == list of ids for search.
+    """
+    in_tests.test_database_name(database)
+    in_tests.test_table_name(table)
+    in_tests.test_list_data_type(areas_ids)
+
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    query = f"SELECT * FROM {table} WHERE id == ?"
+    not_found, found = set(), set()
+
+    for area_id in areas_ids:
+        cursor.execute(query, [area_id])
+        found_area = cursor.fetchall()
+        if not found_area:
+            not_found.add(area_id)
+        else:
+            found.add(found_area[0])
+    cursor.close()
+    connection.close()
+    out_tests.test_select_areas_by_ids(not_found, found)
+    return (not_found, found)
+
 def clean_area_children(found, found_ids):
     """
     If `select_areas_by_name` returned some areas
@@ -251,8 +309,8 @@ def check_if_area_id_is_in_areas_table(config, area_id):
     3. Check if area_id is in `areas_table`.
     4. If yes -> return True, else -> raise
     """
-    database = config["database"]
-    areas_table = config["tables"]["areas_table"]
+    database = deepcopy(config["database"])
+    areas_table = deepcopy(config["tables"]["areas_table"])
     in_tests.test_database_name(database)
     in_tests.test_table_name(areas_table)
     in_tests.test_var_type(area_id, "area_id", int)
