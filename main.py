@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.6
 
 """
-main module for hh_parser project.
+Main module for hh_parser project.
 """
 
 from copy import deepcopy

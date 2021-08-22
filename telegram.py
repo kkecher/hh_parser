@@ -414,7 +414,7 @@ def send_to_telegram(config):
             vacancies, filtered_path, filters)
 
     print ("\n\nSending to Telegram... \n\
-[You may  recieve more vacancies than were got in current session\n\
+[You may recieve more vacancies than were got in current session\n\
 if sending had failed during previous sessions.]\n")
     print (f"\nTotal messages to send: {len(clean_vacancies)}")
     print (f"Program will auto-terminate in {kill_program_after} seconds to \
