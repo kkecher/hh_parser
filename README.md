@@ -6,7 +6,6 @@
     <meta name="author" content="Ivan Arzhanov">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles.css">
-    <title>Manual / Help for hh parser</title>
   </head>
   <body>
 <h2>This program can:</h2>
@@ -49,16 +48,19 @@
   <li> Next we need to know bot’s chat id:
     <ul>
       <li>Send any message to your bot in Telegram</li>
-      <li>In Terminal &sol; CMD type <code>python</code> <code>ENTER</code> &gt; type <code>import requests</code> <code>ENTER</code> &gt; type <code>r = requests.get("https://api.telegram.org/{your token}/getUpdates")</code> <code>ENTER</code> &gt; type <code>r.text</code> <code>ENTER</code>. You will get dictionary, find key value == <code>["result"]["message"]["from"]["id"]</code>. That’s your chat id, put it in <code>config.yaml &gt; chat_id</code> value.
+      <li>In Terminal &sol; CMD type <code>python</code> <code>ENTER</code> &gt; type <code>import requests</code> <code>ENTER</code> &gt; type <code>r = requests.get("https://api.telegram.org/{your token}/getUpdates")</code> <code>ENTER</code> &gt; type <code>r.text</code> <code>ENTER</code>. You will get dictionary, find value for key <code>["result"]["message"]["from"]["id"]</code>. That’s your chat id, put it in <code>config.yaml &gt; chat_id</code> value.
     </ul>
   </li>
   <li>Well&hellip; that’s it! In Terminal / CMD run <code>python main.py</code>. The program will ask you desirable regions and it will start to collect vacancies and send them to the Telegram bot. I have to warn you that in Moscow, for example, you will get more than 9000 vacancies A DAY. So use filters, for more information and examples see <code>config.yaml</code></li>
   <li>Certainly, we want to automate this routine:
     <ul>
-      <li>Ubuntu: open <code>Terminal</code> &gt; type <code>sudo apt update</code> <code>ENTER</code> &gt; <code>type your sudo password</code> &gt; type <code>sudo apt install cron</code> <code>ENTER</code> &gt; type <code>service cron start</code> &gt; type <code>crontab -e</code> <code>ENTER</code> &gt; choose the best text editor in appeared menu if you haven’t set cron before &gt; add a new line to the file end and type <code>*/5 * * * * cd "{path to the project}" && "/usr/bin/python" "main.py"</code> &gt; add empty line to the end of file &gt; save and exit to to Terminal &gt; type <code>crontab -l</code> <code>ENTER</code> to check if settings have been applied &gt; type <code>service cron status</code> <code>ENTER</code> to check if cron is running. If everything was set correctly you will get new messages every 5 minutes. If you decide to change time interval, it’s highly recommended to set the interval to be more than <code>config.yaml &gt; kill_program_after</code> value to avoid overlapping sessions.</li>
-      <li>Windows: open file <code>hh_parser.bat and change project and Python paths to yours (you can see Python path in CMD with command <code>which python</code>) &gt; save and close file &gt; open <code>Start menu</code> &gt; type <code>task schedule</code> &gt; choose command <code>Task Scheduler</code> &gt; choose command <code>Create Task&hellip;</code> &gt; on <code>General</code> tab type any task name &gt; on <code>Triggers</code> tab click <code>New&hellip;</code> &gt; choose <code>Daily</code>, <code>Start: {date and time when you want the task to start}</code>, <code>Advanced settings &gt; Repeat task every: 5 minutes &gt; for a duration of: Indefinitely</code> &gt; on <code>Actions</code> tab click <code>New&hellip;</code> &gt; <code>Program/script: %windir%\system32\cmd.exe &gt; Add arguments (optional): /C start "" /MIN {path to the project}\hh_parser.bat</code> &gt; press <code>OK</code>. That’s it!</li>
-      <li>Everything was set correctly if <code>config.yaml &gt; url_params &gt; date_from</code> value changes every 5 minutes.
+      <li>Ubuntu: open <code>Terminal</code> &gt; type <code>sudo apt update</code> <code>ENTER</code> &gt; type your sudo password &gt; type <code>sudo apt install cron</code> <code>ENTER</code> &gt; type <code>service cron start</code> &gt; type <code>crontab -e</code> <code>ENTER</code> &gt; choose the best text editor in appeared menu if you haven’t set cron before &gt; add a new line to the file end and type <code>*/5 * * * * cd "{path to the project}" && "/usr/bin/python" "main.py"</code> <code>ENTER</code> &gt; save and exit to Terminal &gt; type <code>crontab -l</code> <code>ENTER</code> to check if settings have been applied &gt; type <code>service cron status</code> <code>ENTER</code> to check if cron is running. If everything was set correctly you will get new messages every 5 minutes.</li>
+      <li>Windows: open file <code>hh_parser.bat</code> and change project and Python paths to yours (you can see Python path in CMD with command <code>which python</code>) &gt; save and close file &gt; open <code>Start menu</code> &gt; type <code>task schedule</code> &gt; choose command <code>Task Scheduler</code> &gt; choose command <code>Create Task&hellip;</code> &gt; on <code>General</code> tab type any task name &gt; on <code>Triggers</code> tab click <code>New&hellip;</code> &gt; choose <code>Daily</code>, <code>Start: {date and time when you want the task to start}</code>, <code>Advanced settings &gt; Repeat task every: 5 minutes &gt; for a duration of: Indefinitely</code> &gt; on <code>Actions</code> tab click <code>New&hellip;</code> &gt; <code>Program/script: %windir%\system32\cmd.exe &gt; Add arguments (optional): /C start "" /MIN {path to the project}\hh_parser.bat</code> &gt; press <code>OK</code>. That’s it!</li>
+      <li>Everything was set correctly if <code>config.yaml &gt; url_params &gt; date_from</code> value changes every 5 minutes.</li>
+      <li>If you decide to change time interval, it’s highly recommended to set the interval to be more than <code>config.yaml &gt; kill_program_after</code> value to avoid overlapping sessions.</li>
     </ul>
   </li>
 </ol>
 <p>Good luck finding your dream job!</p>
+  </body>
+</html>

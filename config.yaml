@@ -158,5 +158,5 @@ url_params:
   period: 1
   per_page: 100
   area: *id001
-  date_from: '2021-08-22T12:25:37'
+  date_from: '2021-08-22T12:40:37'
 end_area_autoupdate: _
