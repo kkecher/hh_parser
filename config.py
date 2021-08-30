@@ -33,6 +33,7 @@ def write_config(edited_config, config_path="config.yaml"):
     with open (config_path, "w", encoding="utf8") as f:
         yaml = YAML()
         yaml.default_flow_style = False
+        yaml.width = 80
         yaml.dump(edited_config, f)
     out_tests.test_write_config(edited_config)
     return ()
@@ -43,7 +44,9 @@ def import_database_columns(config, config_path="config.yaml"):
     """
     database = deepcopy(config["database"])
     in_tests.test_database_name(database)
+    in_tests.test_read_config(config_path)
     print (f"\nUpdating {config_path}")
+
     columns = {}
     for table in config["tables"].values():
         columns[table] = get_table_columns_names(database, table)

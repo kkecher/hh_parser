@@ -6,20 +6,17 @@ Output tests for hh_parser.
 
 from copy import deepcopy
 import datetime
-import json
-import os.path
-import sqlite3
-from ruamel.yaml import YAML
 
+from ruamel.yaml import YAML
 import requests
 
 from tests.input_tests import (
-      test_var_type,
+      test_dict_data_type,
+      test_is_file_exists,
+      test_table_name,
       test_var_len_equal,
       test_var_len_more_than,
-      test_table_name,
-      test_dict_data_type,
-      test_is_file_exists
+      test_var_type
 )
 
 # SHARED TESTS
@@ -69,6 +66,7 @@ def test_write_to_database(database_changes_number, counter):
       Got %s database changes." % (counter, database_changes_number)
       return ()
 
+# CONFIG TESTS
 def test_write_config(edited_config, config_path="config.yaml"):
       """
       Compare new config file with the the old modified one.
@@ -78,7 +76,7 @@ def test_write_config(edited_config, config_path="config.yaml"):
             new_config = yaml.load(f)
       assert new_config == edited_config, \
       "\n\nExpected config:\n %s\
-x      \n\nGot config:\n %s" % (edited_config, new_config)
+      \n\nGot config:\n %s" % (edited_config, new_config)
       return ()
 
 # AREAS TESTS
@@ -111,16 +109,6 @@ def test_load_areas_root_keys(areas):
       Got top json keys: %s" % list(areas[0].keys())
       return ()
 
-def test_get_user_inputs(user_areas):
-      """
-      """
-      test_var_type(user_areas, "user_areas", list)
-
-      for user_area in user_areas:
-            test_var_type(user_area, "user_area", str)
-            test_var_len_more_than(user_area, "user_area", 0)
-      return ()
-
 def test_load_areas(response, areas):
       """
       Combine all load_areas tests.
@@ -130,8 +118,20 @@ def test_load_areas(response, areas):
       test_load_areas_root_keys(areas)
       return ()
 
+def test_get_user_inputs(user_areas):
+      """
+      Test for `get_user_input`.
+      """
+      test_var_type(user_areas, "user_areas", list)
+
+      for user_area in user_areas:
+            test_var_type(user_area, "user_area", str)
+            test_var_len_more_than(user_area, "user_area", 0)
+      return ()
+
 def test_select_areas_by_name(not_found, found, found_ids):
       """
+      Test for `select_areas_by_name`.
       """
       test_var_type(not_found, "not_found", set)
       test_var_type(found, "found", set)
@@ -149,6 +149,7 @@ def test_select_areas_by_name(not_found, found, found_ids):
 
 def test_select_areas_by_ids(not_found, found):
       """
+      Test for `select_areas_by_ids`.
       """
       test_var_type(not_found, "not_found", set)
       test_var_type(found, "found", set)
@@ -166,11 +167,10 @@ def test_clean_area_children(found, cleaned, duplicated):
 
       assert len(cleaned) + len(duplicated) == len(found), \
             "\n\n`len(cleaned) + len(duplicated)` \
-            must  be equal to `len(found)`.\n\
+            must be equal to `len(found)`.\n\
             len(cleaned) + len(duplicated) == %d, len(found) = \
             %d" % (len(cleaned) + len(duplicated_names), len(found))
       return ()
-
 
 # VACANCIES TESTS
 def test_load_vacancies_root_length(vacancies):
@@ -223,6 +223,10 @@ def test_load_vacancies_is_respect_filters(filters, vacancies):
                   filters["date_from"])
             filters["date_from"] = filters["date_from"].strftime(
                   "%d.%m.%Y+%H%%3A%M%%3A%S")
+            filters["date_to"] = datetime.datetime.fromisoformat(
+                  filters["date_to"])
+            filters["date_to"] = filters["date_to"].strftime(
+                  "%d.%m.%Y+%H%%3A%M%%3A%S")
       except KeyError:
             pass
       for key, value in filters.items():
@@ -253,7 +257,6 @@ def test_load_vacancies(response, vacancies, filters):
       test_load_vacancies_root_keys(vacancies)
       test_load_vacancies_is_respect_filters(filters, vacancies)
       return ()
-
 
 # TELEGRAM TESTS
 def test_format_filters_to_query(filters, query_filters):
@@ -324,17 +327,3 @@ def test_filter_vacancies(filtered_vacancies, send_columns):
                         test_var_len_more_than(key, "key", 0)
                         test_var_type(value, "value", (int, str, type(None)))
       return ()
-
-def test_replace_specials_to_underscore(string):
-    """
-    Tests for `replace_specials_to_underscore`.
-    """
-    test_var_type(string, "string", str)
-    return ()
-
-def test_format_msg_values(data):
-    """
-    Tests for `format_msg_values`.
-    """
-    test_var_type(data, "data", (str, int, float))
-    return ()

@@ -73,21 +73,6 @@ def test_write_to_file_file_name(file_name):
     test_var_len_more_than(file_name, "file_name", 0)
     return ()
 
-def test_json_data_type(json_data):
-    """
-    Test json data input.
-    """
-    test_var_type(json_data, "json_data", (dict, list))
-    return ()
-
-def test_write_to_file(file_name, json_data):
-    """
-    Combine all tests for `write_to_file`.
-    """
-    test_write_to_file_file_name(file_name)
-    test_json_data_type(json_data)
-    return ()
-
 def test_database_name(database):
     """
     Test `database` input.
@@ -125,14 +110,6 @@ def test_create_table_columns(database, table, columns):
         test_var_len_more_than(column, "column", 0)
     return ()
 
-def test_get_table_columns_names(database, table):
-    """
-    Combine all tests for `get_table_columns_names`.
-    """
-    test_database_name(database)
-    test_table_name(table)
-    return ()
-
 def test_write_to_database_from_dict(database, table, data):
     """
     Combine all tests for `write_to_database_from_dict`.
@@ -148,32 +125,6 @@ def test_write_to_database_from_dict(database, table, data):
         test_var_type(value, "value", (str, int, float, type(None)))
         if type(value) not in [type(None), bool, int, float]:
             test_var_len_more_than(value, "value", 0)
-    return ()
-
-def test_area_names(names):
-    """
-    Valid name must follow all these rules:
-    - can contain numbers
-    - can contain characters: - ́ ’ , ( ) . and whitespaces.
-    - 1 <= length <= 100 characters
-    """
-    test_var_type(names, "names", list)
-    test_var_len_more_than(names, "names", 0)
-    regex = re.compile(r"[0-9a-zA-ZёЁа-яА-Я-́’,()\s\.]")
-    for name in names:
-        test_var_type(name, "name", str)
-        test_var_len_more_than(name, "name", 0)
-
-        assert len(name) <= 100, \
-        "\n\nExpected len(name) <= 100\n\
-        Got len(name) == %d" % len(name)
-
-        forbidden_characters = regex.sub("", name)
-        assert forbidden_characters == "", \
-"\n\nForbidden characters `%s` in `name`.\n\n\
-Valid name must follow all these rules:\n\
-- can contain numbers\n\
-- can contain characters: - ́ ’ , ( ) . and whitespaces." % forbidden_characters
     return ()
 
 # CONFIG TESTS
@@ -203,6 +154,32 @@ def test_clean_area_children(found, found_ids):
         test_var_type(area_id, "area_id", int)
     return ()
 
+def test_area_names(names):
+    """
+    Valid name must follow all these rules:
+    - can contain numbers
+    - can contain characters: - ́ ’ , ( ) . and whitespaces.
+    - 1 <= length <= 100 characters
+    """
+    test_var_type(names, "names", list)
+    test_var_len_more_than(names, "names", 0)
+    regex = re.compile(r"[0-9a-zA-ZёЁа-яА-Я-́’,()\s\.]")
+    for name in names:
+        test_var_type(name, "name", str)
+        test_var_len_more_than(name, "name", 0)
+
+        assert len(name) <= 100, \
+        "\n\nExpected len(name) <= 100\n\
+        Got len(name) == %d" % len(name)
+
+        forbidden_characters = regex.sub("", name)
+        assert forbidden_characters == "", \
+"\n\nForbidden characters `%s` in `name`.\n\n\
+Valid name must follow all these rules:\n\
+- can contain numbers\n\
+- can contain characters: - ́ ’ , ( ) . and whitespaces." % forbidden_characters
+    return ()
+
 # VACANCIES TESTS
 def test_load_vacancies(headers, filters):
     """
@@ -216,28 +193,6 @@ def test_load_vacancies(headers, filters):
         test_var_type(key, "key", str)
     for value in values:
         test_var_type(value, "value", (str, list))
-    return ()
-
-def test_url_per_page(per_page):
-    """
-    Test API `per_page` param.
-    It must be > 0 and <= 100.
-    """
-    test_var_type(per_page, "per_page", int)
-    assert 0 < per_page <= 100,\
-        "Must be 0 < `config.yaml > url_params > per_page` <= 100\n\
-Got per_page: %d" % (per_page)
-    return ()
-
-def test_url_period(period):
-    """
-    Test API `period` param.
-    It must be > 0 and <= 31
-    """
-    test_var_type(period, "period", int)
-    assert 0 < period <= 31,\
-        "Must be 0 < `config.yaml > url_params > period` <= 31\n\
-Got period: %d" % (period)
     return ()
 
 # TELEGRAM TESTS
@@ -262,18 +217,4 @@ def test_format_filters_to_query(filters):
         test_var_type(key, "key", str)
         test_var_len_more_than(key, "key", 0)
         test_var_type(value, "value", (list))
-    return ()
-
-def test_replace_specials_to_underscore(string):
-    """
-    Tests for `replace_specials_to_underscore`.
-    """
-    test_var_type(string, "string", str)
-    return ()
-
-def test_format_msg_values(data):
-    """
-    Tests for `format_msg_values`.
-    """
-    test_var_type(data, "data", (str, int, float, type(None)))
     return ()

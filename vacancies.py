@@ -37,10 +37,9 @@ def get_vacancies(config):
     filters["area"] = filters["area"][-1].split("|")
     if filters["area"] == [""]:
         del filters["area"]
-    if "date_from" in filters:
+    if "date_from"  or "date_to" in filters:
         del filters["period"]
     filters["page"] = 0
-    in_tests.test_dict_data_type(headers)
     in_tests.test_dict_data_type(filters)
     print ("\n\nGetting vacancies from hh...")
 
@@ -88,6 +87,7 @@ def load_vacancies(headers, filters):
     """
     Get vacancies under `filters`.
     """
+    in_tests.test_dict_data_type(headers)
     print ("    Loading vacancies from hh...")
 
     url = "https://api.hh.ru/vacancies"
@@ -101,7 +101,7 @@ def create_vacancies_generator(vacancies, parent_key = ""):
     Create vacancies iterator to flatten multilevel json
     into single-level database table.
     """
-    in_tests.test_json_data_type(vacancies)
+    in_tests.test_var_type(vacancies, "vacancies", (dict, list))
 
     if isinstance(vacancies, dict):
         for key, value in vacancies.items():
@@ -179,7 +179,7 @@ def create_vacancies_tables(config):
     ["id INTEGER NOT NULL PRIMARY KEY",\
      "name TEXT",\
      "area_id INTEGER",\
-     "address_city  TEXT",\
+     "address_city TEXT",\
      "address_street TEXT",\
      "employer_id INT",\
      "alternate_url TEXT",\

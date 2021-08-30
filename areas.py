@@ -46,7 +46,7 @@ def create_areas_generator(areas):
     Create areas iterator to flatten multilevel json
     (countries > regions > cities) into single-level database table.
     """
-    in_tests.test_json_data_type(areas)
+    in_tests.test_var_type(areas, "areas", (dict, list))
 
     if isinstance(areas, dict):
         for key, value in areas.items():
@@ -158,7 +158,6 @@ def search_user_areas(config):
     database = deepcopy(config["database"])
     areas_table = deepcopy(config["tables"]["areas_table"])
     saved_areas = deepcopy(config["url_params"]["area"][-1]).split("|")
-    in_tests.test_database_name(database)
     in_tests.test_table_name(areas_table)
     in_tests.test_var_type(saved_areas, "saved_areas", (list, type(None)))
 

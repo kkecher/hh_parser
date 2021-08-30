@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 """
-unittests for hh_parser
+unittests for hh_parser.
 """
+
+from config import read_config
 import areas
 import telegram
 import unittest
-from config import read_config
 
 # SHARED TESTS
 
@@ -58,12 +59,7 @@ class TestSelectAreasByName(unittest.TestCase):
             self.assertRaises(AssertionError, areas.select_areas_by_name, \
                               database, areas_table, [invalid_name])
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 # VACANCIES TESTS
-
 
 # TELEGRAM TESTS
 class TestFormatFiltersToQuery(unittest.TestCase):

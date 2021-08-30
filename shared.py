@@ -18,7 +18,8 @@ def write_to_file(file_name, json_data):
     Write json to file.
     This function is for debugging purpose only.
     """
-    in_tests.test_write_to_file(file_name, json_data)
+    in_tests.test_write_to_file_file_name(file_name)
+    in_tests.test_var_type(json_data, "json_data", (dict, list))
     print(f"    Writing json to `{file_name}`...")
 
     try:
@@ -59,7 +60,8 @@ def get_table_columns_names(database, table):
     """
     Get table column names.
     """
-    in_tests.test_get_table_columns_names(database, table)
+    in_tests.test_database_name(database)
+    in_tests.test_table_name(table)
     print (f"    Getting `{database} > {table}` column names...")
 
     connection = sqlite3.connect(database)
